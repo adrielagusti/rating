@@ -30,9 +30,9 @@ module.exports = function () {
     //
     // AFTER READ Rating o Ratings?
     //
-    // this.after("READ", "Ratings", async (ratingFilters) => {
+    // this.after("READ", "Strain", async () => {
 
-    //     return dbService.readRatings(ratingFilters)
+    //     return ''
 
     // })
 

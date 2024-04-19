@@ -1,5 +1,5 @@
 <mvc:View
-    controllerName="blackseeds.ratings.controller.Main"
+    controllerName="blackseeds.ratings.controller.Rating"
     xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:core="sap.ui.core"
@@ -14,56 +14,50 @@
             <subHeader>
                 <Toolbar>
                     <ToolbarSpacer />
-                    <Select
-                        forceSelection="false"
-                        selectedKey="{/selectedStrain}"
-                        items="{
-						path: '/Strains',
-						sorter: { path: 'name' }
-					}"
-                    >
-                        <core:Item
-                            key="{strainID}"
-                            text="{name}"
-                        />
-                    </Select>
+                    <Title text="{name}" />
                 </Toolbar>
             </subHeader>
             <content>
-                <HBox justifyContent="SpaceAround">
-                    <Select
-                        selectedKey="{/selectedAttribute}"
-                        items="{
-							path: 'dataModel>/attributes',
-							sorter: { path: 'description' }
-						}"
+                <VBox
+                    id="vbox-atts"
+                    items="{/Attributes}"
+                >
+                    <Panel
+                        width="auto"
+                        class="sapUiResponsiveMargin"
                     >
-                        <core:Item
-                            key="{attributeID}"
-                            text="{description}"
-                        />
-                    </Select>
-                </HBox>
+                        <headerToolbar>
+                            <OverflowToolbar>
+                                <Title text="{description}" />
+                                <ToolbarSpacer />
+                                <!-- <CheckBox selected="{selected}"/> -->
+                            </OverflowToolbar>
+                        </headerToolbar>
+                        <content>
+                            <FlexBox>
+                                <RatingIndicator
+                                    maxValue="5"
+                       
+                                    value="{value}"
+                                />
+                                 <Label text="{value} / 5" class="sapUiSmallMarginBeginEnd sapUiTinyMarginTop" />
+                                <Input value="{comments}"  />
+                            </FlexBox>
+                        </content>
+                    </Panel>
+                </VBox>
             </content>
             <footer>
                 <Toolbar>
+                    <Button
+                        text="Cancel"
+                        press="onBroBack"
+                    />
                     <ToolbarSpacer />
-                    <Select
-                        forceSelection="false"
-                        selectedKey="{/selectedUser}"
-                        type="IconOnly"
-                        icon="sap-icon://filter"
-                        autoAdjustWidth="true"
-                        items="{
-						path: 'dataModel>/attributes',
-						sorter: { path: 'description' }
-					}"
-                    >
-                        <core:Item
-                            key="{attributeID}"
-                            text="{description}"
-                        />
-                    </Select>
+                    <Button
+                        text="Save"
+                        press="onBroSave"
+                    />
                 </Toolbar>
             </footer>
         </Page>

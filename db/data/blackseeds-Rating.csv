@@ -1,1 +1,4 @@
-ratingID,createdAt,createdBy,modifiedAt,modifiedBy,attributeID,strainID,comments,ratingValue
+GUID,value,strain_GUID
+f786b1f9-971f-4d7d-b2a2-810192f3a37b,3,08cfd999-045b-4b30-8d16-07807363a863
+6b43e7d9-89a5-4d5c-a44e-9029b9f05b91,2,08cfd999-045b-4b30-8d16-07807363a863
+f8c8aef6-2676-4e7c-bdc0-736b88c81063,2,0a49b43a-a451-4565-abf1-e4e0284c32e0

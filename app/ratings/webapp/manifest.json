@@ -72,6 +72,8 @@
                 "dataSource": "mainService",
                 "preload": true,
                 "settings": {
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "Inline"
                 }
             }
         },
@@ -95,18 +97,37 @@
             },
             "routes": [
                 {
-                    "name": "Rating",
-                    "pattern": ":?query:",
-                    "target": "TargetRating"
-                }
+                    "pattern": "",
+                    "name": "main",
+                    "target": [
+                        "main"
+                    ]
+                },
+                {
+                    "pattern": "rating/{objectId}",
+                    "name": "rating",
+                    "target": [
+                      "rating"
+                    ]
+                  }
+          
             ],
             "targets": {
-                "TargetRating": {
+                "rating": {
                     "viewType": "XML",
                     "transition": "slide",
                     "clearControlAggregation": false,
+                    "viewLevel": 2,
                     "viewId": "Rating",
                     "viewName": "Rating"
+                },
+                "main": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewLevel": 1,
+                    "viewId": "main",
+                    "viewName": "Main"
                 }
             }
         },

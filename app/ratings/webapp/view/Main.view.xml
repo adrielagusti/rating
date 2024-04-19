@@ -14,10 +14,7 @@
             <subHeader>
                 <Toolbar>
                     <ToolbarSpacer />
-                    <Select
-                        forceSelection="false"
-                        selectedKey="{userSelectionModel>/User}"
-                    >
+                    <Select selectedKey="{userSelectionModel>/User}">
                         <items>
                             <core:Item
                                 key="Level"
@@ -39,25 +36,40 @@
                 <List
                     id="idList"
                     items="{/Strains}"
-                    selectionChange=".onSelectionChange"
+                    selectionChange="onSelectRow"
                     mode="SingleSelectMaster"
                     growing="true"
                     growingThreshold="50"
                     includeItemInSelection="true"
                 >
-                    <infoToolbar>
+                    <!-- <infoToolbar>
                         <OverflowToolbar>
-                            <Label id="Hola {userSelectionModel>/User}" />
+                         
+                            <core:Icon src="sap-icon://shield"/>
                         </OverflowToolbar>
-                    </infoToolbar>
+                    </infoToolbar> -->
                     <!-- icon="{ProductPicUrl}" -->
-                    <StandardListItem
-                        title="{name}"
-                        description="{breeder}"
-                        iconDensityAware="false"
-                        iconInset="false"
-                        press="asd"
-                    />
+                    <CustomListItem
+                        press="onSelectRow"
+                        type="Active"
+                        detailPress="onSelectRow"
+                    >
+                        <FlexBox
+                            justifyContent="SpaceBetween"
+                            alignContent="Center"
+                            alignItems="Center"
+                        >
+                            <VBox>
+                                <Title text="({tagID}) {name}" class="sapUiSmallMarginTopBottom"/>
+                                <Text text="Add breeder" class="sapUiSmallMarginBottom"/>
+                            </VBox>
+                                    <RatingIndicator
+                            maxValue="5"
+                            value="{value}"
+                        />
+                        </FlexBox>
+                
+                    </CustomListItem>
                 </List>
             </content>
             <footer>
@@ -71,7 +83,7 @@
                         autoAdjustWidth="true"
                         items="{
 						path: '/Strains',
-						sorter: { path: 'description' }
+						sorter: { path: 'name' }
 					}"
                     >
                         <core:Item

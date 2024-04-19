@@ -1,15 +1,16 @@
 /* eslint-disable no-undef */
 sap.ui.define(
   [
+    "sap/ui/core/UIComponent",
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel"
   ],
 
-  function (Controller, JSONModel) {
+  function (UIComponent, Controller, JSONModel) {
     "use strict";
 
     return Controller.extend("blackseeds.ratings.controller.Main", {
-      
+
       onInit() {
         // let p1 = this._getStrains();
         // let p2 = this._getAttributes();
@@ -66,7 +67,24 @@ sap.ui.define(
         //     }
         // });
 
+      },
+      onSelectRow(oEvent) {
+        // The source is the list item that got pressed
+        let oItem = oEvent.getParameter("listItem");
+
+        this._showObject(oItem);
+      },
+
+      _showObject(oItem) {
+        this.getRouter().navTo("rating", {
+          objectId: oItem.getBindingContext().getObject().GUID
+        });
+      },
+
+      getRouter() {
+        return UIComponent.getRouterFor(this);
       }
+
     });
   }
 );

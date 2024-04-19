@@ -1,71 +1,57 @@
 /* eslint-disable no-undef */
 sap.ui.define(
   [
+    "sap/ui/core/UIComponent",
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel"
   ],
 
-  function (Controller, JSONModel) {
+  function (UIComponent, Controller, JSONModel) {
     "use strict";
 
     return Controller.extend("blackseeds.ratings.controller.Rating", {
-      
+
       onInit() {
-        let p1 = this._getStrains();
-        let p2 = this._getAttributes();
+        // let p1 = this._getStrains();
+        // let p2 = this._getAttributes();
 
-        Promise.all([p1, p2])
-          .then(results => {
+        // Promise.all([p1, p2])
+        //   .then(results => {
 
-            const [strainsArray, attributesArray] = results;
+        //     const [strainsArray, attributesArray] = results;
 
-            this.getView().setModel(new JSONModel({ strains: strainsArray, attributes: attributesArray }), 'dataModel');
+        //     this.getView().setModel(new JSONModel({ strains: strainsArray, attributes: attributesArray }), 'dataModel');
 
-          })
+        //   })
+
+        this.getRouter().getRoute("rating").attachPatternMatched(this._onObjectMatched, this);
 
       },
 
-      getModel: function (sModelName) {
+      getRouter() {
+        return UIComponent.getRouterFor(this);
+      },
 
+      onBroBack: function () {
+        history.go(-1);
+      },
+
+      _onObjectMatched(oEvent) {
+        let sObjectId = oEvent.getParameter("arguments").objectId;
+        this._bindView("/Strains(guid'" + sObjectId + "')");
+      },
+
+      _bindView(sObjectPath) {
+        this.getView().bindElement({
+          path: sObjectPath
+        });
       },
 
       onBroSave() {
-
-        //     this.getModel().callFunction("/stopSession", {
-        //       method: "POST",
-        //       success: () => {
-        //           this.getModel().invalidateEntry("Sessions('CURRENT_SESSION')");
-
-        //           this.getView().unbindElement()
-        //           this.getView().setBindingContext(null);
-
-        //           this._rebindSession();
-
-        //           MessageToast.show("Session Stopped.")
-        //           this.getView().setBusy(false)
-        //       },
-        //       error: (oResponse) => {
-        //           this._showError(oResponse);
-        //           this.getView().setBusy(false)
-        //       }
-        //   });
-
-
-        //   this.getModel().callFunction("/startSession", {
-        //     method: "POST",
-        //     urlParameters: this.getModel("view").getProperty("/startSessionParams"),
-        //     success: () => {
-        //         this._rebindSession();
-        //         MessageToast.show("Session Started!")
-        //         oStartSessionDialog.setBusy(false);
-        //         oStartSessionDialog.close();
-        //     },
-        //     error: (oResponse) => {
-        //         this._showError(oResponse);
-        //         oStartSessionDialog.setBusy(false)
-        //     }
-        // });
-
+        var oItems = this.getView().byId('vbox-atts');
+        oItems.getItems().forEach(item => {
+          debugger;
+        })
       }
     });
   }
