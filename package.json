@@ -1,0 +1,31 @@
+{
+  "name": "ratings",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@cap-js-community/odata-v2-adapter": "^1.12.8",
+    "@sap/cds": "^7",
+    "@sap/cds-mtxs": "^1.9",
+    "express": "^4"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^1",
+    "@sap/cds-dk": "^7"
+  },
+  "scripts": {
+    "start": "cds-serve"
+  },
+  "cds": {
+    "profile": "with-mtx-sidecar",
+    "requires": {
+      "multitenancy": true,
+      "auth": "dummy",
+      "db": {
+        "kind": "sqlite"
+      }
+    }
+  }
+}

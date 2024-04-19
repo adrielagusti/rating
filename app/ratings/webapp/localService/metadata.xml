@@ -1,0 +1,57 @@
+
+<edmx:Edmx xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData" Version="1.0">
+<edmx:Reference xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+<edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+</edmx:Reference>
+<edmx:Reference xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+<edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+</edmx:Reference>
+<edmx:DataServices m:DataServiceVersion="2.0">
+<Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="BlackSeedsService">
+<EntityContainer Name="EntityContainer" m:IsDefaultEntityContainer="true">
+<EntitySet Name="Strains" EntityType="BlackSeedsService.Strains"/>
+<EntitySet Name="Ratings" EntityType="BlackSeedsService.Ratings"/>
+<EntitySet Name="Attributes" EntityType="BlackSeedsService.Attributes"/>
+<FunctionImport Name="broSaveRating" EntitySet="Ratings" ReturnType="BlackSeedsService.Ratings" m:HttpMethod="POST">
+<Parameter Name="strainID" Type="Edm.Guid" Mode="In" Nullable="true"/>
+<Parameter Name="attributeID" Type="Edm.Guid" Mode="In" Nullable="true"/>
+<Parameter Name="comments" Type="Edm.String" Mode="In" Nullable="true"/>
+<Parameter Name="value" Type="Edm.Int32" Mode="In" Nullable="true"/>
+</FunctionImport>
+</EntityContainer>
+<EntityType Name="Strains">
+<Key>
+<PropertyRef Name="strainID"/>
+</Key>
+<Property Name="strainID" Type="Edm.Guid" Nullable="false"/>
+<Property Name="name" Type="Edm.String"/>
+</EntityType>
+<EntityType Name="Ratings">
+<Key>
+<PropertyRef Name="ratingID"/>
+</Key>
+<Property Name="ratingID" Type="Edm.Guid" Nullable="false"/>
+<Property Name="attributeID" Type="Edm.Guid"/>
+<Property Name="strainID" Type="Edm.Guid"/>
+<Property Name="ratingValue" Type="Edm.Int32"/>
+<Property Name="comments" Type="Edm.String"/>
+</EntityType>
+<EntityType Name="Attributes">
+<Key>
+<PropertyRef Name="attributeID"/>
+</Key>
+<Property Name="attributeID" Type="Edm.Guid" Nullable="false"/>
+<Property Name="description" Type="Edm.String"/>
+</EntityType>
+<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="BlackSeedsService.Strains/strainID">
+<Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+</Annotations>
+<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="BlackSeedsService.Ratings/ratingID">
+<Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+</Annotations>
+<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="BlackSeedsService.Attributes/attributeID">
+<Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+</Annotations>
+</Schema>
+</edmx:DataServices>
+</edmx:Edmx>

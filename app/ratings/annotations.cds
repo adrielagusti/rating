@@ -1,0 +1,1 @@
+using BlackSeedsService as service from '../../srv/service';

@@ -1,0 +1,10 @@
+/* Enter your custom styles here */
+
+.targetPLAmountLabel {
+    font-size: 0.70rem !important;
+}
+
+.priceLimitLabel {
+    font-size: 0.75rem !important; 
+    font-weight: bold;
+}

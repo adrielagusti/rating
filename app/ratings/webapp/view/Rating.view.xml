@@ -1,0 +1,71 @@
+<mvc:View
+    controllerName="blackseeds.ratings.controller.Main"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    displayBlock="true"
+    xmlns="sap.m"
+>
+    <App id="app">
+        <Page
+            showHeader="false"
+            class="sapUiContentPadding"
+        >
+            <subHeader>
+                <Toolbar>
+                    <ToolbarSpacer />
+                    <Select
+                        forceSelection="false"
+                        selectedKey="{/selectedStrain}"
+                        items="{
+						path: '/Strains',
+						sorter: { path: 'name' }
+					}"
+                    >
+                        <core:Item
+                            key="{strainID}"
+                            text="{name}"
+                        />
+                    </Select>
+                </Toolbar>
+            </subHeader>
+            <content>
+                <HBox justifyContent="SpaceAround">
+                    <Select
+                        selectedKey="{/selectedAttribute}"
+                        items="{
+							path: 'dataModel>/attributes',
+							sorter: { path: 'description' }
+						}"
+                    >
+                        <core:Item
+                            key="{attributeID}"
+                            text="{description}"
+                        />
+                    </Select>
+                </HBox>
+            </content>
+            <footer>
+                <Toolbar>
+                    <ToolbarSpacer />
+                    <Select
+                        forceSelection="false"
+                        selectedKey="{/selectedUser}"
+                        type="IconOnly"
+                        icon="sap-icon://filter"
+                        autoAdjustWidth="true"
+                        items="{
+						path: 'dataModel>/attributes',
+						sorter: { path: 'description' }
+					}"
+                    >
+                        <core:Item
+                            key="{attributeID}"
+                            text="{description}"
+                        />
+                    </Select>
+                </Toolbar>
+            </footer>
+        </Page>
+    </App>
+</mvc:View>
