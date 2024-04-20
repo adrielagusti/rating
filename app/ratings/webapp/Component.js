@@ -5,9 +5,10 @@
 sap.ui.define([
         "sap/ui/core/UIComponent",
         "sap/ui/Device",
-        "blackseeds/ratings/model/models"
+        "blackseeds/ratings/model/models",
+        "sap/ui/model/json/JSONModel",
     ],
-    function (UIComponent, Device, models) {
+    function (UIComponent, Device, models, JSONModel) {
         "use strict";
 
         return UIComponent.extend("blackseeds.ratings.Component", {
@@ -30,6 +31,7 @@ sap.ui.define([
                 // set the device model
                 this.setModel(models.createDeviceModel(), "device");
 
+                this.setModel(new JSONModel({GUID: 'd336866a-2c67-4c5f-806f-cdc0780c74b5'}), "loggedUser");
                 //set view model
                 this.setModel(models.createViewModel(), "view");
 

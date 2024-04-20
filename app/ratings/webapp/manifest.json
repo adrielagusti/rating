@@ -109,10 +109,25 @@
                     "target": [
                       "rating"
                     ]
+                  },
+                  {
+                    "pattern": "ratingChange/{objectId}",
+                    "name": "ratingChange",
+                    "target": [
+                      "ratingChange"
+                    ]
                   }
           
             ],
             "targets": {
+                "ratingChange": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewLevel": 2,
+                    "viewId": "RatingChange",
+                    "viewName": "RatingChange"
+                },
                 "rating": {
                     "viewType": "XML",
                     "transition": "slide",

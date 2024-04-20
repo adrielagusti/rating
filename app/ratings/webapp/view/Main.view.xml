@@ -1,39 +1,151 @@
 <mvc:View
     controllerName="blackseeds.ratings.controller.Main"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:grid="sap.ui.layout.cssgrid"
     xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:core="sap.ui.core"
+    xmlns:micro="sap.ui.comp.smartmicrochart"
     displayBlock="true"
-    xmlns="sap.m"
 >
     <App id="app">
         <Page
             showHeader="false"
             class="sapUiContentPadding"
         >
-            <subHeader>
+            <!-- <subHeader>
                 <Toolbar>
                     <ToolbarSpacer />
-                    <Select selectedKey="{userSelectionModel>/User}">
-                        <items>
-                            <core:Item
-                                key="Level"
-                                text="Level"
-                            />
-                            <core:Item
-                                key="Pepe"
-                                text="Pepe"
-                            />
-                            <core:Item
-                                key="Chelok"
-                                text="Chelok"
-                            />
-                        </items>
-                    </Select>
+  
                 </Toolbar>
-            </subHeader>
+            </subHeader> -->
             <content>
-                <List
+                <Panel class="sapUiTinyMarginBottom">
+                    <HBox justifyContent="SpaceBetween">
+                        <Image
+                            class="sapUiTinyMarginTopBottom"
+                            src="./img/logo.png"
+                            width="7rem"
+                        />
+                        <VBox justifyContent="End" alignContent="End" alignItems="End">
+                            <Select
+                                selectedKey="{loggedUser>/GUID}"
+                                items="{/Users}"
+                                forceSelection="true"
+                                change="onUserChange"
+                                class="sapUiMediumMarginBottom"
+                            >
+                                <core:Item
+                                    key="{GUID}"
+                                    text="{name}"
+                                />
+                            </Select>
+                            <ObjectStatus
+                                title="Rated"
+                                text="{dataModel>/tested} / {dataModel>/total}"
+                                state="Success"
+                                class="sapMObjectStatusLarge"
+                                icon="sap-icon://e-care"
+                            />
+                        </VBox>
+                    </HBox>
+                </Panel>
+             
+                <Panel
+                    expanded="false"
+                    expandable="true"
+                    headerText="Top tier ranking"
+                >
+                    <f:GridList
+                        id="grid-toptier"
+                        mode="SingleSelectMaster"
+                        growingThreshold="5"
+                        growing="true"
+                        items="{path: 'dataModel>/strains', sorter: { path: 'value', descending: true } }"
+                    >
+                        <f:customLayout>
+                            <grid:GridBoxLayout boxWidth="100%" />
+                        </f:customLayout>
+
+                        <f:GridListItem type="Active">
+                            <FlexBox
+                                justifyContent="SpaceBetween"
+                                alignContent="Center"
+                                alignItems="Center"
+                            >
+                                <Title
+                                    text="({dataModel>tagID}) {dataModel>name}"
+                                    class="sapUiTinyMarginTopBottom sapUiTinyMarginBegin"
+                                />
+                                <!-- <Text
+                                text="Black Seeds"
+                                class="sapUiTinyMarginTopBottom sapUiTinyMarginEnd"
+                            /> -->
+                                <!-- </FlexBox>
+                        <FlexBox
+                            justifyContent="Center"
+                            alignContent="Center"
+                            alignItems="Center"
+                        > -->
+                                <RatingIndicator
+                                    maxValue="5"
+                                    value="{ path:'dataModel>value' }"
+                                    class="sapUiTinyMarginEnd"
+                                    enabled="false"
+                                    iconSize="22px"
+                                />
+                            </FlexBox>
+                        </f:GridListItem>
+                    </f:GridList>
+                </Panel>
+                <Panel
+                    expanded="true"
+                    class="sapUiTinyMarginTop"
+                    headerText="Strains to rate"
+                >
+                    <f:GridList
+                        id="grid-reasons"
+                        mode="SingleSelectMaster"
+                        items="{path: 'dataModel>/strains', sorter: { path: 'dataModel>name', group: '.getName' } }"
+                        selectionChange="onSelectRow"
+                    >
+                        <f:customLayout>
+                            <grid:GridBoxLayout boxWidth="45%" />
+                        </f:customLayout>
+
+                        <f:GridListItem type="Active">
+                            <FlexBox
+                                justifyContent="SpaceBetween"
+                                alignContent="Center"
+                                alignItems="Center"
+                            >
+                                <Title
+                                    text="{dataModel>tagID}"
+                                    class="sapUiTinyMarginTopBottom sapUiTinyMarginBegin"
+                                />
+                                <Text
+                                    text="Black Seeds"
+                                    class="sapUiTinyMarginTopBottom sapUiTinyMarginEnd"
+                                />
+                            </FlexBox>
+                            <FlexBox
+                                justifyContent="Center"
+                                alignContent="Center"
+                                alignItems="Center"
+                            >
+                                <RatingIndicator
+                                    maxValue="5"
+                                    value="{ path:'dataModel>value' }"
+                                    class="sapUiTinyMarginEnd"
+                                    enabled="false"
+                                    iconSize="22px"
+                                />
+                            </FlexBox>
+                        </f:GridListItem>
+                    </f:GridList>
+                </Panel>
+                <!-- <List
                     id="idList"
                     items="{/Strains}"
                     selectionChange="onSelectRow"
@@ -42,13 +154,6 @@
                     growingThreshold="50"
                     includeItemInSelection="true"
                 >
-                    <!-- <infoToolbar>
-                        <OverflowToolbar>
-                         
-                            <core:Icon src="sap-icon://shield"/>
-                        </OverflowToolbar>
-                    </infoToolbar> -->
-                    <!-- icon="{ProductPicUrl}" -->
                     <CustomListItem
                         press="onSelectRow"
                         type="Active"
@@ -60,17 +165,22 @@
                             alignItems="Center"
                         >
                             <VBox>
-                                <Title text="({tagID}) {name}" class="sapUiSmallMarginTopBottom"/>
-                                <Text text="Add breeder" class="sapUiSmallMarginBottom"/>
+                                <Title
+                                    text="({tagID}) {name}"
+                                    class="sapUiSmallMarginTopBottom"
+                                />
+                                <Text
+                                    text="Add breeder"
+                                    class="sapUiSmallMarginBottom"
+                                />
                             </VBox>
-                                    <RatingIndicator
-                            maxValue="5"
-                            value="{value}"
-                        />
+                            <RatingIndicator
+                                maxValue="5"
+                                value="{value}"
+                            />
                         </FlexBox>
-                
                     </CustomListItem>
-                </List>
+                </List> -->
             </content>
             <footer>
                 <Toolbar>
