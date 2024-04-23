@@ -113,7 +113,7 @@
                     <f:GridList
                         id="grid-reasons"
                         mode="SingleSelectMaster"
-                        items="{path: 'dataModel>/strains', sorter: { path: 'dataModel>name' } }"
+                        items="{path: '/Strains', sorter: { path: 'name' } }"
                         selectionChange="onSelectRow"
                     >
                         <!-- items="{path: 'dataModel>/strains', sorter: { path: 'dataModel>name', group: '.getName' } }" -->
@@ -133,8 +133,8 @@
                                     alignItems="Start"
                                     class="sapUiTinyMarginTop"
                                 >
-                                    <Label text="({dataModel>tagID})" class="sapUiTinyMarginBeginEnd" />
-                                    <Title text="{dataModel>name}" />
+                                    <Label text="({tagID})" class="sapUiTinyMarginBeginEnd" />
+                                    <Title text="{name}" />
                                 </FlexBox>
                                 <!-- <RatingIndicator
                                     maxValue="1"
@@ -144,7 +144,7 @@
                                     iconSize="22px"
                                     visible="{= ${dataModel>value} > 0 }"
                                 /> -->
-                                <core:Icon src="sap-icon://accept" visible="{= ${dataModel>value} > 0 }" 	 class="sapUiTinyMarginEnd" color="#64E4CE"/>
+                                <core:Icon src="sap-icon://accept" visible="{isRated}" class="sapUiTinyMarginEnd" color="#64E4CE"/>
 
                                 <!-- <Text
                                     text="Breeder?"

@@ -13,7 +13,7 @@
         >
             <subHeader>
                 <Toolbar>
-                          <Select
+                          <!-- <Select
                                 selectedKey="{loggedUser>/GUID}"
                                 items="{/Users}"
                                 forceSelection="true"
@@ -24,7 +24,7 @@
                                     key="{GUID}"
                                     text="{name}"
                                 />
-                            </Select>
+                            </Select> -->
                     <ToolbarSpacer />
                     <Title text="({tagID}) {name}" />
                 </Toolbar>
@@ -32,7 +32,7 @@
             <content>
                 <VBox
                     id="vbox-atts"
-                    items="{dataModel>/ratings}"
+                    items="{/Ratings}"
                 >
                     <Panel
                         width="auto"
@@ -40,7 +40,7 @@
                     >
                         <headerToolbar>
                             <OverflowToolbar>
-                                <Title text="{dataModel>attributeDescription}" />
+                                <Title text="{attributeDescription}" />
                                 <ToolbarSpacer />
                             </OverflowToolbar>
                         </headerToolbar>
@@ -48,10 +48,10 @@
                             <FlexBox>
                                 <RatingIndicator
                                     maxValue="5"
-                                    value="{dataModel>value}"
+                                    value="{value}"
                                 />
-                                 <Label text="{dataModel>value} / 5" class="sapUiSmallMarginBeginEnd sapUiTinyMarginTop" />
-                                <Input value="{dataModel>comments}"  />
+                                 <Label text="{value} / 5" class="sapUiSmallMarginBeginEnd sapUiTinyMarginTop" />
+                                <Input value="{comments}"  />
                             </FlexBox>
                         </content>
                     </Panel>

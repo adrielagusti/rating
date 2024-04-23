@@ -18,32 +18,32 @@ sap.ui.define(
 
       onInit() {
 
-        this._setUserResults();
+        // this._setUserResults();
 
       },
 
-      _setUserResults() {
-        let p1 = this._getRatings(this.getOwnerComponent().getModel('loggedUser').getProperty("/GUID"));
-        let p2 = this._getStrains()
-        let p3 = this._getAttributes()
+      // _setUserResults() {
+      //   let p1 = this._getRatings(this.getOwnerComponent().getModel('loggedUser').getProperty("/GUID"));
+      //   let p2 = this._getStrains()
+      //   let p3 = this._getAttributes()
 
-        Promise.all([p1, p2, p3])
-          .then(results => {
+      //   Promise.all([p1, p2, p3])
+      //     .then(results => {
 
-            const [aRatings, aStrains, aAttributes] = results;
+      //       const [aRatings, aStrains, aAttributes] = results;
         
-            const result = this.prepareSummarizedModel(aRatings.results, aStrains.results, aAttributes.results);
-            var iTested = result.filter((item) => item.value > 0).length;
-            var iTotal = result.length;
-            this.getView().setModel(new JSONModel({ strains: result, tested: iTested, total: iTotal }), 'dataModel');
+      //       const result = this.prepareSummarizedModel(aRatings.results, aStrains.results, aAttributes.results);
+      //       var iTested = result.filter((item) => item.value > 0).length;
+      //       var iTotal = result.length;
+      //       this.getView().setModel(new JSONModel({ strains: result, tested: iTested, total: iTotal }), 'dataModel');
 
-          })
+      //     })
 
-      },
+      // },
 
-      onUserChange() {
-        this._setUserResults();
-      },
+      // onUserChange() {
+      //   this._setUserResults();
+      // },
 
       getModel: function (sModelName) {
         return this.getView().getModel();
@@ -57,7 +57,7 @@ sap.ui.define(
 
       _showObject(oItem) {
         this.getRouter().navTo("ratingChange", {
-          objectId: oItem.getBindingContext('dataModel').getObject().GUID
+          objectId: oItem.getBindingContext().getObject().GUID
         });
       },
 
@@ -70,11 +70,11 @@ sap.ui.define(
       },
 
       _getRatings(user) {
-        var aFilter = [new Filter("user_GUID", FilterOperator.EQ, user)];
+        // var aFilter = [new Filter("user_GUID", FilterOperator.EQ, user)];
 
         return new Promise((res, rej) => {
           this.getOwnerComponent().getModel().read("/Ratings", {
-            filters: aFilter,
+            // filters: aFilter,
             success: res,
             error: rej
           })
@@ -99,31 +99,31 @@ sap.ui.define(
         });
       },
 
-      prepareSummarizedModel(aRatings, aStrains, aAttributes) {
+      // prepareSummarizedModel(aRatings, aStrains, aAttributes) {
 
-        let iAttributes = aAttributes.length;
+      //   let iAttributes = aAttributes.length;
 
 
-        let aSummarized = aStrains.map(strain => {
-          // Initialize sum for each strain
-          let sum = 0;
+      //   let aSummarized = aStrains.map(strain => {
+      //     // Initialize sum for each strain
+      //     let sum = 0;
 
-          aRatings.forEach(rating => {
-            if (rating.strain_GUID === strain.GUID) {
-              // Accumulate the value for the current strain
-              sum += rating.value;
-            }
-          });
+      //     aRatings.forEach(rating => {
+      //       if (rating.strain_GUID === strain.GUID) {
+      //         // Accumulate the value for the current strain
+      //         sum += rating.value;
+      //       }
+      //     });
 
-          return {
-            ...strain,
-            value: parseInt(sum / iAttributes)
-          };
-        });
+      //     return {
+      //       ...strain,
+      //       value: parseInt(sum / iAttributes)
+      //     };
+      //   });
 
-        return aSummarized;
+      //   return aSummarized;
 
-      }
+      // }
 
     });
   }

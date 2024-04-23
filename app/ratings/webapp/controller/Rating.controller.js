@@ -32,7 +32,7 @@ sap.ui.define(
         let sObjectId = oEvent.getParameter("arguments").objectId;
         this._bindView("/Strains(guid'" + sObjectId + "')");
 
-        this._setUserResults(sObjectId);
+        // this._setUserResults(sObjectId);
 
       },
 

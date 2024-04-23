@@ -22,10 +22,19 @@
     "profile": "with-mtx-sidecar",
     "requires": {
       "multitenancy": true,
-      "auth": "dummy",
-      "db": {
-        "kind": "sqlite"
+      "auth": {
+        "kind": "basic-auth",
+        
+          "users": {
+            "SHERNANG": {
+              "password": "Ogaitna$1234"
+            }
+         
+        }
+      },
+        "db": {
+          "kind": "sqlite"
+        }
       }
     }
   }
-}

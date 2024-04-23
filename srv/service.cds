@@ -10,13 +10,15 @@ service BlackSeedsService {
     //     value: Integer
     // ) returns Ratings;
 
+
     entity Strains    as
         projection on blackseeds.Strain {
             key GUID,
                 tagID,
                 name,
-                0 as value : Integer,
-        }
+                case when ratings.GUID is not null then true else false end as isRated : Boolean,
+                ratings          : redirected to Ratings
+        } 
         group by
             GUID
 
@@ -32,14 +34,18 @@ service BlackSeedsService {
                 value,
                 attribute.description as attributeDescription,
                 strain.name           as strainName,
+                user.GUID             as userID,
                 user.name             as userName
-        }
+        } where user.GUID = $user
+
+
 
 
     entity Attributes as
         projection on blackseeds.Attribute {
             key GUID,
                 description
+                // case when ratings.value is not null 
         }
 
 
@@ -48,5 +54,18 @@ service BlackSeedsService {
             key GUID,
                 name
         }
-        
+
+
+    // entity myStrains {
+    //     key GUID    : UUID;
+    //         strains : Composition of many {
+    //                       key strain  : Association to Strains;
+    //                           ratings : Composition of many {
+    //                                         key rating : Association to Ratings;
+    //                                             user   : Association to Users;
+    //                                     }
+    //                   }
+    // }
+
+
 }
