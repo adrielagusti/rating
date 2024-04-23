@@ -37,7 +37,7 @@ sap.ui.define(
       },
 
       _setUserResults(objectId){
-        let p1 = this._getRatings(objectId, 'd336866a-2c67-4c5f-806f-cdc0780c74b5');
+        let p1 = this._getRatings(objectId, this.getOwnerComponent().getModel('loggedUser').getProperty("/GUID"));
         let p2 = this._getAttributes();
 
         // Wait for the answer of both entities to match existing ratings of attributes with all existing atts.
@@ -119,7 +119,6 @@ sap.ui.define(
       },
 
       onUserChange(oEvent) {
-        debugger;
         var oItem = oEvent.getSource().getSelectedKey();
         this._setUserResults();
       },

@@ -15,11 +15,7 @@ service BlackSeedsService {
             key GUID,
                 tagID,
                 name,
-                0 as value: Integer,
-                // sum(ratings.value) as value     : Integer,
-            //     ratings.value,
-            // key ratings.user,
-            //     ratings        : redirected to Ratings,
+                0 as value : Integer,
         }
         group by
             GUID
@@ -52,14 +48,5 @@ service BlackSeedsService {
             key GUID,
                 name
         }
-
-
-// entity SummarizedResults as
-//     projection on blackseeds.Strain {
-//         key GUID,
-//         // key Rating.strain,
-//         // sum(value) as valueTotal: Integer
-//         // sum(value) as valueTotal: Integer,
-//     // } group by Rating.user, Rating.strain;
-//     }
+        
 }

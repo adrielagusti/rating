@@ -14,12 +14,13 @@
             showHeader="false"
             class="sapUiContentPadding"
         >
-            <!-- <subHeader>
+            <subHeader>
                 <Toolbar>
                     <ToolbarSpacer />
-  
+                    <Title text="Black Seeds Ratings Application" />
+                    <ToolbarSpacer />
                 </Toolbar>
-            </subHeader> -->
+            </subHeader>
             <content>
                 <Panel class="sapUiTinyMarginBottom">
                     <HBox justifyContent="SpaceBetween">
@@ -28,7 +29,11 @@
                             src="./img/logo.png"
                             width="7rem"
                         />
-                        <VBox justifyContent="End" alignContent="End" alignItems="End">
+                        <VBox
+                            justifyContent="End"
+                            alignContent="End"
+                            alignItems="End"
+                        >
                             <Select
                                 selectedKey="{loggedUser>/GUID}"
                                 items="{/Users}"
@@ -51,7 +56,7 @@
                         </VBox>
                     </HBox>
                 </Panel>
-             
+
                 <Panel
                     expanded="false"
                     expandable="true"
@@ -74,8 +79,9 @@
                                 alignContent="Center"
                                 alignItems="Center"
                             >
+                               <Label text="({dataModel>tagID})" class="sapUiTinyMarginBeginEnd" />
                                 <Title
-                                    text="({dataModel>tagID}) {dataModel>name}"
+                                    text="{dataModel>name}"
                                     class="sapUiTinyMarginTopBottom sapUiTinyMarginBegin"
                                 />
                                 <!-- <Text
@@ -107,11 +113,12 @@
                     <f:GridList
                         id="grid-reasons"
                         mode="SingleSelectMaster"
-                        items="{path: 'dataModel>/strains', sorter: { path: 'dataModel>name', group: '.getName' } }"
+                        items="{path: 'dataModel>/strains', sorter: { path: 'dataModel>name' } }"
                         selectionChange="onSelectRow"
                     >
+                        <!-- items="{path: 'dataModel>/strains', sorter: { path: 'dataModel>name', group: '.getName' } }" -->
                         <f:customLayout>
-                            <grid:GridBoxLayout boxWidth="45%" />
+                            <grid:GridBoxLayout boxWidth="100%" />
                         </f:customLayout>
 
                         <f:GridListItem type="Active">
@@ -120,27 +127,35 @@
                                 alignContent="Center"
                                 alignItems="Center"
                             >
-                                <Title
-                                    text="{dataModel>tagID}"
-                                    class="sapUiTinyMarginTopBottom sapUiTinyMarginBegin"
-                                />
-                                <Text
-                                    text="Black Seeds"
+                                <FlexBox
+                                    justifyContent="Start"
+                                    alignContent="Start"
+                                    alignItems="Start"
+                                    class="sapUiTinyMarginTop"
+                                >
+                                    <Label text="({dataModel>tagID})" class="sapUiTinyMarginBeginEnd" />
+                                    <Title text="{dataModel>name}" />
+                                </FlexBox>
+                                <!-- <RatingIndicator
+                                    maxValue="1"
+                                    value="1"
+                                    class="sapUiTinyMarginBegin sapUiTinyMarginEnd"
+                                    enabled="false"
+                                    iconSize="22px"
+                                    visible="{= ${dataModel>value} > 0 }"
+                                /> -->
+                                <core:Icon src="sap-icon://accept" visible="{= ${dataModel>value} > 0 }" 	 class="sapUiTinyMarginEnd" color="#64E4CE"/>
+
+                                <!-- <Text
+                                    text="Breeder?"
                                     class="sapUiTinyMarginTopBottom sapUiTinyMarginEnd"
-                                />
-                            </FlexBox>
+                                /> -->
+                                <!-- </FlexBox>
                             <FlexBox
                                 justifyContent="Center"
                                 alignContent="Center"
                                 alignItems="Center"
-                            >
-                                <RatingIndicator
-                                    maxValue="5"
-                                    value="{ path:'dataModel>value' }"
-                                    class="sapUiTinyMarginEnd"
-                                    enabled="false"
-                                    iconSize="22px"
-                                />
+                            > -->
                             </FlexBox>
                         </f:GridListItem>
                     </f:GridList>

@@ -31,7 +31,7 @@ sap.ui.define(
           .then(results => {
 
             const [aRatings, aStrains, aAttributes] = results;
-
+        
             const result = this.prepareSummarizedModel(aRatings.results, aStrains.results, aAttributes.results);
             var iTested = result.filter((item) => item.value > 0).length;
             var iTotal = result.length;
