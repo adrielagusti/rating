@@ -25,7 +25,7 @@ modules:
         properties:
           srv-url: ${default-url}
     requires:
-      []
+      - name: ratings-postgres
 
   - name: ratings-mtx
     type: nodejs
@@ -39,6 +39,19 @@ modules:
       - name: mtx-api
         properties:
           mtx-url: ${default-url}
+
+  - name: ratings-postgres-deployer
+    type: nodejs
+    path: gen/pg
+    parameters:
+      buildpack: nodejs_buildpack
+      no-route: true
+      no-start: true
+      tasks:
+        - name: deploy-to-postgresql
+          command: npm start
+    requires:
+      - name: ratings-postgres
 
 resources:
   - name: ratings-registry
@@ -61,3 +74,8 @@ resources:
           onUnSubscriptionAsync: true
           onUpdateDependenciesAsync: true
           callbackTimeoutMillis: 300000 # Increase if your deployments are taking longer than that
+  - name: ratings-postgres
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: postgresql-db
+      service-plan: development

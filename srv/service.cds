@@ -13,59 +13,47 @@ service BlackSeedsService {
 
     entity Strains    as
         projection on blackseeds.Strain {
-            key GUID,
+            key strainID,
                 tagID,
                 name,
-                case when ratings.GUID is not null then true else false end as isRated : Boolean,
+                case when ratings.ratingID is not null then true else false end as isRated : Boolean,
                 ratings          : redirected to Ratings
         } 
-        group by
-            GUID
+        // group by
+        //     GUID
 
 
     entity Ratings    as
         projection on blackseeds.Rating {
-            key GUID,
+            key ratingID,
                 @UI.HiddenFilter
-                strain,
+                strain: redirected to Strains,
                 attribute,
                 @UI.HiddenFilter
                 user,
                 value,
                 attribute.description as attributeDescription,
                 strain.name           as strainName,
-                user.GUID             as userID,
+                user.userID,
                 user.name             as userName
-        } where user.GUID = $user
-
-
-
+        } where user.userID = $user
+        // group by GUID
 
     entity Attributes as
         projection on blackseeds.Attribute {
-            key GUID,
-                description
-                // case when ratings.value is not null 
-        }
+            key attributeID,
+                // case when ratings.GUID is not null then ratings.GUID else null end as ratingID: UUID,
+                description,
+                ratings.user.name,
+                case when ratings.value is not null then ratings.value else 0 end as value: Integer,
+                ratings: redirected to Ratings
+        } where ratings.user.userID = $user 
 
 
     entity Users      as
         projection on blackseeds.User {
-            key GUID,
+            key userID,
                 name
         }
-
-
-    // entity myStrains {
-    //     key GUID    : UUID;
-    //         strains : Composition of many {
-    //                       key strain  : Association to Strains;
-    //                           ratings : Composition of many {
-    //                                         key rating : Association to Ratings;
-    //                                             user   : Association to Users;
-    //                                     }
-    //                   }
-    // }
-
 
 }

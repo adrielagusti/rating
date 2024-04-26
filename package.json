@@ -6,35 +6,121 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "@cap-js-community/odata-v2-adapter": "^1.12.8",
-    "@sap/cds": "^7",
+    "@cap-js-community/odata-v2-adapter": "^1.10.5",
+    "@sap/cds": "7.8.2",
+    "@sap/cds-dk": "7.8.2",
     "@sap/cds-mtxs": "^1.9",
-    "express": "^4"
+    "cds-pg": "0.1.33",
+    "chalk": "4.1.2",
+    "dotenv": "^16.0.3",
+    "express": "^4",
+    "passport-http": "^0.3.0",
+    "sqlite3": "^5.0.4",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@cap-js/sqlite": "^1",
-    "@sap/cds-dk": "^7"
+    "@sap/eslint-plugin-ui5-jsdocs": "^2.0.5",
+    "@sap/ux-specification": "^1.108.2",
+    "@sapui5/ts-types": "^1.92.2",
+    "cds-dbm": "^0.0.36",
+    "eslint": "^7.32.0"
   },
   "scripts": {
-    "start": "cds-serve"
+    "start": "cds run",
+    "start:docker": "docker-compose up",
+    "heroku-postbuild": "echo heroku postbuild skipped",
+    "heroku:pg:deploy": "PGHOST=localhost PGUSER=postgres PGPASSWORD=postgres heroku pg:push rating postgresql-tetrahedral-32605 --app blackseeds-ratings",
+    "pg:deploy": "npx cds-dbm deploy"
+  },
+  "engines": {
+    "node": "^16.15"
+  },
+  "eslintConfig": {
+    "extends": "eslint:recommended",
+    "env": {
+      "es2020": true,
+      "node": true,
+      "jest": true,
+      "mocha": true
+    },
+    "globals": {
+      "SELECT": true,
+      "INSERT": true,
+      "UPDATE": true,
+      "DELETE": true,
+      "CREATE": true,
+      "DROP": true,
+      "CDL": true,
+      "CQL": true,
+      "CXL": true,
+      "cds": true
+    },
+    "rules": {
+      "no-console": "off",
+      "require-atomic-updates": "off"
+    }
   },
   "cds": {
     "profile": "with-mtx-sidecar",
+    "cov2ap": {
+      "plugin": true
+    },
     "requires": {
       "multitenancy": true,
       "auth": {
         "kind": "basic-auth",
-        
-          "users": {
-            "SHERNANG": {
-              "password": "Ogaitna$1234"
-            }
-         
+        "users": {
+          "SHERNANG": {
+            "password": "Ogaitna$1234"
+          },
+          "ADRIEL": {
+            "password": "level"
+          },
+          "ARIEL": {
+            "password": "pepo"
+          },
+          "IGNACIO": {
+            "password": "chelok"
+          }
         }
       },
-        "db": {
-          "kind": "sqlite"
+      "db": {
+        "kind": "postgres",
+        "dialect": "plain"
+      },
+      "postgres": {
+        "dialect": "plain",
+        "impl": "cds-pg",
+        "model": [
+          "srv"
+        ],
+        "credentials": {
+          "[heroku]": {
+            "ssl": {
+              "rejectUnauthorized": false
+            }
+          }
         }
+      }
+    },
+    "migrations": {
+      "db": {
+        "schema": {
+          "default": "public",
+          "clone": "_cdsdbm_clone",
+          "reference": "_cdsdbm_ref"
+        },
+        "deploy": {
+          "tmpFile": "tmp/_autodeploy.json",
+          "undeployFile": "db/undeploy.json"
+        }
+      }
+    },
+    "log": {
+      "levels": {
+        "sqlite": "warn",
+        "cds": "warn"
       }
     }
   }
+}

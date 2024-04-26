@@ -1,4 +1,4 @@
-GUID,value,strain_GUID,attribute_GUID,user_GUID
+ratingID,value,strain_strainID,attribute_attributeID,user_userID
 f786b1f9-971f-4d7d-b2a2-810192f3a37b,3,08cfd999-045b-4b30-8d16-07807363a863,2a733ee0-dd04-48f3-86f5-6ab2d45fbf4f,SHERNANG
 6b43e7d9-89a5-4d5c-a44e-9029b9f05b91,2,08cfd999-045b-4b30-8d16-07807363a863,4612f8c7-582f-4a75-ba53-a59e6cca12bd,SHERNANG
 f8c8aef6-2676-4e7c-bdc0-736b88c81063,2,0a49b43a-a451-4565-abf1-e4e0284c32e0,4b7f0dd4-2ccd-4ab6-aef7-3ab837b31265,SHERNANG
