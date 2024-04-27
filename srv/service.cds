@@ -51,8 +51,11 @@ service BlackSeedsService {
                 attribute.ID as attributeID,
                 attribute.description,
                 strain,
+                strain.tagID,
                 attribute,
-                createdBy
+                createdBy,
+                createdAt,
+                modifiedAt
         }
 
 

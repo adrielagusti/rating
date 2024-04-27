@@ -69,7 +69,7 @@
                             > -->
                             <VBox>
                                 <HBox justifyContent="SpaceBetween">
-                                         <ObjectStatus
+                                    <ObjectStatus
                                         text="{name}"
                                         class="sapMObjectStatusLarge sapUiTinyMarginBegin"
                                     />
@@ -77,17 +77,16 @@
                                         text="{tagID}"
                                         class="sapUiTinyMargin"
                                     />
-                           
                                 </HBox>
                                 <VBox alignItems="Center">
-                                <RatingIndicator
-                                    maxValue="15"
-                                    value="{ path:'totalPoints' }"
-                                    class="sapUiTinyMarginEnd"
-                                    enabled="false"
-                                    iconSize="17px"
-                                />
-                            </VBox>
+                                    <RatingIndicator
+                                        maxValue="15"
+                                        value="{ path:'totalPoints' }"
+                                        class="sapUiTinyMarginEnd"
+                                        enabled="false"
+                                        iconSize="17px"
+                                    />
+                                </VBox>
                             </VBox>
                             <!-- </FlexBox> -->
                         </f:GridListItem>
@@ -130,6 +129,44 @@
                         </f:GridListItem>
                     </f:GridList>
                 </Panel>
+                <Panel
+                    expanded="true"
+                    class="sapUiTinyMarginTop"
+                    visible="{= ${appModel>/mode} === 'hist' }"
+                >
+                    <f:GridList
+                        mode="SingleSelectMaster"
+                        items="{path: 'dataModel>/history', sorter: { path: 'dataModel>modifiedAt', descending: true } }"
+                        selectionChange="onSelectHist"
+                    >
+                        <f:customLayout>
+                            <grid:GridBoxLayout boxWidth="100%" />
+                        </f:customLayout>
+
+                        <f:GridListItem type="Active">
+                            <FlexBox
+                                alignContent="Center"
+                                alignItems="Center"
+                            >
+                                <Text
+                                    text='{dataModel>modifiedAt}'
+                                    class="sapUiSmallMarginTop sapUiSmallMarginBegin"
+                                />
+                            </FlexBox>
+                            <HBox justifyContent="SpaceBetween">
+                                <Title
+                                    class="sapUiSmallMarginTop sapUiSmallMargin"
+                                    text="{dataModel>tagID}"
+                                />
+                                <ObjectStatus
+                                    class="sapUiSmallMarginTop sapUiSmallMargin"
+                                    text="{dataModel>strainName}"
+                                    state="Success"
+                                />
+                            </HBox>
+                        </f:GridListItem>
+                    </f:GridList>
+                </Panel>
             </content>
             <footer>
                 <Toolbar>
@@ -153,6 +190,11 @@
                                 text="Top tier"
                                 icon="sap-icon://competitor"
                                 key="top"
+                            />
+                            <SegmentedButtonItem
+                                text="History"
+                                icon="sap-icon://history"
+                                key="hist"
                             />
                         </items>
                     </SegmentedButton>

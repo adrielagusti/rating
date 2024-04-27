@@ -18,7 +18,7 @@ sap.ui.define(
 
       onInit() {
         this._setUserResults();
-        this.getView().setModel(new JSONModel({ mode: "rate" }), 'appModel');
+        this.getView().setModel(new JSONModel({ mode: "top" }), 'appModel');
       },
 
       _setUserResults() {
@@ -30,21 +30,22 @@ sap.ui.define(
           .then(results => {
 
             const [aRatings, aStrains] = results;
-    
+
             // const result = this.prepareSummarizedModel(aRatings.results, aStrains.results, aAttributes.results);
-            const result = this._setRatedFlags(aRatings.results, aStrains.results);
-            
-            var iTested = result.filter((item) => item.isRated === true ).length;
+            const aStrainsProc = this._setRatedFlags(aRatings.results, aStrains.results);
+            const aHistory = this._setHistory(aRatings.results);
 
-            var iTotal = result.length;
+            var iTested = aStrainsProc.filter((item) => item.isRated === true).length;
 
-            this.getOwnerComponent().setModel(new JSONModel({ strains: result, tested: iTested, total: iTotal }), 'dataModel');
+            var iTotal = aStrainsProc.length;
+          
+            this.getOwnerComponent().setModel(new JSONModel({ strains: aStrainsProc, tested: iTested, total: iTotal, history: aHistory }), 'dataModel');
 
           })
 
       },
 
-      
+
       getModel: function (sModelName) {
         return this.getView().getModel();
       },
@@ -53,10 +54,17 @@ sap.ui.define(
         let oItem = oEvent.getSource().getSelectedItem().getBindingContext("dataModel").getObject();
         this._showObject(oItem);
       },
-      
+
       onSelectRowTop(oEvent) {
         let oItem = oEvent.getSource().getSelectedItem().getBindingContext().getObject();
         this._showObject(oItem);
+      },
+
+      onSelectHist(oEvent) {
+        let oItem = oEvent.getSource().getSelectedItem().getBindingContext('dataModel').getObject();
+        this.getRouter().navTo("rating", {
+          objectId: oItem.strainID
+        });
       },
 
       onSelectNav(oEvent) {
@@ -124,7 +132,21 @@ sap.ui.define(
 
         return aFlaggedRatings;
 
-      }
+      },
+
+      _setHistory(aRatings) {
+
+        const aHistory = [];
+
+        aRatings.forEach(rating => {
+          if (!aHistory.find(item => item.strainID === rating.strainID)) {
+            aHistory.push(rating);
+          }
+        });
+
+        return aHistory;
+
+      },
 
       // prepareSummarizedModel(aRatings, aStrains, aAttributes) {
 
