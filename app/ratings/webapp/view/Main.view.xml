@@ -8,6 +8,7 @@
     xmlns:core="sap.ui.core"
     xmlns:micro="sap.ui.comp.smartmicrochart"
     displayBlock="true"
+    xmlns:tnt="sap.tnt"
 >
     <App id="app">
         <Page
@@ -27,98 +28,83 @@
                         <Image
                             class="sapUiTinyMarginTopBottom"
                             src="./img/logo.png"
-                            width="7rem"
+                            width="6rem"
                         />
-                        <VBox
-                            justifyContent="End"
-                            alignContent="End"
-                            alignItems="End"
-                        >
-                            <Select
-                                selectedKey="{loggedUser>/GUID}"
-                                items="{/Users}"
-                                forceSelection="true"
-                                change="onUserChange"
-                                class="sapUiMediumMarginBottom"
-                            >
-                                <core:Item
-                                    key="{GUID}"
-                                    text="{name}"
-                                />
-                            </Select>
-                            <ObjectStatus
-                                title="Rated"
-                                text="{dataModel>/tested} / {dataModel>/total}"
-                                state="Success"
-                                class="sapMObjectStatusLarge"
-                                icon="sap-icon://e-care"
-                            />
-                        </VBox>
+
+                        <ObjectStatus
+                            text="{dataModel>/tested}"
+                            state="Success"
+                            class="sapMObjectStatusLarge sapUiMediumMarginTop"
+                            icon="sap-icon://sys-enter-2"
+                        />
+
+                        <ObjectStatus
+                            text="{dataModel>/total}"
+                            state="None"
+                            class="sapMObjectStatusLarge sapUiMediumMarginTop"
+                            icon="sap-icon://e-care"
+                        />
                     </HBox>
                 </Panel>
 
                 <Panel
-                    expanded="false"
-                    expandable="true"
-                    headerText="Top tier ranking"
+                    expanded="true"
+                    class="sapUiTinyMarginTop"
+                    visible="{= ${appModel>/mode} === 'top' }"
                 >
                     <f:GridList
                         id="grid-toptier"
                         mode="SingleSelectMaster"
-                        growingThreshold="5"
                         growing="true"
-                        items="{path: 'dataModel>/strains', sorter: { path: 'value', descending: true } }"
+                        items="{path: '/Strains', sorter: { path: 'totalPoints', descending: true } }"
+                        selectionChange="onSelectRowTop"
                     >
                         <f:customLayout>
                             <grid:GridBoxLayout boxWidth="100%" />
                         </f:customLayout>
 
                         <f:GridListItem type="Active">
-                            <FlexBox
-                                justifyContent="SpaceBetween"
-                                alignContent="Center"
-                                alignItems="Center"
-                            >
-                               <Label text="({dataModel>tagID})" class="sapUiTinyMarginBeginEnd" />
-                                <Title
-                                    text="{dataModel>name}"
-                                    class="sapUiTinyMarginTopBottom sapUiTinyMarginBegin"
-                                />
-                                <!-- <Text
-                                text="Black Seeds"
-                                class="sapUiTinyMarginTopBottom sapUiTinyMarginEnd"
-                            /> -->
-                                <!-- </FlexBox>
-                        <FlexBox
-                            justifyContent="Center"
-                            alignContent="Center"
-                            alignItems="Center"
-                        > -->
+                            <!-- <FlexBox
+                          
+                            > -->
+                            <VBox>
+                                <HBox justifyContent="SpaceBetween">
+                                         <ObjectStatus
+                                        text="{name}"
+                                        class="sapMObjectStatusLarge sapUiTinyMarginBegin"
+                                    />
+                                    <Title
+                                        text="{tagID}"
+                                        class="sapUiTinyMargin"
+                                    />
+                           
+                                </HBox>
+                                <VBox alignItems="Center">
                                 <RatingIndicator
-                                    maxValue="5"
-                                    value="{ path:'dataModel>value' }"
+                                    maxValue="15"
+                                    value="{ path:'totalPoints' }"
                                     class="sapUiTinyMarginEnd"
                                     enabled="false"
-                                    iconSize="22px"
+                                    iconSize="17px"
                                 />
-                            </FlexBox>
+                            </VBox>
+                            </VBox>
+                            <!-- </FlexBox> -->
                         </f:GridListItem>
                     </f:GridList>
                 </Panel>
                 <Panel
                     expanded="true"
                     class="sapUiTinyMarginTop"
-                    headerText="Strains to rate"
+                    visible="{= ${appModel>/mode} === 'rate' }"
                 >
                     <f:GridList
-                        id="grid-reasons"
                         mode="SingleSelectMaster"
-                        items="{path: '/Strains', sorter: { path: 'name' } }"
+                        items="{path: 'dataModel>/strains', sorter: { path: 'dataModel>name', group: '.getName' } }"
                         selectionChange="onSelectRow"
                     >
-                        <!-- items="{path: 'dataModel>/strains', sorter: { path: 'dataModel>name', group: '.getName' } }" -->
                         <f:customLayout>
-                            <grid:GridBoxLayout boxWidth="100%" />
+                            <grid:GridBoxLayout boxWidth="30%" />
                         </f:customLayout>
 
                         <f:GridListItem type="Active">
@@ -133,72 +119,43 @@
                                     alignItems="Start"
                                     class="sapUiTinyMarginTop"
                                 >
-                                    <Label text="({tagID})" class="sapUiTinyMarginBeginEnd" />
-                                    <Title text="{name}" />
+                                    <ObjectStatus
+                                        class="sapUiSmallMargin sapUiMediumMarginBegin"
+                                        text="{dataModel>tagID}"
+                                        icon="{= ${dataModel>isRated} === false ? 'sap-icon://e-care' : 'sap-icon://sys-enter-2' }"
+                                        state="{= ${dataModel>isRated} === true ? 'Success' : 'None' }"
+                                    />
                                 </FlexBox>
-                                <!-- <RatingIndicator
-                                    maxValue="1"
-                                    value="1"
-                                    class="sapUiTinyMarginBegin sapUiTinyMarginEnd"
-                                    enabled="false"
-                                    iconSize="22px"
-                                    visible="{= ${dataModel>value} > 0 }"
-                                /> -->
-                                <core:Icon src="sap-icon://accept" visible="{isRated}" class="sapUiTinyMarginEnd" color="#64E4CE"/>
-
-                                <!-- <Text
-                                    text="Breeder?"
-                                    class="sapUiTinyMarginTopBottom sapUiTinyMarginEnd"
-                                /> -->
-                                <!-- </FlexBox>
-                            <FlexBox
-                                justifyContent="Center"
-                                alignContent="Center"
-                                alignItems="Center"
-                            > -->
                             </FlexBox>
                         </f:GridListItem>
                     </f:GridList>
                 </Panel>
-                <!-- <List
-                    id="idList"
-                    items="{/Strains}"
-                    selectionChange="onSelectRow"
-                    mode="SingleSelectMaster"
-                    growing="true"
-                    growingThreshold="50"
-                    includeItemInSelection="true"
-                >
-                    <CustomListItem
-                        press="onSelectRow"
-                        type="Active"
-                        detailPress="onSelectRow"
-                    >
-                        <FlexBox
-                            justifyContent="SpaceBetween"
-                            alignContent="Center"
-                            alignItems="Center"
-                        >
-                            <VBox>
-                                <Title
-                                    text="({tagID}) {name}"
-                                    class="sapUiSmallMarginTopBottom"
-                                />
-                                <Text
-                                    text="Add breeder"
-                                    class="sapUiSmallMarginBottom"
-                                />
-                            </VBox>
-                            <RatingIndicator
-                                maxValue="5"
-                                value="{value}"
-                            />
-                        </FlexBox>
-                    </CustomListItem>
-                </List> -->
             </content>
             <footer>
                 <Toolbar>
+                    <Button
+                        icon="sap-icon://e-care"
+                        type="Transparent"
+                    />
+                    <ToolbarSpacer />
+
+                    <SegmentedButton
+                        selectedKey="{appModel>/mode}"
+                        width="70%"
+                    >
+                        <items>
+                            <SegmentedButtonItem
+                                text="Rate"
+                                icon="sap-icon://favorite"
+                                key="rate"
+                            />
+                            <SegmentedButtonItem
+                                text="Top tier"
+                                icon="sap-icon://competitor"
+                                key="top"
+                            />
+                        </items>
+                    </SegmentedButton>
                     <ToolbarSpacer />
                     <Select
                         forceSelection="false"
@@ -208,12 +165,13 @@
                         autoAdjustWidth="true"
                         items="{
 						path: '/Strains',
-						sorter: { path: 'name' }
+						sorter: { path: 'tagID' }
 					}"
+                        change="onSelectNav"
                     >
                         <core:Item
-                            key="{stainID}"
-                            text="{name}"
+                            key="{ID}"
+                            text="{tagID} - {name} "
                         />
                     </Select>
                 </Toolbar>

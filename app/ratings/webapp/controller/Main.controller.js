@@ -17,47 +17,59 @@ sap.ui.define(
       formatter: formatter,
 
       onInit() {
+        this._setUserResults();
+        this.getView().setModel(new JSONModel({ mode: "rate" }), 'appModel');
+      },
 
-        // this._setUserResults();
+      _setUserResults() {
+        let p1 = this._getRatings();
+        let p2 = this._getStrains()
+        // let p3 = this._getAttributes()
+
+        Promise.all([p1, p2])
+          .then(results => {
+
+            const [aRatings, aStrains] = results;
+    
+            // const result = this.prepareSummarizedModel(aRatings.results, aStrains.results, aAttributes.results);
+            const result = this._setRatedFlags(aRatings.results, aStrains.results);
+            
+            var iTested = result.filter((item) => item.isRated === true ).length;
+
+            var iTotal = result.length;
+
+            this.getOwnerComponent().setModel(new JSONModel({ strains: result, tested: iTested, total: iTotal }), 'dataModel');
+
+          })
 
       },
 
-      // _setUserResults() {
-      //   let p1 = this._getRatings(this.getOwnerComponent().getModel('loggedUser').getProperty("/GUID"));
-      //   let p2 = this._getStrains()
-      //   let p3 = this._getAttributes()
-
-      //   Promise.all([p1, p2, p3])
-      //     .then(results => {
-
-      //       const [aRatings, aStrains, aAttributes] = results;
-        
-      //       const result = this.prepareSummarizedModel(aRatings.results, aStrains.results, aAttributes.results);
-      //       var iTested = result.filter((item) => item.value > 0).length;
-      //       var iTotal = result.length;
-      //       this.getView().setModel(new JSONModel({ strains: result, tested: iTested, total: iTotal }), 'dataModel');
-
-      //     })
-
-      // },
-
-      // onUserChange() {
-      //   this._setUserResults();
-      // },
-
+      
       getModel: function (sModelName) {
         return this.getView().getModel();
       },
 
       onSelectRow(oEvent) {
-        // The source is the list item that got pressed
-        let oItem = oEvent.getParameter("listItem");
+        let oItem = oEvent.getSource().getSelectedItem().getBindingContext("dataModel").getObject();
+        this._showObject(oItem);
+      },
+      
+      onSelectRowTop(oEvent) {
+        let oItem = oEvent.getSource().getSelectedItem().getBindingContext().getObject();
         this._showObject(oItem);
       },
 
+      onSelectNav(oEvent) {
+        // The source is the list item that got pressed
+        // let oItem = oEvent.getParameter("listItem");
+        this.getRouter().navTo("rating", {
+          objectId: oEvent.getParameters().selectedItem.getKey()
+        });
+      },
+      // 
       _showObject(oItem) {
-        this.getRouter().navTo("ratingChange", {
-          objectId: oItem.getBindingContext().getObject().GUID
+        this.getRouter().navTo("rating", {
+          objectId: oItem.ID
         });
       },
 
@@ -69,19 +81,16 @@ sap.ui.define(
         return oContext.getProperty('name');
       },
 
-      _getRatings(user) {
-        // var aFilter = [new Filter("user_GUID", FilterOperator.EQ, user)];
-
+      _getRatings() {
         return new Promise((res, rej) => {
           this.getOwnerComponent().getModel().read("/Ratings", {
-            // filters: aFilter,
             success: res,
             error: rej
           })
         });
       },
 
-      _getStrains(strain, user) {
+      _getStrains() {
         return new Promise((res, rej) => {
           this.getOwnerComponent().getModel().read("/Strains", {
             success: res,
@@ -98,6 +107,24 @@ sap.ui.define(
           })
         });
       },
+
+      _setRatedFlags(aRatings, aStrains) {
+
+        let aFlaggedRatings = aStrains.map(strain => {
+          strain.isRated = false;
+          aRatings.forEach(rating => {
+            if (rating.strainID === strain.ID) {
+              strain.isRated = true;
+            }
+          });
+
+          return strain;
+
+        });
+
+        return aFlaggedRatings;
+
+      }
 
       // prepareSummarizedModel(aRatings, aStrains, aAttributes) {
 

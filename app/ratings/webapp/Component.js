@@ -30,8 +30,7 @@ sap.ui.define([
 
                 // set the device model
                 this.setModel(models.createDeviceModel(), "device");
-
-                this.setModel(new JSONModel({GUID: 'd336866a-2c67-4c5f-806f-cdc0780c74b5'}), "loggedUser");
+                
                 //set view model
                 this.setModel(models.createViewModel(), "view");
 

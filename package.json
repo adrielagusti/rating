@@ -7,6 +7,7 @@
   "private": true,
   "dependencies": {
     "@cap-js-community/odata-v2-adapter": "^1.10.5",
+    "@cap-js/postgres": "^1.7.0",
     "@sap/cds": "7.8.2",
     "@sap/cds-dk": "7.8.2",
     "@sap/cds-mtxs": "^1.9",
@@ -30,7 +31,8 @@
     "start:docker": "docker-compose up",
     "heroku-postbuild": "echo heroku postbuild skipped",
     "heroku:pg:deploy": "PGHOST=localhost PGUSER=postgres PGPASSWORD=postgres heroku pg:push rating postgresql-tetrahedral-32605 --app blackseeds-ratings",
-    "pg:deploy": "npx cds-dbm deploy"
+    "pg:deploy": "npx cds-dbm deploy",
+    "build": "cds build --clean;cp gen/srv/srv/csn.json srv/gen/;cp -r gen/db/src/gen db/src"
   },
   "engines": {
     "node": "^16.15"
@@ -86,7 +88,10 @@
       },
       "db": {
         "kind": "postgres",
-        "dialect": "plain"
+        "pool": {
+          "max": 1400,
+          "min": 100
+        }
       },
       "postgres": {
         "dialect": "plain",

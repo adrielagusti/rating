@@ -6,60 +6,118 @@
     displayBlock="true"
     xmlns="sap.m"
 >
-    <App id="app">
-        <Page
-            showHeader="false"
-            class="sapUiContentPadding"
-        >
-            <subHeader>
-                <Toolbar>
-                    <ToolbarSpacer />
-                    <Title text="{name}" />
-                </Toolbar>
-            </subHeader>
-            <content>
-                <VBox
-                    id="vbox-atts"
-                    items="{/Attributes}"
+    <!-- <App id="app"> -->
+    <Page
+        showHeader="false"
+        class="sapUiContentPadding"
+    >
+        <subHeader>
+            <Toolbar>
+            <ToolbarSpacer />
+                <Title text="{name}" />
+                <ToolbarSpacer />
+                <!-- <Title text="{tagID}" /> -->
+            </Toolbar>
+        </subHeader>
+        <content>
+            <Panel class="sapUiTinyMarginBottom">
+                <HBox justifyContent="SpaceBetween">
+                    <!-- <VBox
+                            justifyContent="End"
+                            alignContent="End"
+                            alignItems="End"
+                        > -->
+
+                    <Image
+                        class="sapUiTinyMarginTopBottom"
+                        src="./img/logo.png"
+                        width="6rem"
+                    />
+
+                    <ObjectStatus
+                        text="{tagID}"
+                        class="sapMObjectStatusLarge sapUiMediumMarginTop"
+                        icon="sap-icon://blank-tag-2"
+                    />
+                    
+                    <!-- <Text text="{name}" class="sapUiMediumMarginTop" wrapping="true"/> -->
+
+
+                    <!-- </VBox> -->
+                </HBox>
+            </Panel>
+
+            <!--                 
+            <HBox alignItems="Center" justifyContent="SpaceBetween">
+               <ObjectStatus
+                            text="{dataModel>/tested}"
+                            state="Success"
+                            class="sapMObjectStatusLarge sapUiMediumMarginTop"
+                            icon="sap-icon://blank-tag-2"
+                        />
+            
+                <Image
+                    class="sapUiTinyMarginTopBottom"
+                    src="./img/logo.png"
+                    width="6rem"
+                />
+                         <ObjectStatus
+                            text="{dataModel>/tested}"
+                            state="Success"
+                            class="sapMObjectStatusLarge sapUiMediumMarginTop"
+                            icon="sap-icon://blank-tag-2"
+                        />
+            </HBox> -->
+            <VBox
+                id="vbox-atts"
+                items="{dataModel>/ratings}"
+            >
+                <Panel
+                    width="100%"
+                    class="sapUiResponsiveMargin"
                 >
-                    <Panel
-                        width="auto"
-                        class="sapUiResponsiveMargin"
-                    >
-                        <headerToolbar>
-                            <OverflowToolbar>
-                                <Title text="{description}" />
-                                <ToolbarSpacer />
-                                <!-- <CheckBox selected="{selected}"/> -->
-                            </OverflowToolbar>
-                        </headerToolbar>
-                        <content>
-                            <FlexBox>
-                                <RatingIndicator
-                                    maxValue="5"
-                       
-                                    value="{value}"
+                    <headerToolbar>
+                        <OverflowToolbar>
+                            <Title text="{dataModel>description}" />
+                            <ToolbarSpacer />
+                            <!-- <CheckBox selected="{selected}"/> -->
+                        </OverflowToolbar>
+                    </headerToolbar>
+                    <content>
+                        <!-- <FlexBox alignItems="Center"> -->
+                        <VBox>
+                            <HBox>
+                                 <Label
+                                    text="{dataModel>value} / 15"
+                                    class="sapUiSmallMarginBeginEnd sapUiTinyMarginTop"
                                 />
-                                 <Label text="{value} / 5" class="sapUiSmallMarginBeginEnd sapUiTinyMarginTop" />
-                                <Input value="{comments}"  />
-                            </FlexBox>
-                        </content>
-                    </Panel>
-                </VBox>
-            </content>
-            <footer>
-                <Toolbar>
-                    <Button
-                        text="Cancel"
-                        press="onBroBack"
-                    />
-                    <ToolbarSpacer />
-                    <Button
-                        text="Save"
-                        press="onBroSave"
-                    />
-                </Toolbar>
-            </footer>
-        </Page>
-    </App>
+                                <RatingIndicator
+                                    maxValue="15"
+                                    value="{dataModel>value}"
+                                      iconSize="17px"
+                                />
+                           
+                            </HBox>
+                            <Input value="{dataModel>comments}" />
+                        </VBox>
+                        <!-- </FlexBox> -->
+                    </content>
+                </Panel>
+            </VBox>
+        </content>
+        <footer>
+            <Toolbar>
+                <Button
+                    text="Cancel"
+                    press="onBroBack"
+                />
+                <ToolbarSpacer />
+                <Button
+                    text="Save"
+                    press="onBroSave"
+                />
+            </Toolbar>
+        </footer>
+    </Page>
+    <!-- </App> -->
 </mvc:View>

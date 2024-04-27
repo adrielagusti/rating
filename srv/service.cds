@@ -1,7 +1,12 @@
 using {blackseeds} from '../db/db';
 
 // @(requires: 'authenticated-user')
+
 service BlackSeedsService {
+    // ENTITY @(restrict: [
+    //     { grant: 'READ', to: 'Auditor', where: 'country = $user.country' },
+    //     { grant: ['READ','WRITE'], where: 'CreatedBy = $user' },
+    //   ]) {/*...*/}
 
     // action broSaveRating(
     //     strainID: UUID,
@@ -11,49 +16,51 @@ service BlackSeedsService {
     // ) returns Ratings;
 
 
+    // entity MAINER SELECT blackseeds.temporalMain as{
+    //     key user.userID : UUID,
+    //     strains.strainID : UUID,
+    //     ratings.ratingID : UUID
+    // }
+
     entity Strains    as
-        projection on blackseeds.Strain {
-            key strainID,
+        projection on blackseeds.Strains {
+            key ID,
                 tagID,
                 name,
-                case when ratings.ratingID is not null then true else false end as isRated : Boolean,
-                ratings          : redirected to Ratings
-        } 
-        // group by
-        //     GUID
+                COALESCE(
+                    AVG(
+                        ratings.value
+                    ), 0
+                ) as totalPoints : Integer,
+        }
+        group by
+            ID;
 
 
-    entity Ratings    as
-        projection on blackseeds.Rating {
-            key ratingID,
-                @UI.HiddenFilter
-                strain: redirected to Strains,
-                attribute,
-                @UI.HiddenFilter
-                user,
+    entity Ratings @(restrict: [{
+        grant: '*',
+        where: 'createdBy = $user'
+    }
+    ])
+    as
+        projection on blackseeds.Ratings {
+            key ID,
+                strain.ID    as strainID,
                 value,
-                attribute.description as attributeDescription,
-                strain.name           as strainName,
-                user.userID,
-                user.name             as userName
-        } where user.userID = $user
-        // group by GUID
+                strain.name  as strainName,
+                attribute.ID as attributeID,
+                attribute.description,
+                strain,
+                attribute,
+                createdBy
+        }
+
 
     entity Attributes as
-        projection on blackseeds.Attribute {
-            key attributeID,
-                // case when ratings.GUID is not null then ratings.GUID else null end as ratingID: UUID,
-                description,
-                ratings.user.name,
-                case when ratings.value is not null then ratings.value else 0 end as value: Integer,
-                ratings: redirected to Ratings
-        } where ratings.user.userID = $user 
-
-
-    entity Users      as
-        projection on blackseeds.User {
-            key userID,
-                name
+        projection on blackseeds.Attributes {
+            key ID,
+                description
         }
+
 
 }

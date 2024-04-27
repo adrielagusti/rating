@@ -16,7 +16,7 @@ sap.ui.define(
       onInit() {
 
         this.getRouter().getRoute("rating").attachPatternMatched(this._onObjectMatched, this);
-        this.getRouter().getRoute("ratingChange").attachPatternMatched(this._onObjectMatched, this);
+        // this.getRouter().getRoute("ratingChange").attachPatternMatched(this._onObjectMatched, this);
 
       },
 
@@ -31,13 +31,12 @@ sap.ui.define(
       _onObjectMatched(oEvent) {
         let sObjectId = oEvent.getParameter("arguments").objectId;
         this._bindView("/Strains(guid'" + sObjectId + "')");
-
-        // this._setUserResults(sObjectId);
+        this._setUserResults(sObjectId);
 
       },
 
-      _setUserResults(objectId){
-        let p1 = this._getRatings(objectId, this.getOwnerComponent().getModel('loggedUser').getProperty("/GUID"));
+      _setUserResults(objectId) {
+        let p1 = this._getRatings(objectId);
         let p2 = this._getAttributes();
 
         // Wait for the answer of both entities to match existing ratings of attributes with all existing atts.
@@ -45,9 +44,9 @@ sap.ui.define(
           .then(results => {
 
             const [aRatings, aAttributes] = results;
-  
+
             const result = this.findCorrespondingEntries(aRatings.results, aAttributes.results);
-  
+
             this.getView().setModel(new JSONModel({ ratings: result }), 'dataModel');
 
           })
@@ -59,9 +58,9 @@ sap.ui.define(
         });
       },
 
-      _getRatings(strain, user) {
-        var aFilter = [new Filter("user_GUID", FilterOperator.EQ, user)];
-        aFilter.push(new Filter("strain_GUID", FilterOperator.EQ, strain));
+      _getRatings(strain) {
+        var aFilter = [new Filter("strainID", FilterOperator.EQ, strain)];
+        // aFilter.push(new Filter("strain_GUID", FilterOperator.EQ, strain));
 
         return new Promise((res, rej) => {
           this.getView().getModel().read("/Ratings", {
@@ -72,7 +71,7 @@ sap.ui.define(
         });
       },
 
-      _getAttributes(strain, user) {
+      _getAttributes() {
         return new Promise((res, rej) => {
           this.getView().getModel().read("/Attributes", {
             success: res,
@@ -85,31 +84,26 @@ sap.ui.define(
       findCorrespondingEntries(aRatings, aAttributes) {
         let result = [];
         var strain = this.getView().getBindingContext().getObject();
-        var userGUID = this.getOwnerComponent().getModel('loggedUser').getProperty("/GUID");
 
         aAttributes.forEach(atribute => {
-
-          let existingRating = aRatings.find(rating => rating.attribute_GUID === atribute.GUID );
+          let existingRating = aRatings.find(rating => rating.attributeID === atribute.ID);
 
           if (existingRating) {
             result.push({
               value: existingRating.value,
-              strain_GUID: existingRating.strain_GUID,
-              attribute_GUID: atribute.GUID,
-              GUID: existingRating.GUID,
-              user_GUID: existingRating.user_GUID,
-              attributeDescription: atribute.description,
-              strainName: existingRating.strainName,
-              userName: existingRating.userName
+              strain: { ID: existingRating.strainID },
+              attribute: { ID: atribute.ID },
+              ID: existingRating.ID,
+              userID: existingRating.userID,
+              description: atribute.description,
+              strainName: existingRating.strainName
             });
           } else {
             result.push({
               value: 0,
-              strain_GUID: strain.GUID,
-              attribute_GUID: atribute.GUID,
-              user_GUID: userGUID,
-              attributeDescription: atribute.description,
-              strainName: strain.name
+              strain: { ID: strain.ID, },
+              attribute: { ID: atribute.ID },
+              description: atribute.description,
             });
           }
         });
@@ -118,42 +112,73 @@ sap.ui.define(
 
       },
 
-      onUserChange(oEvent) {
-        var oItem = oEvent.getSource().getSelectedKey();
-        this._setUserResults();
-      },
 
       onBroSave() {
 
         var oStrain = this.getView().getBindingContext().getObject();
         var aRatingsPayload = this.getView().getModel("dataModel").getProperty("/ratings");
-        
-       debugger;
-
-        this._saveRatings(aRatingsPayload[1]).then( history.go(-1) );
-
-        // var aRatings = aRatingsPayload.map((rating) => {
-        //   var oAttribute = attribute.getObject();
-        //   var oRating = {
-        //     value: oAttribute.value,
-        //     strain_GUID: oStrain.GUID,
-        //     attribute_GUID: oAttribute.GUID
-        //   }
-        // })
+        // this.getView().setBusy(true);
+        this.getView().byId("vbox-atts").setBusy(true)
+        this._saveRatings(aRatingsPayload)
 
       },
 
-      _saveRatings(payload){
+      _saveRatings(payloads) {
 
-        return new Promise((res, rej) => {
-          this.getView().getModel().create("/Ratings", payload,{
-            success: res,
-            error: rej
-          })
+        var aPromises = [];
+
+        payloads.forEach(payload => {
+          aPromises.push(
+
+            new Promise((resolve, reject) => {
+              if (payload.ID !== undefined) {
+                var sPath = this.getView().getModel().createKey('/Ratings', { ID: payload.ID })
+                this.getView().getModel().update(sPath, payload, {
+                  success: resolve,
+                  error: reject
+                });
+              } else {
+                this.getView().getModel().create("/Ratings", payload, {
+                  success: resolve,
+                  error: reject
+                });
+              }
+
+            }));
         });
 
+        Promise.all(aPromises)
+          .then(results => {
+            this._onSuccess()
+          })
+          .catch(error => {
+            console.error("ERROR", error);
+          });
 
+      },
+
+      _onSuccess(payloads) {
+
+        var oInfoModel = this.getOwnerComponent().getModel('dataModel');
+        var oCurrentStrain = this.getView().getBindingContext().getObject();
+        var vTested = parseInt(oInfoModel.getProperty("/tested")) + 1;
+        var vTotal = oInfoModel.getProperty("/total");
+        var aStrains = oInfoModel.getProperty("/strains");
+
+        var aProcStrains = aStrains.map(strain => {
+          if (strain.ID === oCurrentStrain.ID) {
+            // Change the value of 'z' field to true if the condition is met
+            return { ...strain, isRated: true };
+          }
+          return strain; // If the condition is not met, return the original item unchanged
+        });
+
+        this.getOwnerComponent().setModel(new JSONModel({ strains: aProcStrains, tested: vTested, total: vTotal }), 'dataModel');
+
+        this.getView().byId("vbox-atts").setBusy(false)
+        this.getRouter().navTo('main');
       }
+
     });
   }
 );
