@@ -6,68 +6,51 @@
     displayBlock="true"
     xmlns="sap.m"
 >
-    <!-- <App id="app"> -->
     <Page
         showHeader="false"
         class="sapUiContentPadding"
     >
         <subHeader>
             <Toolbar>
-            <ToolbarSpacer />
-                <Title text="{name}" />
                 <ToolbarSpacer />
-                <!-- <Title text="{tagID}" /> -->
+                <Title text="Black Seeds Ratings Application" />
+                <ToolbarSpacer />
             </Toolbar>
         </subHeader>
         <content>
             <Panel class="sapUiTinyMarginBottom">
                 <HBox justifyContent="SpaceBetween">
-                    <!-- <VBox
-                            justifyContent="End"
-                            alignContent="End"
-                            alignItems="End"
-                        > -->
-
                     <Image
                         class="sapUiTinyMarginTopBottom"
                         src="./img/logo.png"
-                        width="6rem"
+                        width="8rem"
                     />
-
-                    <ObjectStatus
-                        text="{tagID}"
-                        class="sapMObjectStatusLarge sapUiMediumMarginTop"
-                        icon="sap-icon://blank-tag-2"
-                    />
-                    
-                    <!-- <Text text="{name}" class="sapUiMediumMarginTop" wrapping="true"/> -->
-
-
-                    <!-- </VBox> -->
+                    <VBox>
+                        <HBox justifyContent="End">
+                            <ObjectStatus
+                                text="{name}"
+                                state="Success"
+                                class=" sapUiTinyMarginEnd"
+                            />
+                            <ObjectStatus
+                                state="Success"
+                                class=""
+                                icon="sap-icon://e-care"
+                            />
+                        </HBox>
+                        <HBox justifyContent="End">
+                            <ObjectStatus
+                                text="{tagID}"
+                                class=" sapUiTinyMarginEnd sapUiTinyMarginTop"
+                            />
+                            <ObjectStatus
+                                class="sapUiTinyMarginTop"
+                                icon="sap-icon://blank-tag"
+                            />
+                        </HBox>
+                    </VBox>
                 </HBox>
             </Panel>
-
-            <!--                 
-            <HBox alignItems="Center" justifyContent="SpaceBetween">
-               <ObjectStatus
-                            text="{dataModel>/tested}"
-                            state="Success"
-                            class="sapMObjectStatusLarge sapUiMediumMarginTop"
-                            icon="sap-icon://blank-tag-2"
-                        />
-            
-                <Image
-                    class="sapUiTinyMarginTopBottom"
-                    src="./img/logo.png"
-                    width="6rem"
-                />
-                         <ObjectStatus
-                            text="{dataModel>/tested}"
-                            state="Success"
-                            class="sapMObjectStatusLarge sapUiMediumMarginTop"
-                            icon="sap-icon://blank-tag-2"
-                        />
-            </HBox> -->
             <VBox
                 id="vbox-atts"
                 items="{dataModel>/ratings}"
@@ -78,29 +61,56 @@
                 >
                     <headerToolbar>
                         <OverflowToolbar>
-                            <Title text="{dataModel>description}" />
-                            <ToolbarSpacer />
-                            <!-- <CheckBox selected="{selected}"/> -->
+                            <core:Icon
+                                src="sap-icon://accept"
+                                color="yellow"
+                                visible="{= ${dataModel>value} > 0 }"
+                            />
+                            <Title text=" {dataModel>description}" />
                         </OverflowToolbar>
                     </headerToolbar>
                     <content>
-                        <!-- <FlexBox alignItems="Center"> -->
                         <VBox>
-                            <HBox>
-                                 <Label
-                                    text="{dataModel>value} / 15"
-                                    class="sapUiSmallMarginBeginEnd sapUiTinyMarginTop"
-                                />
+                            <HBox visible="{= ${dataModel>type} !== 'slider'}">
                                 <RatingIndicator
                                     maxValue="15"
                                     value="{dataModel>value}"
-                                      iconSize="17px"
+                                    iconSize="16px"
                                 />
-                           
+                                <Label
+                                    text="{dataModel>value} / 15"
+                                    class="sapUiTinyMarginEnd sapUiTinyMarginTop sapUiSmallMarginBegin"
+                                />
                             </HBox>
-                            <Input value="{dataModel>comments}" />
+                            <HBox visible="{= ${dataModel>type} === 'slider'}">
+                                <Slider
+                                    min="0"
+                                    max="15"
+                                    step="1"
+                                    width="21.7rem"
+                                    value="{dataModel>value}"
+                                    showHandleTooltip="false"
+                                >
+                                    <ResponsiveScale
+                                        tickmarksBetweenLabels="5"
+                                    />
+                                </Slider>
+                            </HBox>
+                            <Input
+                                value="{dataModel>comments}"
+                                visible="{= ${dataModel>type} !== 'slider'}"
+                                placeholder="Add comments"
+                                width="90%"
+                            />
+                            <HBox
+                                justifyContent="SpaceBetween"
+                                visible="{= ${dataModel>type} === 'slider'}"
+                            >
+                                <ObjectStatus text="Low" />
+                                <ObjectStatus text="Medium" />
+                                <ObjectStatus text="High" />
+                            </HBox>
                         </VBox>
-                        <!-- </FlexBox> -->
                     </content>
                 </Panel>
             </VBox>
@@ -119,5 +129,4 @@
             </Toolbar>
         </footer>
     </Page>
-    <!-- </App> -->
 </mvc:View>

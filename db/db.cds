@@ -13,29 +13,19 @@ entity Strains {
 
 }
 
-
 entity Ratings : managed {
   key ID        : UUID;
       value     : Integer default 0;
       strain    : Association to Strains;
       attribute : Association to Attributes;
+      comments  : String;
 }
 
 
 entity Attributes {
   key ID          : UUID;
       description : String;
+      type        : String;
+      step       : Integer;
 }
 
-// entity temporalMain : temporal {/*...*/
-//   user : Association to User;
-//   strains: Association to Strain;
-//   ratings : Association to Rating on ratings.user.userID = user.userID;
-// }
-
-// /** Hierarchically organized Code List for Genres */
-// entity Genres : sap.common.CodeList {
-//   key ID   : Integer;
-//   parent   : Association to Genres;
-//   children : Composition of many Genres on children.parent = $self;
-// }

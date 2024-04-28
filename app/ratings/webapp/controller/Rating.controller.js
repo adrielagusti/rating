@@ -44,7 +44,7 @@ sap.ui.define(
           .then(results => {
 
             const [aRatings, aAttributes] = results;
-
+            aAttributes.results.sort((a, b) => a.step - b.step);
             const result = this.findCorrespondingEntries(aRatings.results, aAttributes.results);
 
             this.getView().setModel(new JSONModel({ ratings: result }), 'dataModel');
@@ -95,7 +95,10 @@ sap.ui.define(
               attribute: { ID: atribute.ID },
               ID: existingRating.ID,
               userID: existingRating.userID,
+              comments: existingRating.comments,
               description: atribute.description,
+              type: atribute.type,
+              step: atribute.step,
               strainName: existingRating.strainName
             });
           } else {
@@ -104,6 +107,9 @@ sap.ui.define(
               strain: { ID: strain.ID, },
               attribute: { ID: atribute.ID },
               description: atribute.description,
+              type: atribute.type,
+              step: atribute.step,
+              comments: ''
             });
           }
         });
@@ -113,13 +119,14 @@ sap.ui.define(
       },
 
 
-      onBroSave() {
-
+      onBroSave(oEvent) {
+        oEvent.getSource().setBusy(true);
         var oStrain = this.getView().getBindingContext().getObject();
         var aRatingsPayload = this.getView().getModel("dataModel").getProperty("/ratings");
-        // this.getView().setBusy(true);
+
         this.getView().byId("vbox-atts").setBusy(true)
         this._saveRatings(aRatingsPayload)
+        oEvent.getSource().setBusy(false);
 
       },
 
@@ -149,7 +156,7 @@ sap.ui.define(
 
         Promise.all(aPromises)
           .then(results => {
-            this._onSuccess()
+            this._onSuccess(results)
           })
           .catch(error => {
             console.error("ERROR", error);
@@ -161,19 +168,45 @@ sap.ui.define(
 
         var oInfoModel = this.getOwnerComponent().getModel('dataModel');
         var oCurrentStrain = this.getView().getBindingContext().getObject();
-        var vTested = parseInt(oInfoModel.getProperty("/tested")) + 1;
-        var vTotal = oInfoModel.getProperty("/total");
+        var vTested = oInfoModel.getProperty("/tested");
+        var iFull = oInfoModel.getProperty("/full");
+        var iTotal = oInfoModel.getProperty("/total");
         var aStrains = oInfoModel.getProperty("/strains");
+        
 
-        var aProcStrains = aStrains.map(strain => {
+        var aZeros = payloads.filter(function (pay) { return pay.value === 0 });
+       
+
+        oCurrentStrain.totalPoints = ( payloads.reduce(function (a, item) { return a + item.value }, 0) / payloads.length);
+        
+        if (aZeros.length === 0) {
+          oCurrentStrain.state = 'Success',
+            oCurrentStrain.icon = 'sap-icon://sys-enter-2'
+        } else {
+          oCurrentStrain.state = 'Warning',
+            oCurrentStrain.icon = 'sap-icon://warning2'
+        }
+
+        var aStrainsProc = aStrains.map(strain => {
           if (strain.ID === oCurrentStrain.ID) {
-            // Change the value of 'z' field to true if the condition is met
-            return { ...strain, isRated: true };
+            return { ...oCurrentStrain };
           }
           return strain; // If the condition is not met, return the original item unchanged
         });
 
-        this.getOwnerComponent().setModel(new JSONModel({ strains: aProcStrains, tested: vTested, total: vTotal }), 'dataModel');
+        var vCompleted = aStrainsProc.filter(function (strain) { return strain.state === 'Success' }).length;
+        var vProgress = aStrainsProc.filter(function (strain) { return strain.state === 'Warning' }).length;
+        var vLeft = aStrainsProc.filter(function (strain) { return strain.state === 'None' }).length;
+
+        var aHistory = oInfoModel.getProperty("/history");
+        aHistory.push({
+          strainName: oCurrentStrain.name,
+          tagID: oCurrentStrain.tagID,
+          modifiedAt: new Date()
+        })
+
+        this.getOwnerComponent().setModel(new JSONModel({ strains: aStrainsProc, full: vCompleted, progress: vProgress, total: vLeft, history: aHistory }), 'dataModel');
+
 
         this.getView().byId("vbox-atts").setBusy(false)
         this.getRouter().navTo('main');

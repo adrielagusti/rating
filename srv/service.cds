@@ -50,19 +50,24 @@ service BlackSeedsService {
                 strain.name  as strainName,
                 attribute.ID as attributeID,
                 attribute.description,
+                attribute.type,
+                attribute.step,
                 strain,
                 strain.tagID,
                 attribute,
                 createdBy,
                 createdAt,
-                modifiedAt
+                modifiedAt,
+                comments
         }
 
 
     entity Attributes as
         projection on blackseeds.Attributes {
             key ID,
-                description
+                description,
+                type,
+                step
         }
 
 

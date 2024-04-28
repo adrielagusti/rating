@@ -28,22 +28,47 @@
                         <Image
                             class="sapUiTinyMarginTopBottom"
                             src="./img/logo.png"
-                            width="6rem"
+                            width="8rem"
                         />
+                        <VBox>
+                            <HBox justifyContent="End">
+                                <ObjectStatus
+                                    text="Unrated ({dataModel>/total})"
+                                    state="None"
+                                    class=" sapUiTinyMarginEnd"
+                                />
+                                <ObjectStatus
+                                    state="None"
+                                    class=""
+                                    icon="sap-icon://e-care"
+                                />
+                            </HBox>
 
-                        <ObjectStatus
-                            text="{dataModel>/tested}"
-                            state="Success"
-                            class="sapMObjectStatusLarge sapUiMediumMarginTop"
-                            icon="sap-icon://sys-enter-2"
-                        />
-
-                        <ObjectStatus
-                            text="{dataModel>/total}"
-                            state="None"
-                            class="sapMObjectStatusLarge sapUiMediumMarginTop"
-                            icon="sap-icon://e-care"
-                        />
+                            <HBox justifyContent="End">
+                                <ObjectStatus
+                                    text="Incomplete ({dataModel>/progress})"
+                                    state="Warning"
+                                    class=" sapUiTinyMarginEnd"
+                                />
+                                <ObjectStatus
+                                    state="Warning"
+                                    class=""
+                                    icon="sap-icon://warning2"
+                                />
+                            </HBox>
+                            <HBox justifyContent="End">
+                                <ObjectStatus
+                                    text="Complete ({dataModel>/full})"
+                                    state="Success"
+                                    class=" sapUiTinyMarginEnd"
+                                />
+                                <ObjectStatus
+                                    state="Success"
+                                    class=""
+                                    icon="sap-icon://sys-enter-2"
+                                />
+                            </HBox>
+                        </VBox>
                     </HBox>
                 </Panel>
 
@@ -64,31 +89,29 @@
                         </f:customLayout>
 
                         <f:GridListItem type="Active">
-                            <!-- <FlexBox
-                          
-                            > -->
                             <VBox>
                                 <HBox justifyContent="SpaceBetween">
-                                    <ObjectStatus
+                                    <Title
                                         text="{name}"
-                                        class="sapMObjectStatusLarge sapUiTinyMarginBegin"
+                                        class="sapUiSmallMargin"
                                     />
                                     <Title
                                         text="{tagID}"
-                                        class="sapUiTinyMargin"
+                                        class="sapUiSmallMargin"
                                     />
                                 </HBox>
-                                <VBox alignItems="Center">
-                                    <RatingIndicator
-                                        maxValue="15"
-                                        value="{ path:'totalPoints' }"
-                                        class="sapUiTinyMarginEnd"
-                                        enabled="false"
-                                        iconSize="17px"
+                                <HBox justifyContent="Center">
+                                    <core:Icon
+                                        src="sap-icon://favorite"
+                                        color="#FFC933"
+                                        class="sapUiTinyMargin"
                                     />
-                                </VBox>
+                                    <Label
+                                        text="{totalPoints} / 15"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                </HBox>
                             </VBox>
-                            <!-- </FlexBox> -->
                         </f:GridListItem>
                     </f:GridList>
                 </Panel>
@@ -99,33 +122,59 @@
                 >
                     <f:GridList
                         mode="SingleSelectMaster"
-                        items="{path: 'dataModel>/strains', sorter: { path: 'dataModel>name', group: '.getName' } }"
+                        items="{path: 'dataModel>/strains', sorter: { path: 'dataModel>tagID' } }"
                         selectionChange="onSelectRow"
                     >
                         <f:customLayout>
-                            <grid:GridBoxLayout boxWidth="30%" />
+                            <grid:GridBoxLayout boxWidth="100%" />
                         </f:customLayout>
 
                         <f:GridListItem type="Active">
-                            <FlexBox
-                                justifyContent="SpaceBetween"
-                                alignContent="Center"
-                                alignItems="Center"
-                            >
-                                <FlexBox
-                                    justifyContent="Start"
-                                    alignContent="Start"
-                                    alignItems="Start"
-                                    class="sapUiTinyMarginTop"
-                                >
-                                    <ObjectStatus
-                                        class="sapUiSmallMargin sapUiMediumMarginBegin"
-                                        text="{dataModel>tagID}"
-                                        icon="{= ${dataModel>isRated} === false ? 'sap-icon://e-care' : 'sap-icon://sys-enter-2' }"
-                                        state="{= ${dataModel>isRated} === true ? 'Success' : 'None' }"
+                            <VBox>
+                                <HBox justifyContent="SpaceBetween">
+                                    <Title
+                                        text="{dataModel>name}"
+                                        class="sapUiSmallMarginTop sapUiSmallMarginBegin"
                                     />
-                                </FlexBox>
-                            </FlexBox>
+                                    <HBox>
+                                        <ObjectStatus
+                                            class="sapUiTinyMarginTopBottom sapUiSmallMarginTop"
+                                            state="{dataModel>state}"
+                                            icon="{dataModel>icon}"
+                                        />
+                                        <Title
+                                            text="{dataModel>tagID}"
+                                            class="sapUiSmallMarginTopBottom sapUiSmallMarginEnd sapUiTinyMarginBegin"
+                                        />
+                                    </HBox>
+                                </HBox>
+                                <HBox justifyContent="Center">
+                                    <HBox
+                                        visible="{= ${dataModel>state} === 'Success' }"
+                                    >
+                                        <core:Icon
+                                            src="sap-icon://favorite"
+                                            color="#FFC933"
+                                            class="sapUiTinyMargin"
+                                        />
+
+                                        <Label
+                                            text="{dataModel>totalPoints} / 15"
+                                            class="sapUiTinyMarginTop"
+                                        />
+                                    </HBox>
+                                    <Label
+                                        visible="{= ${dataModel>state} === 'Warning' }"
+                                        text="Not concluded"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                    <Label
+                                        visible="{= ${dataModel>state} === 'None' }"
+                                        text="Not started"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                </HBox>
+                            </VBox>
                         </f:GridListItem>
                     </f:GridList>
                 </Panel>
@@ -144,26 +193,22 @@
                         </f:customLayout>
 
                         <f:GridListItem type="Active">
-                            <FlexBox
-                                alignContent="Center"
-                                alignItems="Center"
-                            >
-                                <Text
-                                    text='{dataModel>modifiedAt}'
-                                    class="sapUiSmallMarginTop sapUiSmallMarginBegin"
-                                />
-                            </FlexBox>
                             <HBox justifyContent="SpaceBetween">
                                 <Title
-                                    class="sapUiSmallMarginTop sapUiSmallMargin"
+                                    class="sapUiSmallMargin"
+                                    text="{dataModel>strainName}"
+                                />
+                                <Title
+                                    class="sapUiSmallMargin"
                                     text="{dataModel>tagID}"
                                 />
-                                <ObjectStatus
-                                    class="sapUiSmallMarginTop sapUiSmallMargin"
-                                    text="{dataModel>strainName}"
-                                    state="Success"
-                                />
                             </HBox>
+                            <ObjectStatus
+                                text='{dataModel>modifiedAt}'
+                                state="Success"
+                                class="sapUiTinyMargin sapUiSmallMarginBegin"
+                            />
+                        
                         </f:GridListItem>
                     </f:GridList>
                 </Panel>
@@ -187,7 +232,7 @@
                                 key="rate"
                             />
                             <SegmentedButtonItem
-                                text="Top tier"
+                                text="Global"
                                 icon="sap-icon://competitor"
                                 key="top"
                             />

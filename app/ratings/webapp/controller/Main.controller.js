@@ -18,28 +18,26 @@ sap.ui.define(
 
       onInit() {
         this._setUserResults();
-        this.getView().setModel(new JSONModel({ mode: "top" }), 'appModel');
+        this.getView().setModel(new JSONModel({ mode: "rate" }), 'appModel');
       },
 
       _setUserResults() {
         let p1 = this._getRatings();
         let p2 = this._getStrains()
-        // let p3 = this._getAttributes()
+        let p3 = this._getAttributes()
 
-        Promise.all([p1, p2])
+        Promise.all([p1, p2, p3])
           .then(results => {
 
-            const [aRatings, aStrains] = results;
-
-            // const result = this.prepareSummarizedModel(aRatings.results, aStrains.results, aAttributes.results);
-            const aStrainsProc = this._setRatedFlags(aRatings.results, aStrains.results);
+            const [aRatings, aStrains, aAttributes] = results;
+            const aStrainsProc = this.prepareSummarizedModel(aRatings.results, aStrains.results, aAttributes.results);
             const aHistory = this._setHistory(aRatings.results);
 
-            var iTested = aStrainsProc.filter((item) => item.isRated === true).length;
-
-            var iTotal = aStrainsProc.length;
-          
-            this.getOwnerComponent().setModel(new JSONModel({ strains: aStrainsProc, tested: iTested, total: iTotal, history: aHistory }), 'dataModel');
+            var iFull = aStrainsProc.filter((item) => item.state === 'Success').length;
+            var iPogress = aStrainsProc.filter((item) => item.state === 'Warning').length;
+            var iTotal = aStrainsProc.length - iFull - iPogress;
+            
+            this.getOwnerComponent().setModel(new JSONModel({ strains: aStrainsProc, full: iFull, progress: iPogress, total: iTotal, history: aHistory }), 'dataModel');
 
           })
 
@@ -68,13 +66,11 @@ sap.ui.define(
       },
 
       onSelectNav(oEvent) {
-        // The source is the list item that got pressed
-        // let oItem = oEvent.getParameter("listItem");
         this.getRouter().navTo("rating", {
           objectId: oEvent.getParameters().selectedItem.getKey()
         });
       },
-      // 
+
       _showObject(oItem) {
         this.getRouter().navTo("rating", {
           objectId: oItem.ID
@@ -116,24 +112,6 @@ sap.ui.define(
         });
       },
 
-      _setRatedFlags(aRatings, aStrains) {
-
-        let aFlaggedRatings = aStrains.map(strain => {
-          strain.isRated = false;
-          aRatings.forEach(rating => {
-            if (rating.strainID === strain.ID) {
-              strain.isRated = true;
-            }
-          });
-
-          return strain;
-
-        });
-
-        return aFlaggedRatings;
-
-      },
-
       _setHistory(aRatings) {
 
         const aHistory = [];
@@ -148,31 +126,45 @@ sap.ui.define(
 
       },
 
-      // prepareSummarizedModel(aRatings, aStrains, aAttributes) {
+      prepareSummarizedModel(aRatings, aStrains, aAttributes) {
 
-      //   let iAttributes = aAttributes.length;
+        let iAttributes = aAttributes.length;
 
 
-      //   let aSummarized = aStrains.map(strain => {
-      //     // Initialize sum for each strain
-      //     let sum = 0;
+        let aSummarized = aStrains.map(strain => {
+          let sum = 0;
+      
+          strain.state = 'None';
+          strain.text = 'Not rated';
+          strain.icon = 'sap-icon://e-care';
+          strain.totalPoints = 0;
 
-      //     aRatings.forEach(rating => {
-      //       if (rating.strain_GUID === strain.GUID) {
-      //         // Accumulate the value for the current strain
-      //         sum += rating.value;
-      //       }
-      //     });
+          aRatings.forEach(rating => {
+            if (rating.strainID === strain.ID && rating.value > 0) {
+              sum += 1;
+              strain.totalPoints = rating.value + strain.totalPoints;
+            }
+          });
+       
+          strain.totalPoints =  parseInt(strain.totalPoints / iAttributes );
+          if (sum === 0) {
+            return {...strain}
+          } else{
+    
+            return {
+              ...strain,
+              text: sum === iAttributes ?  'Full rated' : 'In process',
+              state: sum === iAttributes ?  'Success' : 'Warning',
+              icon: sum === iAttributes ?  'sap-icon://sys-enter-2' : 'sap-icon://warning2',
+            };
+          }
 
-      //     return {
-      //       ...strain,
-      //       value: parseInt(sum / iAttributes)
-      //     };
-      //   });
+         
+        });
 
-      //   return aSummarized;
+        return aSummarized;
 
-      // }
+      }
 
     });
   }
