@@ -30,7 +30,7 @@
     "start": "cds run",
     "start:docker": "docker-compose up",
     "heroku-postbuild": "echo heroku postbuild skipped",
-    "heroku:pg:deploy": "PGHOST=localhost PGUSER=postgres PGPASSWORD=postgres heroku pg:push rating postgresql-tetrahedral-32605 --app blackseeds-ratings",
+    "heroku:pg:deploy": "PGHOST=localhost PGUSER=postgres PGPASSWORD=postgres heroku pg:push rating postgresql-acute-84663 --app blackseeds-ratings",
     "pg:deploy": "npx cds-dbm deploy",
     "build": "cds build --clean;cp gen/srv/srv/csn.json srv/gen/;cp -r gen/db/src/gen db/src"
   },
@@ -63,12 +63,10 @@
     }
   },
   "cds": {
-    "profile": "with-mtx-sidecar",
     "cov2ap": {
       "plugin": true
     },
     "requires": {
-      "multitenancy": true,
       "auth": {
         "kind": "basic-auth",
         "[heroku]": {
@@ -108,10 +106,7 @@
       },
       "db": {
         "kind": "postgres",
-        "pool": {
-          "max": 1400,
-          "min": 100
-        }
+        "dialect": "plain"
       },
       "postgres": {
         "dialect": "plain",
