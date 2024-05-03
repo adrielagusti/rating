@@ -71,36 +71,38 @@
       "multitenancy": true,
       "auth": {
         "kind": "basic-auth",
-        "users": {
-          "SHERNANG": {
-            "password": "Ogaitna$1234"
-          },
-          "ADRIEL": {
-            "password": "level"
-          },
-          "ARIEL": {
-            "password": "pepo"
-          },
-          "IGNACIO": {
-            "password": "chelok"
-          },
-          "BLACKSEEDS1": {
-            "password": "blackseeds1"
-          },
-          "BLACKO2": {
-            "password": "blackseeds2"
-          },
-          "SEEDSBLACK3": {
-            "password": "blackseeds3"
-          },
-          "BLACKER4": {
-            "password": "blackseeds4"
-          },
-          "BLACK5": {
-            "password": "blackseeds5"
-          },
-          "BL4CK6": {
-            "password": "blackseeds6"
+        "[heroku]": {
+          "users": {
+            "SHERNANG": {
+              "password": "Ogaitna$1234"
+            },
+            "ADRIEL": {
+              "password": "level"
+            },
+            "ARIEL": {
+              "password": "pepo"
+            },
+            "IGNACIO": {
+              "password": "chelok"
+            },
+            "BLACKSEEDS1": {
+              "password": "blackseeds1"
+            },
+            "BLACKO2": {
+              "password": "blackseeds2"
+            },
+            "SEEDSBLACK3": {
+              "password": "blackseeds3"
+            },
+            "BLACKER4": {
+              "password": "blackseeds4"
+            },
+            "BLACK5": {
+              "password": "blackseeds5"
+            },
+            "BL4CK6": {
+              "password": "blackseeds6"
+            }
           }
         }
       },
