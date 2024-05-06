@@ -1,6 +1,5 @@
 using {blackseeds} from '../db/db';
-
-// @(requires: 'authenticated-user')
+@(requires: 'authenticated-user')
 
 service BlackSeedsService {
     // ENTITY @(restrict: [

@@ -8,8 +8,8 @@
   "dependencies": {
     "@cap-js-community/odata-v2-adapter": "^1.10.5",
     "@cap-js/postgres": "^1.7.0",
-    "@sap/cds": "7.8.2",
-    "@sap/cds-dk": "7.8.2",
+    "@sap/cds": "7",
+    "@sap/cds-dk": "^7",
     "@sap/cds-mtxs": "^1.9",
     "cds-pg": "0.1.33",
     "chalk": "4.1.2",
@@ -69,6 +69,11 @@
     "requires": {
       "auth": {
         "kind": "basic-auth",
+        "users": {
+          "ADRIEL33": {
+            "password": "level33"
+          }
+        },
         "[heroku]": {
           "users": {
             "SHERNANG": {
@@ -106,10 +111,17 @@
       },
       "db": {
         "kind": "postgres",
-        "dialect": "plain"
+        "dialect": "postgres",
+        "pool": {
+          "max": 50000,
+          "min": 2,
+          "idle": 20000,
+          "acquire": 20000,
+          "testTimeout": 20000
+        }
       },
       "postgres": {
-        "dialect": "plain",
+        "dialect": "postgres",
         "impl": "cds-pg",
         "model": [
           "srv"
