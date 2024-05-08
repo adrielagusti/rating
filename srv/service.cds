@@ -1,4 +1,4 @@
-using {blackseeds} from '../db/db';
+using { blackseeds } from '../db/db';
 @(requires: 'authenticated-user')
 
 service BlackSeedsService {
