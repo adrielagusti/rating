@@ -15,6 +15,7 @@
     "chalk": "4.1.2",
     "dotenv": "^16.0.3",
     "express": "^4",
+    "node-fetch": "^3.3.2",
     "passport-http": "^0.3.0",
     "sqlite3": "^5.0.4",
     "uuid": "^9.0.0"
@@ -117,7 +118,8 @@
           "min": 2,
           "idle": 20000,
           "acquire": 20000,
-          "testTimeout": 20000
+          "testTimeout": 20000,
+          "timeout": 6666
         }
       },
       "postgres": {
