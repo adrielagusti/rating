@@ -11,7 +11,7 @@ const port = process.env.PORT || 4004;
 
   // OData V2
   app.use(proxy());
-  console.info('llegamo');
+  console.info(process);
   // OData V4
 //   await cds.connect.to("db");
 //   await cds.serve("all").in(app);
@@ -33,7 +33,7 @@ const port = process.env.PORT || 4004;
 //Initialize system
 // service.initialize();
 
-// module.exports = function () {
+module.exports = function () {
 
     //User OData V2
     // const cov2ap = require("@cap-js-community/odata-v2-adapter");
@@ -56,10 +56,16 @@ const port = process.env.PORT || 4004;
     //
     // AFTER READ Rating o Ratings?
     //
-    // this.after("READ", "Strain", async () => {
+    this.after("READ", "Strain", async () => {
 
-    //     return ''
+        console.info('llegamo');
 
-    // })
+    })
 
-// }
+    this.after("READ", "Strains", async () => {
+
+        console.info('llegamo');
+
+    })
+
+}
