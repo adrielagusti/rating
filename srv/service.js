@@ -1,24 +1,24 @@
 
-const express = require("express");
-const cds = require("@sap/cds");
-const proxy = require("@sap/cds-odata-v2-adapter-proxy");
+// const express = require("express");
+// const cds = require("@sap/cds");
+// const proxy = require("@sap/cds-odata-v2-adapter-proxy");
 
-const host = "0.0.0.0";
-const port = process.env.PORT || 4004;
+// const host = "0.0.0.0";
+// const port = process.env.PORT || 4004;
 
-(async () => {
-  const app = express();
+// (async () => {
+//   const app = express();
 
-  // OData V2
-  app.use(proxy());
-  console.info(process);
-  // OData V4
+//   // OData V2
+//   app.use(proxy());
+//   console.info(process).env;
+//   // OData V4
 //   await cds.connect.to("db");
 //   await cds.serve("all").in(app);
 
 //   const server = app.listen(port, host, () => console.info(`app is listing at ${host}:${port}`));
 //   server.on("error", error => console.error(error.stack));
-})();
+// })();
 
 // const cds = require("@sap/cds");
 // const cov2ap = require("@cap-js-community/odata-v2-adapter");
@@ -33,7 +33,7 @@ const port = process.env.PORT || 4004;
 //Initialize system
 // service.initialize();
 
-module.exports = function () {
+// module.exports = function () {
 
     //User OData V2
     // const cov2ap = require("@cap-js-community/odata-v2-adapter");
@@ -56,16 +56,16 @@ module.exports = function () {
     //
     // AFTER READ Rating o Ratings?
     //
-    this.after("READ", "Strain", async () => {
+//     this.after("READ", "Strain", async () => {
 
-        console.info('llegamo');
+//         console.info('llegamo');
 
-    })
+//     })
 
-    this.after("READ", "Strains", async () => {
+//     this.after("READ", "Strains", async () => {
 
-        console.info('llegamo');
+//         console.info('llegamo');
 
-    })
+//     })
 
-}
+// }
