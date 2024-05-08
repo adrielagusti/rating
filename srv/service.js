@@ -1,3 +1,9 @@
+
+const cds = require("@sap/cds");
+const cov2ap = require("@cap-js-community/odata-v2-adapter");
+cds.on("bootstrap", (app) => app.use(cov2ap()));
+module.exports = cds.server;
+
 // const cds = require('@sap/cds')
 // const RatingService = require('./lib/blackseeds-service.js');
 // const chalk = require('chalk');
