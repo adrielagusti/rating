@@ -33,9 +33,9 @@
 //Initialize system
 // service.initialize();
 
-module.exports = function () {
+// module.exports = function () {
 
-    const fetch = require("node-fetch");
+//     const fetch = require("node-fetch");
     //User OData V2
     // const cov2ap = require("@cap-js-community/odata-v2-adapter");
     // this.on("bootstrap", (app) => app.use(cov2ap()));
@@ -69,4 +69,4 @@ module.exports = function () {
 
 //     })
 
-}
+// }
