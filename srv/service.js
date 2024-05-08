@@ -11,13 +11,13 @@ const port = process.env.PORT || 4004;
 
   // OData V2
   app.use(proxy());
-
+  console.info('llegamo');
   // OData V4
-  await cds.connect.to("db");
-  await cds.serve("all").in(app);
+//   await cds.connect.to("db");
+//   await cds.serve("all").in(app);
 
-  const server = app.listen(port, host, () => console.info(`app is listing at ${host}:${port}`));
-  server.on("error", error => console.error(error.stack));
+//   const server = app.listen(port, host, () => console.info(`app is listing at ${host}:${port}`));
+//   server.on("error", error => console.error(error.stack));
 })();
 
 // const cds = require("@sap/cds");
