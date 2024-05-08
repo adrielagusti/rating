@@ -6,7 +6,7 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "@cap-js-community/odata-v2-adapter": "^1.10.5",
+    "@cap-js-community/odata-v2-adapter": "^1.12.9",
     "@cap-js/postgres": "^1.7.0",
     "@sap/cds": "7",
     "@sap/cds-dk": "^7",
@@ -15,6 +15,7 @@
     "chalk": "4.1.2",
     "dotenv": "^16.0.3",
     "express": "^4",
+    "node-fetch": "^3.3.2",
     "passport-http": "^0.3.0",
     "sqlite3": "^5.0.4",
     "uuid": "^9.0.0"
@@ -24,8 +25,7 @@
     "@sap/ux-specification": "^1.108.2",
     "@sapui5/ts-types": "^1.92.2",
     "cds-dbm": "^0.0.36",
-    "eslint": "^7.32.0",
-    "node-fetch": "^3.3.2"
+    "eslint": "^7.32.0"
   },
   "scripts": {
     "start": "cds run",

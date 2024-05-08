@@ -1,27 +1,22 @@
-<edmx:Edmx xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData" Version="1.0">
-<edmx:Reference xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+<edmx:Edmx xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Version="4.0">
+<edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
 <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
 </edmx:Reference>
-<edmx:Reference xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+<edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
 <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
 </edmx:Reference>
-<edmx:Reference xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+<edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
 <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
 </edmx:Reference>
-<edmx:DataServices m:DataServiceVersion="2.0">
-<Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="BlackSeedsService">
-<EntityContainer Name="EntityContainer" m:IsDefaultEntityContainer="true">
+<edmx:DataServices>
+<Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="BlackSeedsService">
+<EntityContainer Name="EntityContainer">
 <EntitySet Name="Strains" EntityType="BlackSeedsService.Strains"/>
-<EntitySet Name="Ratings" EntityType="BlackSeedsService.Ratings"/>
+<EntitySet Name="Ratings" EntityType="BlackSeedsService.Ratings">
+<NavigationPropertyBinding Path="strain" Target="Strains"/>
+<NavigationPropertyBinding Path="attribute" Target="Attributes"/>
+</EntitySet>
 <EntitySet Name="Attributes" EntityType="BlackSeedsService.Attributes"/>
-<AssociationSet Name="Ratings_strain" Association="BlackSeedsService.Ratings_strain">
-<End Role="Ratings" EntitySet="Ratings"/>
-<End Role="Strains" EntitySet="Strains"/>
-</AssociationSet>
-<AssociationSet Name="Ratings_attribute" Association="BlackSeedsService.Ratings_attribute">
-<End Role="Ratings" EntitySet="Ratings"/>
-<End Role="Attributes" EntitySet="Attributes"/>
-</AssociationSet>
 </EntityContainer>
 <EntityType Name="Strains">
 <Key>
@@ -38,16 +33,20 @@
 </Key>
 <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
 <Property Name="strainID" Type="Edm.Guid"/>
-<Property Name="value" Type="Edm.Int32"/>
+<Property Name="value" Type="Edm.Int32" DefaultValue="0"/>
 <Property Name="strainName" Type="Edm.String"/>
 <Property Name="attributeID" Type="Edm.Guid"/>
 <Property Name="description" Type="Edm.String"/>
 <Property Name="type" Type="Edm.String"/>
 <Property Name="step" Type="Edm.Int32"/>
-<NavigationProperty Name="strain" Relationship="BlackSeedsService.Ratings_strain" FromRole="Ratings" ToRole="Strains"/>
+<NavigationProperty Name="strain" Type="BlackSeedsService.Strains">
+<ReferentialConstraint Property="strain_ID" ReferencedProperty="ID"/>
+</NavigationProperty>
 <Property Name="strain_ID" Type="Edm.Guid"/>
 <Property Name="tagID" Type="Edm.String"/>
-<NavigationProperty Name="attribute" Relationship="BlackSeedsService.Ratings_attribute" FromRole="Ratings" ToRole="Attributes"/>
+<NavigationProperty Name="attribute" Type="BlackSeedsService.Attributes">
+<ReferentialConstraint Property="attribute_ID" ReferencedProperty="ID"/>
+</NavigationProperty>
 <Property Name="attribute_ID" Type="Edm.Guid"/>
 <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
 <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
@@ -63,58 +62,34 @@
 <Property Name="type" Type="Edm.String"/>
 <Property Name="step" Type="Edm.Int32"/>
 </EntityType>
-<Association Name="Ratings_strain">
-<End Role="Ratings" Type="BlackSeedsService.Ratings" Multiplicity="*"/>
-<End Role="Strains" Type="BlackSeedsService.Strains" Multiplicity="0..1"/>
-<ReferentialConstraint>
-<Principal Role="Strains">
-<PropertyRef Name="ID"/>
-</Principal>
-<Dependent Role="Ratings">
-<PropertyRef Name="strain_ID"/>
-</Dependent>
-</ReferentialConstraint>
-</Association>
-<Association Name="Ratings_attribute">
-<End Role="Ratings" Type="BlackSeedsService.Ratings" Multiplicity="*"/>
-<End Role="Attributes" Type="BlackSeedsService.Attributes" Multiplicity="0..1"/>
-<ReferentialConstraint>
-<Principal Role="Attributes">
-<PropertyRef Name="ID"/>
-</Principal>
-<Dependent Role="Ratings">
-<PropertyRef Name="attribute_ID"/>
-</Dependent>
-</ReferentialConstraint>
-</Association>
-<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="BlackSeedsService.Strains/ID">
+<Annotations Target="BlackSeedsService.Strains/ID">
 <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
 </Annotations>
-<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="BlackSeedsService.Strains/totalPoints">
+<Annotations Target="BlackSeedsService.Strains/totalPoints">
 <Annotation Term="Core.Computed" Bool="true"/>
 </Annotations>
-<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="BlackSeedsService.Ratings/ID">
+<Annotations Target="BlackSeedsService.Ratings/ID">
 <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
 </Annotations>
-<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="BlackSeedsService.Ratings/createdBy">
+<Annotations Target="BlackSeedsService.Ratings/createdBy">
 <Annotation Term="UI.HiddenFilter" Bool="true"/>
 <Annotation Term="Core.Immutable" Bool="true"/>
 <Annotation Term="Core.Computed" Bool="true"/>
 <Annotation Term="Core.Description" String="ID único de usuario"/>
 <Annotation Term="Common.Label" String="Creado por"/>
 </Annotations>
-<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="BlackSeedsService.Ratings/createdAt">
+<Annotations Target="BlackSeedsService.Ratings/createdAt">
 <Annotation Term="UI.HiddenFilter" Bool="true"/>
 <Annotation Term="Core.Immutable" Bool="true"/>
 <Annotation Term="Core.Computed" Bool="true"/>
 <Annotation Term="Common.Label" String="Fecha de creación"/>
 </Annotations>
-<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="BlackSeedsService.Ratings/modifiedAt">
+<Annotations Target="BlackSeedsService.Ratings/modifiedAt">
 <Annotation Term="UI.HiddenFilter" Bool="true"/>
 <Annotation Term="Core.Computed" Bool="true"/>
 <Annotation Term="Common.Label" String="Modificado el"/>
 </Annotations>
-<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="BlackSeedsService.Attributes/ID">
+<Annotations Target="BlackSeedsService.Attributes/ID">
 <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
 </Annotations>
 </Schema>
