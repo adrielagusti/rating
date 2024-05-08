@@ -118,7 +118,6 @@
           "min": 2,
           "idle": 20000,
           "acquire": 1000000,
-          "testTimeout": 20000,
           "timeout": 6666
         }
       },
