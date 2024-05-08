@@ -1,5 +1,4 @@
 
-import fetch from "node-fetch";
 // const express = require("express");
 // const cds = require("@sap/cds");
 // const proxy = require("@sap/cds-odata-v2-adapter-proxy");
@@ -34,8 +33,9 @@ import fetch from "node-fetch";
 //Initialize system
 // service.initialize();
 
-// module.exports = function () {
+module.exports = function () {
 
+    const fetch = require("node-fetch");
     //User OData V2
     // const cov2ap = require("@cap-js-community/odata-v2-adapter");
     // this.on("bootstrap", (app) => app.use(cov2ap()));
@@ -69,4 +69,4 @@ import fetch from "node-fetch";
 
 //     })
 
-// }
+}
