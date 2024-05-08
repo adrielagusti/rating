@@ -37,7 +37,7 @@
     "build": "cds build --clean;cp gen/srv/srv/csn.json srv/gen/;cp -r gen/db/src/gen db/src"
   },
   "engines": {
-    "node": "^16.15"
+    "node": "^18"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
