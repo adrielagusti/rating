@@ -10,7 +10,8 @@ const cds = require('@sap/cds')
 module.exports = function () {
 
     //User OData V2
-    const cov2ap = require("@cap-js-community/odata-v2-adapter");
+    // const cov2ap = require("@cap-js-community/odata-v2-adapter");
+    const cov2ap = require("@sap/cds-odata-v2-adapter-proxy");
     this.on("bootstrap", (app) => app.use(cov2ap()));
 
     // this.on('broSaveRating', async req => {
