@@ -65,11 +65,6 @@
     "requires": {
       "auth": {
         "kind": "basic-auth",
-        "users": {
-          "ADRIEL33": {
-            "password": "level33"
-          }
-        },
         "[heroku]": {
           "users": {
             "SHERNANG": {
