@@ -137,6 +137,7 @@ sap.ui.define(
         payloads.forEach(payload => {
           delete payload.description;
           delete payload.type;
+          delete payload.step;
           aPromises.push(
 
             new Promise((resolve, reject) => {
