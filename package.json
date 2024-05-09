@@ -25,10 +25,10 @@
   "scripts": {
     "start": "cds run",
     "start:docker": "docker-compose up",
-    "heroku-postbuild": "pg:deploy",
+    "heroku-postbuild": "npx cds-dbm deploy --load-via delta",
     "heroku:pg:deploy": "PGHOST=localhost PGUSER=postgres PGPASSWORD=postgres heroku pg:push rating postgresql-acute-84663 --app blackseeds-ratings",
     "pg:deploy": "npx cds-dbm deploy --load-via delta",
-    "build": "cds build --clean;cp gen/srv/srv/csn.json srv/gen/;cp -r gen/db/src/gen db/src pg:deploy"
+    "build": "cds build --clean;cp gen/srv/srv/csn.json srv/gen/;cp -r gen/db/src/gen db/src"
   },
   "engines": {
     "node": "^18"
