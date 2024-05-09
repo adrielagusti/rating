@@ -1,7 +1,6 @@
 # CAP ratings
 _out
 *.db
-*.sqlite
 connection.properties
 default-*.json
 .cdsrc-private.json
@@ -22,13 +21,13 @@ mta_archives/
 .DS_Store
 *.orig
 *.log
+.env
 
 *.iml
 *.flattened-pom.xml
 
 # IDEs
-# .vscode
+.vscode
 # .idea
 
-# @cap-js/cds-typer
-@cds-models
+default-env.json
