@@ -135,6 +135,8 @@ sap.ui.define(
         var aPromises = [];
 
         payloads.forEach(payload => {
+          delete payload.description;
+          delete payload.type;
           aPromises.push(
 
             new Promise((resolve, reject) => {
