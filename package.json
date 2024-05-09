@@ -107,7 +107,7 @@
       },
       "db": {
         "kind": "postgres",
-        "dialect": "postgres",
+        "dialect": "plain",
         "pool": {
           "max": 30,
           "min": 2,
@@ -117,7 +117,7 @@
         }
       },
       "postgres": {
-        "dialect": "postgres",
+        "dialect": "plain",
         "impl": "cds-pg",
         "model": [
           "srv"
