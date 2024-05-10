@@ -89,7 +89,8 @@
                                     step="1"
                                     width="21.7rem"
                                     value="{dataModel>value}"
-                                    showHandleTooltip="false"
+                                 	showAdvancedTooltip="true"
+				                    showHandleTooltip="false"
                                 >
                                     <ResponsiveScale
                                         tickmarksBetweenLabels="5"

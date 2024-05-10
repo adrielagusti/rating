@@ -107,7 +107,7 @@
                                         class="sapUiTinyMargin"
                                     />
                                     <Label
-                                        text="{totalPoints} / 15"
+                                        text="{path : 'totalPoints' , formatter: '.formatter.rating' } / 15"
                                         class="sapUiTinyMarginTop"
                                     />
                                 </HBox>
