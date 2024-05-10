@@ -64,7 +64,8 @@
     },
     "requires": {
       "auth": {
-        "kind": "basic",
+        "kind": "basic-auth",
+        "[heroku]": {
           "users": {
             "SHERNANG": {
               "password": "Ogaitna$1234"
@@ -95,7 +96,9 @@
             },
             "BL4CK6": {
               "password": "blackseeds6"
-            }
+            },
+            "*" : false
+          }
         }
       },
       "db": {
