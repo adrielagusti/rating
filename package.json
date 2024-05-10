@@ -64,7 +64,8 @@
     },
     "requires": {
       "auth": {
-        "kind": "basic-auth",
+        "kind": "basic",
+        "[heroku]": {
           "users": {
             "SHERNANG": {
               "password": "Ogaitna$1234"
@@ -96,6 +97,7 @@
             "BL4CK6": {
               "password": "blackseeds6"
             }
+          }
         }
       },
       "db": {
@@ -118,7 +120,7 @@
         "credentials": {
           "[heroku]": {
             "ssl": {
-              "rejectUnauthorized": true
+              "rejectUnauthorized": false
             }
           }
         }
