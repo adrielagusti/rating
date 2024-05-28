@@ -4,3 +4,4 @@ ID,description,type,step
 4612f8c7-582f-4a75-ba53-a59e6cca12bd,Smell,stars,4
 4b7f0dd4-2ccd-4ab6-aef7-3ab837b31265,Consistency,slider,2
 3336fbf7-a72a-43c9-8842-665740d5a301,Resin,slider,3
+2e2b56d6-7c52-4b1e-9f1c-83dabfc18ae6,Comments,string,6

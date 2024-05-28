@@ -71,7 +71,7 @@
                     </headerToolbar>
                     <content>
                         <VBox>
-                            <HBox visible="{= ${dataModel>type} !== 'slider'}">
+                            <HBox visible="{= ${dataModel>type} === 'stars'}">
                                 <RatingIndicator
                                     maxValue="15"
                                     value="{dataModel>value}"
@@ -99,9 +99,9 @@
                             </HBox>
                             <Input
                                 value="{dataModel>comments}"
-                                visible="{= ${dataModel>type} !== 'slider'}"
+                                visible="{= ${dataModel>type} === 'string'}"
                                 placeholder="Add comments"
-                                width="90%"
+                                width="100%"
                             />
                             <HBox
                                 justifyContent="SpaceBetween"
