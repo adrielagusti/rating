@@ -128,8 +128,8 @@ sap.ui.define(
 
       prepareSummarizedModel(aRatings, aStrains, aAttributes) {
 
-        let iAttributes = aAttributes.length;
-
+        var iAttributes = aAttributes.length;
+        iAttributes = iAttributes - 1; // Comments is not a valuable attribute
 
         let aSummarized = aStrains.map(strain => {
           let sum = 0;
@@ -145,8 +145,6 @@ sap.ui.define(
               strain.totalPoints = rating.value + strain.totalPoints;
             }
           });
-          
-          iAttributes = iAttributes - 1; // Comments is not a feasible attribute
 
           strain.totalPoints =  parseInt(strain.totalPoints / iAttributes );
           if (sum === 0) {
