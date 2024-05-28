@@ -145,7 +145,9 @@ sap.ui.define(
               strain.totalPoints = rating.value + strain.totalPoints;
             }
           });
-       
+          
+          iAttributes = iAttributes - 1; // Comments is not a feasible attribute
+
           strain.totalPoints =  parseInt(strain.totalPoints / iAttributes );
           if (sum === 0) {
             return {...strain}
