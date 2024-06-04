@@ -103,6 +103,13 @@
                                 placeholder="Add comments"
                                 width="100%"
                             />
+                            <Input
+                                value="{dataModel>comments}"
+                                visible="{= ${dataModel>type} !== 'string' &amp;&amp; ${dataModel>comments} !== '' }"
+                                enabled="false"
+                                placeholder="Add comments"
+                                width="100%"
+                            />
                             <HBox
                                 justifyContent="SpaceBetween"
                                 visible="{= ${dataModel>type} === 'slider'}"
