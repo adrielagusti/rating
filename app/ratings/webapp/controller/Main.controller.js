@@ -71,6 +71,12 @@ sap.ui.define(
         });
       },
 
+      toCollection(oEvent){
+        this.getRouter().navTo("collection", {
+          // objectId: oEvent.getParameters().selectedItem.getKey()
+        });
+      },
+
       _showObject(oItem) {
         this.getRouter().navTo("rating", {
           objectId: oItem.ID

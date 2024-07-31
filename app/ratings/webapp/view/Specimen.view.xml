@@ -1,0 +1,122 @@
+<mvc:View
+    controllerName="blackseeds.ratings.controller.Specimen"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    displayBlock="true"
+    xmlns="sap.m"
+>
+    <Page
+        showHeader="false"
+        class="sapUiContentPadding"
+    >
+        <subHeader>
+            <Toolbar>
+                <ToolbarSpacer />
+                <Title text="Black Seeds Specimen" />
+                <ToolbarSpacer />
+            </Toolbar>
+        </subHeader>
+        <content>
+            <Panel class="sapUiTinyMarginBottom">
+                <HBox justifyContent="SpaceBetween">
+                    <Image
+                        class="sapUiTinyMarginTopBottom"
+                        src="./img/logo.png"
+                        width="8rem"
+                    />
+                    <VBox>
+                        <HBox justifyContent="End">
+                            <ObjectStatus
+                                text="{specimenModel>/name}"
+                                state="Success"
+                                class=" sapUiTinyMarginEnd"
+                            />
+                            <ObjectStatus
+                                state="Success"
+                                class=""
+                                icon="sap-icon://e-care"
+                            />
+                        </HBox>
+                        <HBox justifyContent="End">
+                            <ObjectStatus
+                                text="{specimenModel>/tagID}"
+                                class=" sapUiTinyMarginEnd sapUiTinyMarginTop"
+                            />
+                            <ObjectStatus
+                                class="sapUiTinyMarginTop"
+                                icon="sap-icon://tag"
+                            />
+                        </HBox>
+                        <HBox justifyContent="End">
+                            <ObjectStatus
+                                text="{specimenModel>/bornDate}"
+                                class=" sapUiTinyMarginEnd sapUiTinyMarginTop"
+                            />
+                            <ObjectStatus
+                                class="sapUiTinyMarginTop"
+                                icon="sap-icon://appointment"
+                            />
+                        </HBox>
+                        <HBox justifyContent="End">
+                            <ObjectStatus
+                                text="{specimenModel>/daysAlive} days"
+                                class=" sapUiTinyMarginEnd sapUiTinyMarginTop"
+                            />
+                            <ObjectStatus
+                                class="sapUiTinyMarginTop"
+                                icon="sap-icon://history"
+                            />
+                        </HBox>
+                    </VBox>
+                </HBox>
+            </Panel>
+            <VBox
+                id="vbox-atts"
+                items="{specimenModel>/photos}"
+            >
+                <Panel
+                    width="100%"
+                    class="sapUiResponsiveMargin"
+                    expandable="true"
+                >
+                    <headerToolbar>
+                        <OverflowToolbar>
+                
+                            <Title text=" {specimenModel>daysAlive} Days" />
+                        </OverflowToolbar>
+                    </headerToolbar>
+                    <content>
+                        <Image
+                        class="sapUiTinyMarginTopBottom"
+                        src="{specimenModel>url}"
+                        width="20rem"
+                    />
+                    </content>
+                </Panel>
+            </VBox>
+                         <!-- <Image
+                        class="sapUiTinyMarginTopBottom"
+                        src="https://www.johnlennon.com/wp-content/uploads/2024/05/250xNxJYMG-B-800a.jpg.pagespeed.ic.E9NGOhL7K3.webp"
+                        width="15rem"
+                    /> -->
+        </content>
+        <footer>
+            <Toolbar>
+
+               <!-- <Button
+                    text="Add"
+                    press="onAddSpecimen"
+                /> -->
+                
+                <ToolbarSpacer />
+                
+                <Button
+                    text="Back"
+                    press="onBroBack"
+                />
+ 
+            </Toolbar>
+        </footer>
+    </Page>
+</mvc:View>

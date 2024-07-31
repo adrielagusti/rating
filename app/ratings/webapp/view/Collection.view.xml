@@ -1,6 +1,6 @@
 <mvc:View
-    controllerName="blackseeds.ratings.controller.Main"
-    xmlns="sap.m"
+    controllerName="blackseeds.ratings.controller.Collection"
+   xmlns="sap.m"
     xmlns:f="sap.f"
     xmlns:grid="sap.ui.layout.cssgrid"
     xmlns:html="http://www.w3.org/1999/xhtml"
@@ -10,15 +10,14 @@
     displayBlock="true"
     xmlns:tnt="sap.tnt"
 >
-    <App id="app">
-        <Page
+   <Page
             showHeader="false"
             class="sapUiContentPadding"
         >
             <subHeader>
                 <Toolbar>
                     <ToolbarSpacer />
-                    <Title text="Black Seeds Ratings Application" />
+                    <Title text="Black Seeds Collection Application" />
                     <ToolbarSpacer />
                 </Toolbar>
             </subHeader>
@@ -71,76 +70,31 @@
                         </VBox>
                     </HBox>
                 </Panel>
-
                 <Panel
                     expanded="true"
                     class="sapUiTinyMarginTop"
-                    visible="{= ${appModel>/mode} === 'top' }"
                 >
                     <f:GridList
-                        id="grid-toptier"
                         mode="SingleSelectMaster"
-                        growing="true"
-                        items="{path: '/Strains', sorter: { path: 'totalPoints', descending: true } }"
-                        selectionChange="onSelectRowTop"
+                        items="{path: 'dataModel>/strains', sorter: { path: 'dataModel>name',  group: true } }"
+                        selectionChange="onSelectSpecimen"
                     >
                         <f:customLayout>
-                            <grid:GridBoxLayout boxWidth="100%" />
+                            <grid:GridBoxLayout boxWidth="30%" />
                         </f:customLayout>
 
                         <f:GridListItem type="Active">
                             <VBox>
                                 <HBox justifyContent="SpaceBetween">
-                                    <Title
-                                        text="{name}"
-                                        class="sapUiSmallMargin"
-                                    />
-                                    <Title
-                                        text="{tagID}"
-                                        class="sapUiSmallMargin"
-                                    />
-                                </HBox>
-                                <HBox justifyContent="Center">
-                                    <core:Icon
-                                        src="sap-icon://favorite"
-                                        color="#FFC933"
-                                        class="sapUiTinyMargin"
-                                    />
-                                    <Label
-                                        text="{path : 'totalPoints' , formatter: '.formatter.rating' } / 15"
-                                        class="sapUiTinyMarginTop"
-                                    />
-                                </HBox>
-                            </VBox>
-                        </f:GridListItem>
-                    </f:GridList>
-                </Panel>
-                <Panel
-                    expanded="true"
-                    class="sapUiTinyMarginTop"
-                    visible="{= ${appModel>/mode} === 'rate' }"
-                >
-                    <f:GridList
-                        mode="SingleSelectMaster"
-                        items="{path: 'dataModel>/strains', sorter: { path: 'dataModel>tagID' } }"
-                        selectionChange="onSelectRow"
-                    >
-                        <f:customLayout>
-                            <grid:GridBoxLayout boxWidth="100%" />
-                        </f:customLayout>
-
-                        <f:GridListItem type="Active">
-                            <VBox>
-                                <HBox justifyContent="SpaceBetween">
-                                    <Title
+                                    <!-- <Title
                                         text="{dataModel>name}"
                                         class="sapUiSmallMarginTop sapUiSmallMarginBegin"
-                                    />
+                                    /> -->
                                     <HBox>
                                         <ObjectStatus
-                                            class="sapUiTinyMarginTopBottom sapUiSmallMarginTop"
+                                          class="sapUiSmallMarginTop sapUiSmallMarginBegin"
                                             state="{dataModel>state}"
-                                            icon="{dataModel>icon}"
+                                            icon="sap-icon://tag"
                                         />
                                         <Title
                                             text="{dataModel>tagID}"
@@ -218,11 +172,11 @@
                     <Button
                         icon="sap-icon://e-care"
                         type="Transparent"
-                        press="toCollection"
+                        press="toSpecimens"
                     />
                     <ToolbarSpacer />
 
-                    <SegmentedButton
+                    <!-- <SegmentedButton
                         selectedKey="{appModel>/mode}"
                         width="70%"
                     >
@@ -243,7 +197,7 @@
                                 key="hist"
                             />
                         </items>
-                    </SegmentedButton>
+                    </SegmentedButton> -->
                     <ToolbarSpacer />
                     <Select
                         forceSelection="false"
@@ -265,5 +219,4 @@
                 </Toolbar>
             </footer>
         </Page>
-    </App>
 </mvc:View>

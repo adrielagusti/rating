@@ -26,6 +26,24 @@ entity Attributes {
   key ID          : UUID;
       description : String;
       type        : String;
-      step       : Integer;
+      step        : Integer;
 }
 
+entity Specimens : managed  {
+  key ID        : UUID;
+      strain    : Association to Strains;
+      parentID  : UUID;
+      clone     : Boolean;
+      name      : String;
+}
+
+entity Events : managed  {
+  key ID          : UUID;
+      specimenID  : Association to Specimens;
+      eventTypeID : Association to EventTypes;
+}
+
+entity EventTypes {
+  key ID          : UUID;
+      description : String;
+}
