@@ -156,11 +156,10 @@
                             </f:FormElement> -->
                             <f:FormElement>
                                 <f:fields>
-                                    <DatePicker
+                                    <DateTimePicker
                                         value="{
                                             'path': 'careModel>/date',
-                                            'type': 'sap.ui.model.type.Date',
-                                            'formatOptions': {UTC: true} 
+                                            'type': 'sap.ui.model.type.DateTime'
                                             }"
                                     />
                                 </f:fields>

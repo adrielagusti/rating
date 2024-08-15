@@ -88,10 +88,11 @@ sap.ui.define([
 			this.setState(sap.ui.core.ValueState.None);
 			return;
 		}
+		
 		var oStartDate = bIsFuture ? new Date() : oDate,
 			oEndDate = bIsFuture ? oDate : new Date(),
 			oTimeMeasures = this._getTimeMeasures(oStartDate, oEndDate);
-
+			// debugger;
 		this.setText(oTimeMeasures.days + "d " + oTimeMeasures.hours + "h " + oTimeMeasures.minutes + "m " + oTimeMeasures.seconds + "s");
 
 		var iTotalHours = (oTimeMeasures.days * 24) + oTimeMeasures.hours;
@@ -105,6 +106,7 @@ sap.ui.define([
 	};
 
 	oControl.prototype._getTimeMeasures = function (startDate, endDate) {
+		// debugger;
 		var delta = Math.abs(endDate - startDate) / 1000;
 		// calculate (and subtract) whole days
 		var days = Math.floor(delta / 86400);

@@ -115,6 +115,11 @@
                                     icon="sap-icon://notes"
                                     visible="{= ${collectionModel>/selectedSpecimens}.length >= 1 }"
                                 />
+                                <Button
+                                    text="{= ${collectionModel>/selectedSpecimens}.length >= 1 ? 'Add new specimens' : 'Add' }"
+                                    icon="sap-icon://add"
+                                    press="onAddSpecimen"
+                                />
                             </content>
                         </OverflowToolbar>
                     </headerToolbar>
@@ -185,10 +190,6 @@
                     </items>
                 </SegmentedButton>
                 <ToolbarSpacer />
-                <Button
-                    icon="sap-icon://add"
-                    press="onAddSpecimen"
-                />
             </Toolbar>
         </footer>
     </Page>

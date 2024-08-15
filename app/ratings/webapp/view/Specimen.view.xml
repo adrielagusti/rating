@@ -43,7 +43,7 @@
                             <ObjectStatus
                                 text="{
                                         'path': 'plantedDate',
-                                        'type': 'sap.ui.model.type.Date'}"
+                                        'type': 'sap.ui.model.type.DateTime'}"
                                 class=" sapUiTinyMarginEnd sapUiTinyMarginTop"
                             />
                             <ObjectStatus
@@ -84,44 +84,63 @@
                     </VBox>
                 </HBox>
             </Panel>
-            <VBox>
-                <FlexBox
-                    alignContent="Center"
-                    justifyContent="Center"
-                >
-                    <u:Calendar
-                        id="calendar"
-                        select="handleCalendarSelect"
-                        class="sapUiTinyMarginTop"
-                        minDate="{plantedDate}"
-                        maxDate="{specimenModel>/deadDate}"
-                        legend="legend"
-                    />
-                </FlexBox>
-                <u:CalendarLegend id="legend" />
-            </VBox>
+            <IconTabBar class="sapUiResponsiveContentPadding">
+                <items>
+                    <IconTabFilter
+                        key="info"
+                        icon="sap-icon://hint"
+                    >
+                        <Text text="Formulario informacion" />
+                    </IconTabFilter>
+                    <!-- <IconTabSeparator icon="" />
+                    <IconTabSeparator icon="sap-icon://vertical-grip" /> -->
+                    <IconTabFilter
+                        key="notes"
+                        icon="sap-icon://notes"
+                    >
+                        <VBox>
+                            <FlexBox
+                                alignContent="Center"
+                                justifyContent="Center"
+                            >
+                                <u:Calendar
+                                    id="calendar"
+                                    select="handleCalendarSelect"
+                                    class="sapUiTinyMarginTop"
+                                    minDate="{plantedDate}"
+                                    maxDate="{specimenModel>/deadDate}"
+                                    legend="legend"
+                                />
+                            </FlexBox>
+                            <u:CalendarLegend id="legend" />
+                        </VBox>
+                    </IconTabFilter>
 
-            <c:Timeline
-            
-                enableDoubleSided="true"
-                groupBy="date"
-                growingThreshold="0"
-                showItemFilter="false"
-                showSearch="false"
-                sortOldestFirst="true"
-                content="{cares}"
-            >
-                <c:content>
-                    <c:TimelineItem
-                    
-                        dateTime="{date}"
-                 
-                        text="{description}"
-                        userName="{careD}"
-                    
-                    />
-                </c:content>
-            </c:Timeline>
+                    <IconTabFilter
+                        key="people"
+                        icon="sap-icon://timesheet"
+                    >
+                        <c:Timeline
+                            enableDoubleSided="true"
+                            groupBy="date"
+                            growingThreshold="0"
+                            showItemFilter="false"
+                            showSearch="false"
+                            sortOldestFirst="true"
+                            content="{cares}"
+                        >
+                            <c:content>
+                                <c:TimelineItem
+                                    dateTime="{date}"
+                                    text="{description}"
+                                    userName="{careD}"
+                                />
+                            </c:content>
+                        </c:Timeline>
+                    </IconTabFilter>
+                </items>
+            </IconTabBar>
+
             <!-- <VBox
                 id="vbox-atts"
                 visible="false"

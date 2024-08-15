@@ -32,7 +32,7 @@
                     <f:FormContainer>
                         <!-- ID;parentID;breedType;seqNumber;strain_ID;clone;name;comments;tagID -->
                         <f:formElements>
-                         <f:FormElement>
+                            <f:FormElement>
                                 <f:fields>
                                     <HBox>
                                         <CheckBox
@@ -62,26 +62,23 @@
                             <f:FormElement>
                                 <f:fields>
                                     <!-- <FlexBox justifyContent="SpaceBetween" alignContent="SpaceBetween"> -->
-                                 
+
                                     <!-- </FlexBox> -->
                                 </f:fields>
                             </f:FormElement>
-                            <f:FormElement label="Strain">
+                            <f:FormElement>
                                 <f:fields>
-
-                                   <SegmentedButton
+                                    <SegmentedButton
                                         selectedKey="{specimenCreationModel>/status}"
                                     >
                                         <items>
                                             <SegmentedButtonItem
-                                                text="Existing Str"
+                                                text="Existing Strain"
                                                 key="existing"
-                                                icon="sap-icon://e-care"
                                             />
                                             <SegmentedButtonItem
-                                                text="New Str"
+                                                text="New Strain"
                                                 key="new"
-                                                icon="sap-icon://add"
                                             />
                                         </items>
                                     </SegmentedButton>
@@ -154,7 +151,7 @@
                                     </Select>
                                 </f:fields>
                             </f:FormElement>
-                           
+
                             <f:FormElement label="Name">
                                 <f:fields>
                                     <Input
@@ -188,7 +185,7 @@
                                     </SegmentedButton>
                                 </f:fields>
                             </f:FormElement>
-                                  <f:FormElement label="Tag">
+                            <f:FormElement label="Tag">
                                 <f:fields>
                                     <Input
                                         value="{specimenCreationModel>/tagID}"
@@ -199,10 +196,10 @@
                             </f:FormElement>
                             <f:FormElement label="Planted on">
                                 <f:fields>
-                                    <DatePicker
+                                    <DateTimePicker
                                         value="{
                                             'path': 'specimenCreationModel>/plantedDate',
-                                            'type': 'sap.ui.model.type.Date'}"
+                                            'type': 'sap.ui.model.type.DateTime'}"
                                     />
                                 </f:fields>
                             </f:FormElement>
