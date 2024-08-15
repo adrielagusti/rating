@@ -1,0 +1,238 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+>
+    <Dialog
+        title="New Specimen"
+        contentWidth="60%"
+        busy="{collectionModel>/createDialogBusy}"
+    >
+        <content>
+            <f:Form editable="true">
+                <f:layout>
+                    <f:ResponsiveGridLayout
+                        labelSpanXL="4"
+                        labelSpanL="4"
+                        labelSpanM="4"
+                        labelSpanS="12"
+                        adjustLabelSpan="false"
+                        emptySpanXL="0"
+                        emptySpanL="0"
+                        emptySpanM="0"
+                        emptySpanS="0"
+                        columnsXL="2"
+                        columnsL="2"
+                        columnsM="2"
+                        singleContainerFullSize="false"
+                    />
+                </f:layout>
+                <f:formContainers>
+                    <f:FormContainer>
+                        <!-- ID;parentID;breedType;seqNumber;strain_ID;clone;name;comments;tagID -->
+                        <f:formElements>
+                         <f:FormElement>
+                                <f:fields>
+                                    <HBox>
+                                        <CheckBox
+                                            activeHandling="true"
+                                            displayOnly="false"
+                                            editable="true"
+                                            enabled="true"
+                                            partiallySelected="false"
+                                            selected="{specimenCreationModel>/multiple}"
+                                            text="Multiple Specimens"
+                                            textAlign="Begin"
+                                            textDirection="Inherit"
+                                            useEntireWidth="false"
+                                            valueState="None"
+                                            wrapping="false"
+                                        />
+                                        <StepInput
+                                            value="{specimenCreationModel>/value}"
+                                            displayValuePrecision="{displayValuePrecision}"
+                                            min="1"
+                                            change="onChange"
+                                            enabled="{= ${specimenCreationModel>/multiple} }"
+                                        />
+                                    </HBox>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement>
+                                <f:fields>
+                                    <!-- <FlexBox justifyContent="SpaceBetween" alignContent="SpaceBetween"> -->
+                                 
+                                    <!-- </FlexBox> -->
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="Strain">
+                                <f:fields>
+
+                                   <SegmentedButton
+                                        selectedKey="{specimenCreationModel>/status}"
+                                    >
+                                        <items>
+                                            <SegmentedButtonItem
+                                                text="Existing Str"
+                                                key="existing"
+                                                icon="sap-icon://e-care"
+                                            />
+                                            <SegmentedButtonItem
+                                                text="New Str"
+                                                key="new"
+                                                icon="sap-icon://add"
+                                            />
+                                        </items>
+                                    </SegmentedButton>
+
+                                    <Input
+                                        visible="{= ${specimenCreationModel>/status} === 'new' ? true : false}"
+                                        value="{specimenCreationModel>/strainName}"
+                                        placeholder="Enter Strain name"
+                                        required="true"
+                                    />
+                                    <Input
+                                        visible="{= ${specimenCreationModel>/status} === 'new' ? true : false}"
+                                        value="{specimenCreationModel>/strainAlias}"
+                                        placeholder="Enter Strain alias"
+                                    />
+                                    <Input
+                                        visible="{= ${specimenCreationModel>/status} === 'new' ? true : false}"
+                                        value="{specimenCreationModel>/strainTagID}"
+                                        placeholder="Enter Tag ID"
+                                    />
+                                    <Select
+                                        forceSelection="true"
+                                        selectedKey="{specimenCreationModel>/strainID}"
+                                        autoAdjustWidth="true"
+                                        items="{
+												path: '/Strains',
+												sorter: { path: 'tagID' }
+												}"
+                                        visible="{= ${specimenCreationModel>/status} === 'new' ? false : true}"
+                                        change="onSelectStrain"
+                                    >
+                                        <core:Item
+                                            key="{ID}"
+                                            text="{name} "
+                                        />
+                                    </Select>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement
+                                label="Clone/Mother"
+                                visible="{= ${specimenCreationModel>/status} === 'new' ? false : true }"
+                            >
+                                <f:fields>
+                                    <!-- <ComboBox
+                                        items="{/Specimens}"
+                                        selectedKey="{specimenCreationModel>/parentID}"
+                                        selectionChange=".onChangeSanctionSubtype"
+                                        
+                                    >
+                                        <core:Item
+                                            key="{ID}"
+                                            text="{name}"
+                                        />
+                                    </ComboBox> -->
+                                    <Select
+                                        id="select.specimens"
+                                        forceSelection="false"
+                                        selectedKey="{specimenCreationModel>/parentID}"
+                                        autoAdjustWidth="true"
+                                        items="{
+												path: '/Specimens',
+												sorter: { path: 'name' }
+												}"
+                                        enabled="{= ${specimenCreationModel>/strainID} !== '' ? true : false }"
+                                    >
+                                        <core:Item
+                                            key="{ID}"
+                                            text="{name} "
+                                        />
+                                    </Select>
+                                </f:fields>
+                            </f:FormElement>
+                           
+                            <f:FormElement label="Name">
+                                <f:fields>
+                                    <Input
+                                        value="{specimenCreationModel>/name}"
+                                        placeholder="Enter Specimen name"
+                                        required="true"
+                                    />
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                    <f:FormContainer>
+                        <f:formElements>
+                            <f:FormElement>
+                                <f:fields>
+                                    <SegmentedButton
+                                        selectedKey="{specimenCreationModel>/breedType}"
+                                    >
+                                        <items>
+                                            <SegmentedButtonItem
+                                                text="Cutting"
+                                                key="C"
+                                                icon="sap-icon://e-care"
+                                            />
+                                            <SegmentedButtonItem
+                                                text="Seed"
+                                                key="S"
+                                                icon="sap-icon://blur"
+                                            />
+                                        </items>
+                                    </SegmentedButton>
+                                </f:fields>
+                            </f:FormElement>
+                                  <f:FormElement label="Tag">
+                                <f:fields>
+                                    <Input
+                                        value="{specimenCreationModel>/tagID}"
+                                        placeholder="Enter Specimen tag"
+                                        type="Number"
+                                    />
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="Planted on">
+                                <f:fields>
+                                    <DatePicker
+                                        value="{
+                                            'path': 'specimenCreationModel>/plantedDate',
+                                            'type': 'sap.ui.model.type.Date'}"
+                                    />
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="Comments">
+                                <f:fields>
+                                    <TextArea
+                                        value="{specimenCreationModel>/comments}"
+                                    />
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                </f:formContainers>
+            </f:Form>
+        </content>
+        <beginButton>
+            <Button
+                text="{i18n>confirm}"
+                icon="sap-icon://add"
+                type="Emphasized"
+                press=".onCreateConfirmPress"
+            />
+        </beginButton>
+        <endButton>
+            <Button
+                text="{i18n>cancel}"
+                icon="sap-icon://sys-cancel"
+                type="Reject"
+                press=".onCreateCancelPress"
+            />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

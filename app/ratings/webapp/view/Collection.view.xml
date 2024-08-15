@@ -1,222 +1,195 @@
 <mvc:View
     controllerName="blackseeds.ratings.controller.Collection"
-   xmlns="sap.m"
+    xmlns="sap.m"
     xmlns:f="sap.f"
     xmlns:grid="sap.ui.layout.cssgrid"
     xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:core="sap.ui.core"
-    xmlns:micro="sap.ui.comp.smartmicrochart"
     displayBlock="true"
-    xmlns:tnt="sap.tnt"
 >
-   <Page
-            showHeader="false"
-            class="sapUiContentPadding"
-        >
-            <subHeader>
-                <Toolbar>
-                    <ToolbarSpacer />
-                    <Title text="Black Seeds Collection Application" />
-                    <ToolbarSpacer />
-                </Toolbar>
-            </subHeader>
-            <content>
-                <Panel class="sapUiTinyMarginBottom">
-                    <HBox justifyContent="SpaceBetween">
-                        <Image
-                            class="sapUiTinyMarginTopBottom"
-                            src="./img/logo.png"
-                            width="8rem"
-                        />
-                        <VBox>
-                            <HBox justifyContent="End">
-                                <ObjectStatus
-                                    text="Unrated ({dataModel>/total})"
-                                    state="None"
-                                    class=" sapUiTinyMarginEnd"
-                                />
-                                <ObjectStatus
-                                    state="None"
-                                    class=""
-                                    icon="sap-icon://e-care"
-                                />
-                            </HBox>
-
-                            <HBox justifyContent="End">
-                                <ObjectStatus
-                                    text="Incomplete ({dataModel>/progress})"
-                                    state="Warning"
-                                    class=" sapUiTinyMarginEnd"
-                                />
-                                <ObjectStatus
-                                    state="Warning"
-                                    class=""
-                                    icon="sap-icon://warning2"
-                                />
-                            </HBox>
-                            <HBox justifyContent="End">
-                                <ObjectStatus
-                                    text="Complete ({dataModel>/full})"
-                                    state="Success"
-                                    class=" sapUiTinyMarginEnd"
-                                />
-                                <ObjectStatus
-                                    state="Success"
-                                    class=""
-                                    icon="sap-icon://sys-enter-2"
-                                />
-                            </HBox>
-                        </VBox>
-                    </HBox>
-                </Panel>
-                <Panel
-                    expanded="true"
-                    class="sapUiTinyMarginTop"
-                >
-                    <f:GridList
-                        mode="SingleSelectMaster"
-                        items="{path: 'dataModel>/strains', sorter: { path: 'dataModel>name',  group: true } }"
-                        selectionChange="onSelectSpecimen"
-                    >
-                        <f:customLayout>
-                            <grid:GridBoxLayout boxWidth="30%" />
-                        </f:customLayout>
-
-                        <f:GridListItem type="Active">
-                            <VBox>
-                                <HBox justifyContent="SpaceBetween">
-                                    <!-- <Title
-                                        text="{dataModel>name}"
-                                        class="sapUiSmallMarginTop sapUiSmallMarginBegin"
-                                    /> -->
-                                    <HBox>
-                                        <ObjectStatus
-                                          class="sapUiSmallMarginTop sapUiSmallMarginBegin"
-                                            state="{dataModel>state}"
-                                            icon="sap-icon://tag"
-                                        />
-                                        <Title
-                                            text="{dataModel>tagID}"
-                                            class="sapUiSmallMarginTopBottom sapUiSmallMarginEnd sapUiTinyMarginBegin"
-                                        />
-                                    </HBox>
-                                </HBox>
-                                <HBox justifyContent="Center">
-                                    <HBox
-                                        visible="{= ${dataModel>state} === 'Success' }"
-                                    >
-                                        <core:Icon
-                                            src="sap-icon://favorite"
-                                            color="#FFC933"
-                                            class="sapUiTinyMargin"
-                                        />
-
-                                        <Label
-                                            text="{dataModel>totalPoints} / 15"
-                                            class="sapUiTinyMarginTop"
-                                        />
-                                    </HBox>
-                                    <Label
-                                        visible="{= ${dataModel>state} === 'Warning' }"
-                                        text="Not concluded"
-                                        class="sapUiTinyMarginTop"
-                                    />
-                                    <Label
-                                        visible="{= ${dataModel>state} === 'None' }"
-                                        text="Not started"
-                                        class="sapUiTinyMarginTop"
-                                    />
-                                </HBox>
-                            </VBox>
-                        </f:GridListItem>
-                    </f:GridList>
-                </Panel>
-                <Panel
-                    expanded="true"
-                    class="sapUiTinyMarginTop"
-                    visible="{= ${appModel>/mode} === 'hist' }"
-                >
-                    <f:GridList
-                        mode="SingleSelectMaster"
-                        items="{path: 'dataModel>/history', sorter: { path: 'dataModel>modifiedAt', descending: true } }"
-                        selectionChange="onSelectHist"
-                    >
-                        <f:customLayout>
-                            <grid:GridBoxLayout boxWidth="100%" />
-                        </f:customLayout>
-
-                        <f:GridListItem type="Active">
-                            <HBox justifyContent="SpaceBetween">
-                                <Title
-                                    class="sapUiSmallMargin"
-                                    text="{dataModel>strainName}"
-                                />
-                                <Title
-                                    class="sapUiSmallMargin"
-                                    text="{dataModel>tagID}"
-                                />
-                            </HBox>
-                            <ObjectStatus
-                                text='{dataModel>modifiedAt}'
-                                state="Success"
-                                class="sapUiTinyMargin sapUiSmallMarginBegin"
-                            />
-                        
-                        </f:GridListItem>
-                    </f:GridList>
-                </Panel>
-            </content>
-            <footer>
-                <Toolbar>
-                    <Button
-                        icon="sap-icon://e-care"
-                        type="Transparent"
-                        press="toSpecimens"
+    <Page
+        showHeader="false"
+        class="sapUiContentPadding"
+    >
+        <subHeader>
+            <Toolbar>
+                <ToolbarSpacer />
+                <Title text="Black Seeds Collection Application" />
+                <ToolbarSpacer />
+            </Toolbar>
+        </subHeader>
+        <content>
+            <Panel class="sapUiTinyMarginBottom">
+                <HBox justifyContent="SpaceBetween">
+                    <Image
+                        class="sapUiTinyMarginTopBottom"
+                        src="./img/logo.png"
+                        width="8rem"
                     />
-                    <ToolbarSpacer />
+                    <VBox
+                        items="{ 
+                                path: '/SpecimenStates',
+                                sorter: {
+                                        path: 'ID'
+                                    } 
+                                }"
+                    >
+                        <HBox justifyContent="End">
+                            <ObjectStatus
+                                text="{description}"
+                                state="{color}"
+                                class=" sapUiTinyMarginTop sapUiTinyMarginEnd"
+                            />
+                            <ObjectStatus
+                                state="{color}"
+                                icon="{icon}"
+                                class=" sapUiTinyMarginTop"
+                            />
+                            <!-- <ObjectStatus
+                                state="None"
+                                class=""
+                                icon="sap-icon://e-care"
+                            /> -->
+                            <!-- </VBox>
+                        <VBox justifyContent="End"> -->
+                        </HBox>
+                        <!-- <HBox justifyContent="End" /> -->
+                    </VBox>
+                </HBox>
+            </Panel>
+            <Panel
+                expanded="true"
+                class="sapUiTinyMarginTop"
+                visible="{= ${collectionModel>/mode} === 'grid' }"
+            >
+                <List
+                    items="{
+                        path: '/Specimens',
+                        sorter: {
+                            path: 'strainName'
+                        }
+                    }"
+                    mode="MultiSelect"
+                    selectionChange="onSelectionChange"
+                >
+                    <!-- group: true -->
+                    <headerToolbar>
+                        <OverflowToolbar>
+                            <content>
+                                <ObjectStatus
+                                    text="{= ${collectionModel>/selectedSpecimens}.length }"
+                                    icon="sap-icon://checklist-item"
+                                />
+                                <ToolbarSpacer />
+                                <ToolbarSpacer />
+                                <Button
+                                    icon="sap-icon://multiselect-all"
+                                    press="onSelectAction('all',$event)"
+                                />
+                                <Button
+                                    icon="sap-icon://multiselect-none"
+                                    press="onSelectAction('none',$event)"
+                                />
+                                <Button
+                                    text="Display"
+                                    icon="sap-icon://display"
+                                    visible="{= ${collectionModel>/selectedSpecimens}.length === 1 }"
+                                    press="onDisplay"
+                                />
+                                <Button
+                                    text="Water"
+                                    icon="sap-icon://blur"
+                                    visible="{= ${collectionModel>/selectedSpecimens}.length >= 1 }"
+                                    press="onApplication"
+                                />
 
-                    <!-- <SegmentedButton
-                        selectedKey="{appModel>/mode}"
-                        width="70%"
-                    >
-                        <items>
-                            <SegmentedButtonItem
-                                text="Rate"
-                                icon="sap-icon://favorite"
-                                key="rate"
-                            />
-                            <SegmentedButtonItem
-                                text="Global"
-                                icon="sap-icon://competitor"
-                                key="top"
-                            />
-                            <SegmentedButtonItem
-                                text="History"
-                                icon="sap-icon://history"
-                                key="hist"
-                            />
-                        </items>
-                    </SegmentedButton> -->
-                    <ToolbarSpacer />
-                    <Select
-                        forceSelection="false"
-                        selectedKey="{userSelectionModel>/Strains}"
-                        type="IconOnly"
-                        icon="sap-icon://filter"
-                        autoAdjustWidth="true"
-                        items="{
-						path: '/Strains',
-						sorter: { path: 'tagID' }
-					}"
-                        change="onSelectNav"
-                    >
-                        <core:Item
-                            key="{ID}"
-                            text="{tagID} - {name} "
+                                <Button
+                                    text="Change status"
+                                    icon="sap-icon://electronic-medical-record"
+                                    visible="{= ${collectionModel>/selectedSpecimens}.length >= 1 }"
+                                    press="onChangeStatus"
+                                />
+                                <Button
+                                    text="Leave a note"
+                                    icon="sap-icon://notes"
+                                    visible="{= ${collectionModel>/selectedSpecimens}.length >= 1 }"
+                                />
+                            </content>
+                        </OverflowToolbar>
+                    </headerToolbar>
+                    <InputListItem label="{strainName}-{tagID}">
+                        <!-- <Title title="{specimenName}"/> -->
+                        <ObjectStatus
+                            icon="{stateIcon}"
+                            state="{stateColor}"
                         />
-                    </Select>
-                </Toolbar>
-            </footer>
-        </Page>
+                        <!-- <ObjectStatus
+                           
+                            text="{tagID}"
+                        /> -->
+                        <!-- <CheckBox /> -->
+                    </InputListItem>
+                </List>
+            </Panel>
+            <Panel
+                expanded="true"
+                class="sapUiTinyMarginTop"
+                visible="{= ${collectionModel>/mode} === 'tree' }"
+            >
+                <IconTabBar
+                    expanded="true"
+                    expandable="false"
+                    class="sapUiResponsiveContentPadding"
+                    items="{dataModel>/currentStrains}"
+                >
+                    <items>
+                        <IconTabFilter text="{dataModel>name}">
+                            <Tree
+                                items="{
+                                    path: 'dataModel>treeSpecimens',
+                                    templateShareable: true
+                                }"
+                            >
+                                <StandardTreeItem
+                                    title="{dataModel>name}"
+                                    icon="{dataModel>stateIcon}"
+                                />
+                            </Tree>
+                        </IconTabFilter>
+                    </items>
+                </IconTabBar>
+            </Panel>
+        </content>
+        <footer>
+            <Toolbar>
+                <Button
+                    icon="sap-icon://e-care"
+                    type="Transparent"
+                    press="onBroBack"
+                />
+                <ToolbarSpacer />
+                <SegmentedButton
+                    selectedKey="{collectionModel>/mode}"
+                    width="70%"
+                >
+                    <items>
+                        <SegmentedButtonItem
+                            text="Hierarchy"
+                            key="tree"
+                        />
+                        <SegmentedButtonItem
+                            text="List"
+                            key="grid"
+                        />
+                    </items>
+                </SegmentedButton>
+                <ToolbarSpacer />
+                <Button
+                    icon="sap-icon://add"
+                    press="onAddSpecimen"
+                />
+            </Toolbar>
+        </footer>
+    </Page>
 </mvc:View>

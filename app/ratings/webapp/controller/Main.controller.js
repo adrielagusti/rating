@@ -156,7 +156,7 @@ sap.ui.define(
           if (sum === 0) {
             return {...strain}
           } else{
-    
+            
             return {
               ...strain,
               text: sum === iAttributes ?  'Full rated' : 'In process',

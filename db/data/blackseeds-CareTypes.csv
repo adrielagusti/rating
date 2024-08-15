@@ -1,0 +1,9 @@
+ID;name;description
+550e8400-e29b-41d4-a716-446655440100;OW;Only water
+550e8400-e29b-41d4-a716-446655440101;FE;Fertilizing
+550e8400-e29b-41d4-a716-446655440102;PR;Pruning
+550e8400-e29b-41d4-a716-446655440103;RE;Repotting
+550e8400-e29b-41d4-a716-446655440104;IN;Inspection
+88b7aef4-8813-43ce-991f-84506b92d1a7;WP;Water and product
+d5817966-a593-43f6-9894-f94b45d1ed37;VI;Visit
+0a3db691-62ce-4ba1-bfe0-acba66de8aba;JN;Just a note

@@ -35,7 +35,7 @@ sap.ui.define([
                 this.setModel(models.createViewModel(), "view");
 
                 this.getModel().setSizeLimit(99999);
-                var oModel = new JSONModel("/services/userapi/currentUser");
+                // var oModel = new JSONModel("/services/userapi/currentUser");
                 // debugger;
             }
         });

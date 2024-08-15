@@ -1,33 +1,33 @@
-ID,tagID,name,breederName
-c6a8d6e2-3b10-4d39-b59a-a9fd88c8d3a5,453,ZZ x Jealously 3,
-49f8dc83-f4e3-45f5-b27e-5df99b3dbef8,465,Master Kush 3,
-6db7c2c9-242a-4bea-b606-85030d91c9e3,461,Fat Banana x Tropicana,
-08cfd999-045b-4b30-8d16-07807363a863,458,Colour Of Space,
-cc0d0b7a-7cbb-4514-97dc-b614f1e9e3c1,466,ZZ x PP 1,
-b6b65dd7-b98a-45bc-b451-88c7c8b1aa27,462,Fat Banana x Tropicana,
-b4f46858-57ab-4d27-b64c-9d8fb0c40845,456,Lemon Skitles x MB 2,
-3a4f49b1-582a-4652-992a-446f11aa01db,449,NN 1,
-d55c9a13-ebf8-4c01-86d3-cfaf146dcd14,467,ZZ x PP 1,
-9b22a095-08e7-4023-b1cb-4fe95f42c895,463,Fat Banana x Tropicana,
-38e4d0c7-dcdb-4843-b82e-c02454cb6094,460,Lemon Skitles x MB 1,
-2b44df04-0d4e-4f15-b31c-84e36aa40d47,455,Lemon Skitles x MB 2,
-e79459c3-7a2d-45d7-b94a-524cb2a0110a,471,Benny Blanco,
-1a51520e-769a-4ae1-b1eb-4d1dcfe32ea3,468,ZZ x PP 1,
-6161b35a-c3e1-4bb1-b14c-7f8f0aa4b131,464,Master Kush 3,
-b99b7c38-e063-494d-825d-cb29c0322b8a,478,Celosa,
-8e4b66cf-3f5b-4316-95b7-e8e4ee3b2c02,434,ZZ x Jealously 2,
-6d479d82-c862-45d2-9b7e-21d426217154,445,NN 2,
-a227c55e-2d86-48fe-ad27-a1b107f885db,442,Pure Michigan,
-4bf54b8e-e770-4c3b-a671-da2017e2e59f,443,Pure Michigan,
-27a3f6f0-ec6a-42f5-af5e-80505d31fc4b,446,NN 2,
-1357e90f-c73f-479f-899b-0cb979929ac2,433,ZZ x Jealously 2,
-1a8ecb79-b3bc-40ec-82db-61bea5c3ccf1,490,Benny Blanco,
-0dc3ad7f-4c86-4075-bf39-bf9a2d11d582,435,Benny Blanco,
-b49a235e-3f1a-4b96-a857-e45e9d9e8e92,489,Benny Blanco,
-0a49b43a-a451-4565-abf1-e4e0284c32e0,441,Pure Michigan,
-b08b6b2f-d4f7-4f2a-a5b3-cb7805b0757a,444,Pure Michigan,
-ceee9517-85ea-4c92-bc6c-b5f57af51c90,475,Lunosa,
-5e8859b2-cb71-4f15-8295-6f025e42bf6a,436,Benny Blanco,
-d6cf63e6-4ac4-4ed6-a7e0-c376268e94f8,474,Lunosa,
-29bc9698-41e6-482a-976a-0e18e8f3f048,001,Snowy Peaks,
+ID,tagID,name,alias
+c6a8d6e2-3b10-4d39-b59a-a9fd88c8d3a5,453,ZZ x Jealously 3,ZZJ
+49f8dc83-f4e3-45f5-b27e-5df99b3dbef8,465,Master Kush 3,MK3
+6db7c2c9-242a-4bea-b606-85030d91c9e3,461,Fat Banana x Tropicana,FBT
+08cfd999-045b-4b30-8d16-07807363a863,458,Colour Of Space,COS
+cc0d0b7a-7cbb-4514-97dc-b614f1e9e3c1,466,ZZ x PP 1,ZP1
+b6b65dd7-b98a-45bc-b451-88c7c8b1aa27,462,Fat Banana x Tropicana,FB2
+b4f46858-57ab-4d27-b64c-9d8fb0c40845,456,Lemon Skitles x MB 2,LSM
+3a4f49b1-582a-4652-992a-446f11aa01db,449,NN 1,NN1
+d55c9a13-ebf8-4c01-86d3-cfaf146dcd14,467,ZZ x PP 1,ZP2
+9b22a095-08e7-4023-b1cb-4fe95f42c895,463,Fat Banana x Tropicana,FB3
+38e4d0c7-dcdb-4843-b82e-c02454cb6094,460,Lemon Skitles x MB 1,LS1
+2b44df04-0d4e-4f15-b31c-84e36aa40d47,455,Lemon Skitles x MB 2,LS2
+e79459c3-7a2d-45d7-b94a-524cb2a0110a,471,Benny Blanco,BB1
+1a51520e-769a-4ae1-b1eb-4d1dcfe32ea3,468,ZZ x PP 1,ZP3
+6161b35a-c3e1-4bb1-b14c-7f8f0aa4b131,464,Master Kush 3,MK4
+b99b7c38-e063-494d-825d-cb29c0322b8a,478,Celosa,CL1
+8e4b66cf-3f5b-4316-95b7-e8e4ee3b2c02,434,ZZ x Jealously 2,ZZ2
+6d479d82-c862-45d2-9b7e-21d426217154,445,NN 2,NN2
+a227c55e-2d86-48fe-ad27-a1b107f885db,442,Pure Michigan,PM1
+4bf54b8e-e770-4c3b-a671-da2017e2e59f,443,Pure Michigan,PM2
+27a3f6f0-ec6a-42f5-af5e-80505d31fc4b,446,NN 2,NN3
+1357e90f-c73f-479f-899b-0cb979929ac2,433,ZZ x Jealously 2,ZJ3
+1a8ecb79-b3bc-40ec-82db-61bea5c3ccf1,490,Benny Blanco,BB2
+0dc3ad7f-4c86-4075-bf39-bf9a2d11d582,435,Benny Blanco,BB3
+b49a235e-3f1a-4b96-a857-e45e9d9e8e92,489,Benny Blanco,BB4
+0a49b43a-a451-4565-abf1-e4e0284c32e0,441,Pure Michigan,PM3
+b08b6b2f-d4f7-4f2a-a5b3-cb7805b0757a,444,Pure Michigan,PM4
+ceee9517-85ea-4c92-bc6c-b5f57af51c90,475,Lunosa,LN1
+5e8859b2-cb71-4f15-8295-6f025e42bf6a,436,Benny Blanco,BB5
+d6cf63e6-4ac4-4ed6-a7e0-c376268e94f8,474,Lunosa,LN3
+29bc9698-41e6-482a-976a-0e18e8f3f048,001,Snowy Peaks,SNW
 

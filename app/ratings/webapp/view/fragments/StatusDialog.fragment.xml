@@ -1,0 +1,164 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+>
+    <Dialog
+        title="{= ${collectionModel>/selectedSpecimens}.length }"
+        contentWidth="60%"
+        busy="{collectionModel>/createDialogBusy}"
+    >
+        <content>
+            <f:Form editable="true">
+                <f:layout>
+                    <f:ResponsiveGridLayout
+                        labelSpanXL="4"
+                        labelSpanL="4"
+                        labelSpanM="4"
+                        labelSpanS="12"
+                        adjustLabelSpan="false"
+                        emptySpanXL="0"
+                        emptySpanL="0"
+                        emptySpanM="0"
+                        emptySpanS="0"
+                        columnsXL="2"
+                        columnsL="2"
+                        columnsM="2"
+                        singleContainerFullSize="false"
+                    />
+                </f:layout>
+                <f:formContainers>
+                    <f:FormContainer>
+                        <!-- ID;parentID;breedType;seqNumber;strain_ID;clone;name;comments;tagID -->
+                        <f:formElements>
+                            <f:FormElement>
+                                <f:fields>
+                                    <CheckBox
+                                        text="Update sex"
+                                        selected="{statusModel>/sexUpdate}"
+                                    />
+                                    <SegmentedButton
+                                        selectedKey="{statusModel>/sex}"
+                                        enabled="{= ${statusModel>/sexUpdate} === true }"
+                                    >
+                                        <items>
+                                            <SegmentedButtonItem
+                                                text="Female"
+                                                key="F"
+                                                icon="sap-icon://female"
+                                            />
+                                            <SegmentedButtonItem
+                                                text="Male"
+                                                key="M"
+                                                icon="sap-icon://male"
+                                            />
+                                        </items>
+                                    </SegmentedButton>
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                    <f:FormContainer>
+                        <f:formElements>
+                            <f:FormElement>
+                                <f:fields>
+                                    <!-- <FlexBox justifyContent="SpaceBetween" alignContent="SpaceBetween"> -->
+                                    <CheckBox
+                                        text="Update status"
+                                        selected="{statusModel>/stateUpdate}"
+                                    />
+                                    <!-- <SegmentedButton
+                                    enabled="{= ${statusModel>/stateUpdate} === true }"
+                                        selectedKey="{statusModel>/state}"
+                                    >
+                                        <items>
+                                            <SegmentedButtonItem
+                                                text="Alive"
+                                                key="A"
+                                                icon="sap-icon://electrocardiogram"
+                                            />
+                                            <SegmentedButtonItem
+                                                text="Sick"
+                                                key="S"
+                                                icon="sap-icon://temperature"
+                                            />
+                                            <SegmentedButtonItem
+                                                text="Cut"
+                                                key="H"
+                                                icon="sap-icon://scissors"
+                                            />
+                                        </items>
+                                    </SegmentedButton> -->
+                                    <!-- </FlexBox> -->
+                                    <Select
+                                        forceSelection="false"
+                                        selectedKey="{statusModel>/state}"
+                                        autoAdjustWidth="true"
+                                        items="{
+												path: '/SpecimenStates',
+												sorter: { path: 'description' }
+												}"
+                                        enabled="{= ${statusModel>/stateUpdate} === true }"
+                                    >
+                                        <core:Item
+                                            key="{ID}"
+                                            text="{description} "
+                                        />
+                                    </Select>
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                    <f:FormContainer>
+                        <f:formElements>
+                            <f:FormElement>
+                                <f:fields>
+                                    <DatePicker
+                                        value="{
+                                            'path': 'statusModel>/date',
+                                            'type': 'sap.ui.model.type.Date'}"
+                                    />
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                    <f:FormContainer>
+                        <f:formElements>
+                            <!-- <f:FormElement label="Tag">
+                                <f:fields>
+                                    <Input
+                                        value="{careModel>/tagID}"
+                                        placeholder="Enter Specimen tag"
+                                    />
+                                </f:fields>
+                            </f:FormElement> -->
+
+                            <f:FormElement label="Comments">
+                                <f:fields>
+                                    <TextArea value="{careModel>/comments}" />
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                </f:formContainers>
+            </f:Form>
+        </content>
+        <beginButton>
+            <Button
+                text="{i18n>confirm}"
+                icon="sap-icon://accept"
+                type="Emphasized"
+                press=".onStatusConfirmPress"
+            />
+        </beginButton>
+        <endButton>
+            <Button
+                text="{i18n>cancel}"
+                icon="sap-icon://sys-cancel"
+                type="Reject"
+                press=".onStatusCancelPress"
+            />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

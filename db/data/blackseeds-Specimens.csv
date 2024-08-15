@@ -1,4 +1,3 @@
-ID;createdAt;createdBy;modifiedAt;modifiedBy;strain_ID;parentID;clone;name
-e85b1a3c-0aa3-486e-9c0a-5767611967d9;2023-05-20T04:12:16;level;2023-05-20T04:12:16;level;29bc9698-41e6-482a-976a-0e18e8f3f048;cd304b8b-2599-4a38-8e42-31a114618829;false;Madre
-54e6b77b-e195-44f4-9307-abc60712bc20;2023-05-20T04:12:16;level;2023-05-20T04:12:16;level;29bc9698-41e6-482a-976a-0e18e8f3f048;e85b1a3c-0aa3-486e-9c0a-5767611967d9;false;Semilla
-88bad13e-e571-414b-84e8-43184cb98055;2023-05-20T04:12:16;level;2023-05-20T04:12:16;level;29bc9698-41e6-482a-976a-0e18e8f3f048;e85b1a3c-0aa3-486e-9c0a-5767611967d9;true;Esqueje
+ID;parentID;breedType;seqNumber;strain_ID;name;tagID
+1a8ecb79-b3bc-40ec-82db-61bea5c3ccf1;f1ab063d-0836-4eb3-bc8d-77cb21be2ed8;C;0;29bc9698-41e6-482a-976a-0e18e8f3f048;PLANTA MADRE;00001
+11cd66a1-7c57-4cc1-9272-c85c78ffb16a;1a8ecb79-b3bc-40ec-82db-61bea5c3ccf1;S;1;29bc9698-41e6-482a-976a-0e18e8f3f048;Primer semilla plantada;00002

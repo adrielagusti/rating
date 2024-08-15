@@ -15,12 +15,12 @@ sap.ui.define(
 
       onInit() {
 
-        this.getRouter().getRoute("rating").attachPatternMatched(this._onObjectMatched, this);
+        this._getRouter().getRoute("rating").attachPatternMatched(this._onObjectMatched, this);
         // this.getRouter().getRoute("ratingChange").attachPatternMatched(this._onObjectMatched, this);
 
       },
 
-      getRouter() {
+      _getRouter() {
         return UIComponent.getRouterFor(this);
       },
 
@@ -212,7 +212,7 @@ sap.ui.define(
 
 
         this.getView().byId("vbox-atts").setBusy(false)
-        this.getRouter().navTo('main');
+        this._getRouter().navTo('main');
       }
 
     });

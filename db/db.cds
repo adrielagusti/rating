@@ -8,7 +8,7 @@ entity Strains {
   key ID          : UUID;
       tagID       : String;
       name        : String;
-      breederName : String;
+      alias       : String;
       ratings     : Composition of many Ratings on ratings.strain = $self;
 
 }
@@ -29,21 +29,79 @@ entity Attributes {
       step        : Integer;
 }
 
-entity Specimens : managed  {
-  key ID        : UUID;
-      strain    : Association to Strains;
-      parentID  : UUID;
-      clone     : Boolean;
-      name      : String;
-}
 
-entity Events : managed  {
+//  Collection 
+entity Specimens {
   key ID          : UUID;
-      specimenID  : Association to Specimens;
-      eventTypeID : Association to EventTypes;
+      parentID    : UUID;
+      breedType   : String;
+      seqNumber   : Integer;
+      strain      : Association to Strains;
+      // clone       : Boolean;
+      name        : String;
+      // comments    : String;
+      tagID       : String;
+      plantedDate : Date;
+      place       : Association to Places;
+      state       : Association to SpecimenStates;
+      sex         : String(1) default 'F';
+      
+      cares       : Composition of many Care on cares.specimen = $self;
 }
 
-entity EventTypes {
+entity Care : managed  {
+  key ID          : UUID;
+      specimen    : Association to Specimens;
+      careType    : Association to CareTypes;
+      date        : DateTime;
+      description : String;
+}
+
+entity Waterings : managed  {
+  key ID          : UUID;
+      specimen    : Association to Specimens;
+      date        : DateTime;
+      liters      : Decimal(5,2);
+      method      : String;
+}
+
+entity Applications : managed {
+  key ID          : UUID;
+      specimen    : Association to Specimens;
+      product     : Association to Products;
+      date        : DateTime;
+      amount      : Decimal(5,2);
+      method      : String; //Spraying, water
+}
+
+entity Products {
+  key ID          : UUID;
+      name        : String;
+      type        : String; //Fertilizer / Pesticide
+      description : String;
+      instructions: String;
+      unit        : String;
+}
+
+entity CareTypes {
+  key ID          : UUID;
+      name        : String;
+      description : String; // watering, fertilizing, pruning, etc
+}
+
+entity Places {
   key ID          : UUID;
       description : String;
+}
+
+// entity States {
+//   key ID          : UUID;
+//       description : String; // Dead , alive, sick
+// }
+
+entity SpecimenStates {
+  key ID          : UUID;
+      description : String; // Dead , alive, sick
+      icon        : String;
+      color       : String;
 }

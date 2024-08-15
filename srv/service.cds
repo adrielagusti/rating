@@ -26,6 +26,7 @@ service BlackSeedsService {
             key ID,
                 tagID,
                 name,
+                alias,
                 COALESCE(
                     AVG(
                         ratings.value
@@ -35,6 +36,28 @@ service BlackSeedsService {
         group by
             ID;
 
+  entity Specimens    as
+        projection on blackseeds.Specimens {
+            key ID,
+                parentID,
+                name,
+                breedType,
+                seqNumber,
+                // clone as wasCloned,
+                // comments,
+                tagID,
+                plantedDate,
+                strain,
+                sex,
+                state.color as stateColor,
+                state.icon as stateIcon,
+                state.description as stateDescription,
+                state,
+                strain.ID as strainID,
+                strain.alias as strainAlias,
+                strain.name as strainName,
+                cares
+        }
 
     entity Ratings @(restrict: [{
         grant: '*',
@@ -69,5 +92,73 @@ service BlackSeedsService {
                 step
         }
 
+    entity Cares as
+        projection on blackseeds.Care {  
+            key ID,         
+                specimen,   
+                careType.name as careName, 
+                careType.description as careD, 
+                careType, 
+                date,       
+                description    
+            }
 
+    entity Waterings as
+            projection on blackseeds.Waterings { 
+                ID,      
+                specimen,
+                date,    
+                liters,  
+                method  
+            }
+
+   entity Applications as
+        projection on blackseeds.Applications {
+           key ID,      
+               specimen,
+               product,
+               date, 
+               amount,  
+               method   
+        }
+
+    entity Products as
+        projection on blackseeds.Products {
+            key ID,
+                name,
+                type,
+                description,
+                instructions,
+                unit,
+                0 as amount: Decimal(5,2)
+        }
+
+    entity CareTypes as
+        projection on blackseeds.CareTypes {
+            key ID,
+                name,
+                description
+        }
+
+    entity Places as
+        projection on blackseeds.Places {
+            key ID,
+                description
+        }
+
+    // entity States as
+    //     projection on blackseeds.States {
+    //         key ID,
+    //             description
+    //     }
+
+    entity SpecimenStates as
+        projection on blackseeds.SpecimenStates {
+            key ID,
+                description,
+                icon,
+                color
+        }
 }
+
+

@@ -1,0 +1,195 @@
+<core:FragmentDefinition xmlns:launchpad="sap.ushell.ui.launchpad"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+>
+    <Dialog
+        title="{= ${collectionModel>/selectedSpecimens}.length }"
+        contentWidth="60%"
+        busy="{collectionModel>/createDialogBusy}"
+    >
+        <content>
+            <f:Form editable="true">
+                <f:layout>
+                    <f:ResponsiveGridLayout
+                        labelSpanXL="4"
+                        labelSpanL="4"
+                        labelSpanM="4"
+                        labelSpanS="12"
+                        adjustLabelSpan="false"
+                        emptySpanXL="0"
+                        emptySpanL="0"
+                        emptySpanM="0"
+                        emptySpanS="0"
+                        columnsXL="2"
+                        columnsL="2"
+                        columnsM="2"
+                        singleContainerFullSize="false"
+                    />
+                </f:layout>
+                <f:formContainers>
+                    <f:FormContainer>
+                        <!-- ID;parentID;breedType;seqNumber;strain_ID;clone;name;comments;tagID -->
+                        <f:formElements>
+                            <f:FormElement
+                                label="Water ( liters - grades - ph - ec )"
+                            >
+                                <f:fields>
+                                <VBox justifyContent="End" alignContent="End" alignItems="End">
+                                    <HBox>
+                                        <Input
+                                            value="{careModel>/water/liters}"
+                                            placeholder="Liters"
+                                        />
+                                        <Input
+                                            value="{careModel>/water/temp}"
+                                            placeholder="temp"
+                                        />
+                                        <Input
+                                            value="{careModel>/water/ph}"
+                                            placeholder="ph"
+                                        />
+                                        <Input
+                                            value="{careModel>/water/ec}"
+                                            placeholder="ec"
+                                        />
+                                    </HBox>
+                                    <!-- <HBox>
+                                       
+                                    </HBox> -->
+                                    <FlexBox>
+                                        <Text
+                                            text="Only water"
+                                            class="sapUiTinyMarginEnd"
+                                        />
+                                         <CheckBox
+                                            selected="{careModel>/water/onlyWater}"
+                                    
+                                        />
+                                        <!-- <Switch
+                                            state="{careModel>/onlyWater}"
+                                            customTextOn=" "
+                                            customTextOff=" "
+                                        >
+                                            <layoutData>
+                                                <FlexItemData growFactor="1" />
+                                            </layoutData>
+                                        </Switch> -->
+                                    </FlexBox>
+                                  
+                                    </VBox>
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                    <f:FormContainer visible="{= ${careModel>/water/onlyWater} === false }">
+                        <f:formElements>
+                            <f:FormElement >
+                                <f:fields>
+                                    <!-- <ComboBox
+                                        items="{/Specimens}"
+                                        selectedKey="{careModel>/parentID}"
+                                        selectionChange=".onChangeSanctionSubtype"
+                                        
+                                    >
+                                        <core:Item
+                                            key="{ID}"
+                                            text="{name}"
+                                        />
+                                    </ComboBox> -->
+
+                                    <List
+                                        backgroundDesign="Solid"
+                                        items="{careModel>/application/products}"
+                                    >
+                                        <CustomListItem>
+                                            <FlexBox>
+                                                <!-- <Text text="of"/> -->
+                                                <!-- <Select
+                                                    forceSelection="false"
+                                                    selectedKey="{careModel>/productID}"
+                                                    autoAdjustWidth="true"
+                                                    items="{
+                                                    path: '/Products',
+                                                    sorter: { path: 'name' }
+                                                    }"
+                                             
+                                                >
+                                                    <core:Item
+                                                        key="{ID}"
+                                                        text="{name} "
+                                                    />
+                                                </Select> -->
+                                                <CheckBox
+                                                    selected="{= ${careModel>amount} > 0 }"
+                                                    valueState="Information"
+                                                    enabled="false"
+                                                />
+                                                <Text
+                                                    text="{careModel>name}"
+                                                    width="170px"
+                                                />
+                                                <Input
+                                                    value="{careModel>amount}"
+                                                    class="sapUiTinyMarginBegin"
+                                                    width="85%"
+                                                    type="Number"
+                                                />
+                                                <!-- <Label text="{careModel>unit}" class="sapUiTinyMarginTop"/> -->
+                                            </FlexBox>
+                                        </CustomListItem>
+                                    </List>
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                    <f:FormContainer>
+                        <f:formElements>
+                            <!-- <f:FormElement label="Tag">
+                                <f:fields>
+                                    <Input
+                                        value="{careModel>/tagID}"
+                                        placeholder="Enter Specimen tag"
+                                    />
+                                </f:fields>
+                            </f:FormElement> -->
+                            <f:FormElement>
+                                <f:fields>
+                                    <DatePicker
+                                        value="{
+                                            'path': 'careModel>/date',
+                                            'type': 'sap.ui.model.type.Date',
+                                            'formatOptions': {UTC: true} 
+                                            }"
+                                    />
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="Comments">
+                                <f:fields>
+                                    <TextArea value="{careModel>/description}" />
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                </f:formContainers>
+            </f:Form>
+        </content>
+        <beginButton>
+            <Button
+                text="{i18n>confirm}"
+                icon="sap-icon://add"
+                type="Emphasized"
+                press=".onApplicationConfirmPress"
+            />
+        </beginButton>
+        <endButton>
+            <Button
+                text="{i18n>cancel}"
+                icon="sap-icon://sys-cancel"
+                type="Reject"
+                press=".onApplicationCancelPress"
+            />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>
