@@ -9,7 +9,7 @@ entity Strains {
       tagID       : String;
       name        : String;
       alias       : String;
-      ratings     : Composition of many Ratings on ratings.strain = $self;
+      ratings     : Composition of many Ratings on ratings.strain = $self; // Cant live without Strain
 
 }
 
@@ -37,9 +37,7 @@ entity Specimens {
       breedType   : String;
       seqNumber   : Integer;
       strain      : Association to Strains;
-      // clone       : Boolean;
       name        : String;
-      // comments    : String;
       tagID       : String;
       plantedDate : Date;
       place       : Association to Places;
@@ -87,6 +85,8 @@ entity CareTypes {
   key ID          : UUID;
       name        : String;
       description : String; // watering, fertilizing, pruning, etc
+      calDayType  : String; 
+      icon        : String;
 }
 
 entity Places {
@@ -94,10 +94,15 @@ entity Places {
       description : String;
 }
 
-// entity States {
-//   key ID          : UUID;
-//       description : String; // Dead , alive, sick
-// }
+entity LifeCycles {
+  key ID            : UUID;
+      days          : Integer;
+      specimenType  : String;
+      breedType     : String;
+      sequence      : String;
+      description   : String; // Vegetation floration
+      calDayType    : String; 
+}
 
 entity SpecimenStates {
   key ID          : UUID;

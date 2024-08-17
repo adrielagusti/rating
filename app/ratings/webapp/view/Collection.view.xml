@@ -37,11 +37,13 @@
                     >
                         <HBox justifyContent="End">
                             <ObjectStatus
+                                active="true"
                                 text="{description}"
                                 state="{color}"
                                 class=" sapUiTinyMarginTop sapUiTinyMarginEnd"
                             />
                             <ObjectStatus
+                                active="true"
                                 state="{color}"
                                 icon="{icon}"
                                 class=" sapUiTinyMarginTop"
@@ -64,6 +66,7 @@
                 visible="{= ${collectionModel>/mode} === 'grid' }"
             >
                 <List
+                    id='list'
                     items="{
                         path: '/Specimens',
                         sorter: {
@@ -123,12 +126,19 @@
                             </content>
                         </OverflowToolbar>
                     </headerToolbar>
-                    <InputListItem label="{strainName}-{tagID}">
+                    <InputListItem label="{strainName} - {tagID} ">
                         <!-- <Title title="{specimenName}"/> -->
+                        <ObjectStatus
+                            icon="{ parts: [ 'lastCare','stateIcon'], formatter: '.formatter.showWarning' }"
+                            state="{ parts: [ 'lastCare','stateColor'], formatter: '.formatter.showWarningColor' }"
+                        
+                        />
+
                         <ObjectStatus
                             icon="{stateIcon}"
                             state="{stateColor}"
                         />
+
                         <!-- <ObjectStatus
                            
                             text="{tagID}"

@@ -5,6 +5,7 @@
     xmlns:u="sap.ui.unified"
     xmlns:c="sap.suite.ui.commons"
     displayBlock="true"
+    xmlns:core="sap.ui.core"
     xmlns="sap.m"
     xmlns:dc="blackseeds.ratings.controls"
 >
@@ -84,13 +85,13 @@
                     </VBox>
                 </HBox>
             </Panel>
-            <IconTabBar class="sapUiResponsiveContentPadding">
+            <IconTabBar class="sapUiResponsiveContentPadding" tabDensityMode="Compact">
                 <items>
                     <IconTabFilter
                         key="info"
                         icon="sap-icon://hint"
                     >
-                        <Text text="Formulario informacion" />
+                        <core:Fragment fragmentName="blackseeds.ratings.view.fragments.Display" type="XML" />
                     </IconTabFilter>
                     <!-- <IconTabSeparator icon="" />
                     <IconTabSeparator icon="sap-icon://vertical-grip" /> -->
@@ -111,6 +112,9 @@
                                     maxDate="{specimenModel>/deadDate}"
                                     legend="legend"
                                 />
+                                <VBox class="sapUiTinyMarginBegin">
+                                <Button icon="sap-icon://notes"/>
+                                </VBox>
                             </FlexBox>
                             <u:CalendarLegend id="legend" />
                         </VBox>
@@ -134,6 +138,7 @@
                                     dateTime="{date}"
                                     text="{description}"
                                     userName="{careD}"
+                                    icon="{icon}"
                                 />
                             </c:content>
                         </c:Timeline>

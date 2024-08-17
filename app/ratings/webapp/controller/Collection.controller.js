@@ -4,15 +4,18 @@ sap.ui.define(
     "sap/ui/core/UIComponent",
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
+    "../model/formatter",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
     "../model/models"
   ],
 
-  function (UIComponent, Controller, JSONModel, Filter, FilterOperator, models) {
+  function (UIComponent, Controller, JSONModel, formatter, Filter, FilterOperator, models) {
     "use strict";
 
     return Controller.extend("blackseeds.ratings.controller.Collection", {
+
+      formatter: formatter,
 
       onInit() {
         this.getRouter().getRoute("collection").attachPatternMatched(this._onObjectMatched, this);
@@ -311,6 +314,7 @@ sap.ui.define(
         var that = this;
         this.applicateToSpecimens(aItems).then((result) => {
           sap.m.MessageToast.show('Specimens have ate');
+          that.byId('list').getBinding("items").refresh(true);
           that.onApplicationCancelPress();
         });
       },
@@ -574,7 +578,7 @@ sap.ui.define(
           specimen: {ID: specimen.ID},
           // product: {ID: product.ID},
           date: this.getView().getModel("careModel").getProperty("/date"),
-          liters: parseFloat( (water.liters / selected), 2),
+          liters: parseFloat( (water.liters / selected), 2).toFixed(2),
           method: water.method
           // ...water,
         }
@@ -597,7 +601,7 @@ sap.ui.define(
           specimen: {ID: specimen.ID},
           product: {ID: product.ID},
           date: this.getView().getModel("careModel").getProperty("/date"),
-          amount: parseFloat( (product.amount / selected) , 2),
+          amount: parseFloat( (product.amount / selected) , 2).toFixed(2),
           method: 'Water'
         }
       },

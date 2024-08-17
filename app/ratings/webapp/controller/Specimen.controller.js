@@ -106,33 +106,36 @@ sap.ui.define(
         let p0 = this._getSpecimen();
         let p1 = this._getCareTypes();
         let p2 = this._getCares();
+
+        let p4 = this._getLifeCycles();
         // let p2 = this._getApplications();
         // let p3 = this._getNotes();
         // let p1 = this._getWatering();
 
         var oLeg = this.byId("legend");
         var oCal = this.byId("calendar");
+        var oPla = this.byId("planing");
         var index = 0;
         oCal.removeAllSpecialDates();
-        oLeg.removeAllItems()
+        oLeg.removeAllItems();
+        // debugger; 
+        oPla.removeAllAppointments();
 
         var calDayType;
 
-   
-
-        Promise.all([p0, p1, p2])
+        Promise.all([p0, p1, p2, p4])
           .then(results => {
 
-            const [specimen, careTypes, cares] = results;
-
+            const [specimen, careTypes, cares, lifeCycles] = results;
+            var aLifeCycles = lifeCycles.results.sort((a, b) => a.sequence - b.sequence);
             // oRefDate = UI5Date.getInstance(),
             var sType;
-
+            
             oLeg.addItem(new CalendarLegendItem({
               type: sap.ui.unified.CalendarDayType.Type08,
               text: 'Planted on'
             }));
-            
+
             oCal.addSpecialDate(new DateTypeRange({
               startDate: specimen.plantedDate,
               type: sap.ui.unified.CalendarDayType.Type08
@@ -144,7 +147,7 @@ sap.ui.define(
 
               if (aCares.length > 0) {
                 sType = "Type0" + index;
-                calDayType = sap.ui.unified.CalendarDayType[sType]
+                calDayType = sap.ui.unified.CalendarDayType[careType.calDayType]
                 oLeg.addItem(new CalendarLegendItem({
                   type: calDayType,
                   text: careType.description
@@ -154,28 +157,83 @@ sap.ui.define(
                 calDayType = sap.ui.unified.CalendarDayType.Type09
               }
 
-        
+
               aCares.forEach((care, i) => {
-                oCal.addSpecialDate(new DateTypeRange({
+                // oCal.addSpecialDate(new DateTypeRange({
+                //   startDate: care.date,
+                //   type: calDayType,
+                //   tooltip: careType.description
+                // }));
+
+                oPla.addAppointment(new sap.ui.unified.CalendarAppointment({
+                  key: 'AA' + i,
+                  type: sap.ui.unified.CalendarDayType[care.dayType],
+                  // text: careType.description,
+                  // title: careType.description,
+                  // description: careType.description,
                   startDate: care.date,
-                  type: calDayType,
-                  tooltip: careType.description
+                  endDate: care.date,
+                  icon: care.icon
                 }));
+                // debugger;
 
               })
+              
 
             })
 
-        
+            var startDate = null;
+            var endDate = null;
 
-          }
-          )
+            aLifeCycles.forEach((cycle, i) => {
+
+              if (endDate === null){
+                startDate = new Date(specimen.plantedDate);
+                endDate = new Date(specimen.plantedDate);
+                // debugger
+              }
+              else {
+                startDate = new Date(endDate);
+                startDate.setDate(startDate.getDate() + 1);
+                endDate = new Date(endDate);
+                // debugger;
+              }
+      
+              endDate.setDate(endDate.getDate() + cycle.days);
+
+              sType = "Type08";
+              calDayType = sap.ui.unified.CalendarDayType[sType]
+          
+              oPla.addAppointment(new sap.ui.unified.CalendarAppointment({
+                key: 'AA' + i,
+                type: sap.ui.unified.CalendarDayType[cycle.calDayType],
+                text: cycle.description,
+                title: cycle.description,
+                description: cycle.description,
+                startDate: startDate,
+                endDate: endDate
+              }));
+              // debugger;
+            })
+
+          })
+
 
       },
 
       _getCareTypes() {
         return new Promise((res, rej) => {
           this.getView().getModel().read("/CareTypes", {
+            success: res,
+            error: rej
+          })
+        });
+      },
+
+
+      _getLifeCycles() {
+        return new Promise((res, rej) => {
+          this.getView().getModel().read("/LifeCycles", {
             success: res,
             error: rej
           })

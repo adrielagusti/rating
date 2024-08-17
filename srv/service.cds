@@ -1,4 +1,5 @@
-using { blackseeds } from '../db/db';
+using {blackseeds} from '../db/db';
+
 @(requires: 'authenticated-user')
 
 service BlackSeedsService {
@@ -21,7 +22,7 @@ service BlackSeedsService {
     //     ratings.ratingID : UUID
     // }
 
-    entity Strains    as
+    entity Strains        as
         projection on blackseeds.Strains {
             key ID,
                 tagID,
@@ -36,35 +37,35 @@ service BlackSeedsService {
         group by
             ID;
 
-  entity Specimens    as
+    entity Specimens      as
         projection on blackseeds.Specimens {
             key ID,
                 parentID,
                 name,
                 breedType,
                 seqNumber,
-                // clone as wasCloned,
-                // comments,
                 tagID,
                 plantedDate,
                 strain,
                 sex,
-                state.color as stateColor,
-                state.icon as stateIcon,
+                state.color       as stateColor,
+                state.icon        as stateIcon,
                 state.description as stateDescription,
                 state,
-                strain.ID as strainID,
-                strain.alias as strainAlias,
-                strain.name as strainName,
-                cares
+                strain.ID         as strainID,
+                strain.alias      as strainAlias,
+                strain.name       as strainName,
+                cares,
+                MAX(cares.date)   as lastCare : DateTime,
         }
+          group by
+            ID, strain.name, strain.ID, state.color, state.icon, state.description;
+            
 
     entity Ratings @(restrict: [{
         grant: '*',
         where: 'createdBy = $user'
-    }
-    ])
-    as
+    }])                   as
         projection on blackseeds.Ratings {
             key ID,
                 strain.ID    as strainID,
@@ -84,7 +85,7 @@ service BlackSeedsService {
         }
 
 
-    entity Attributes as
+    entity Attributes     as
         projection on blackseeds.Attributes {
             key ID,
                 description,
@@ -92,37 +93,40 @@ service BlackSeedsService {
                 step
         }
 
-    entity Cares as
-        projection on blackseeds.Care {  
-            key ID,         
-                specimen,   
-                careType.name as careName, 
-                careType.description as careD, 
-                careType, 
-                date,       
-                description    
-            }
-
-    entity Waterings as
-            projection on blackseeds.Waterings { 
-                ID,      
+    entity Cares          as
+        projection on blackseeds.Care {
+            key ID,
                 specimen,
-                date,    
-                liters,  
-                method  
-            }
-
-   entity Applications as
-        projection on blackseeds.Applications {
-           key ID,      
-               specimen,
-               product,
-               date, 
-               amount,  
-               method   
+                careType.name        as careName,
+                careType.description as careD,
+                careType.calDayType as dayType,
+                careType.icon       as icon,
+                careType,
+                date,
+                description
         }
 
-    entity Products as
+
+    entity Waterings      as
+        projection on blackseeds.Waterings {
+            ID,
+            specimen,
+            date,
+            liters,
+            method
+        }
+
+    entity Applications   as
+        projection on blackseeds.Applications {
+            key ID,
+                specimen,
+                product,
+                date,
+                amount,
+                method
+        }
+
+    entity Products       as
         projection on blackseeds.Products {
             key ID,
                 name,
@@ -130,20 +134,29 @@ service BlackSeedsService {
                 description,
                 instructions,
                 unit,
-                0 as amount: Decimal(5,2)
+                0 as amount : Decimal(5, 2)
         }
 
-    entity CareTypes as
+    entity CareTypes      as
         projection on blackseeds.CareTypes {
             key ID,
                 name,
                 description
         }
 
-    entity Places as
+    entity Places         as
         projection on blackseeds.Places {
             key ID,
                 description
+        }
+
+    entity LifeCycles         as
+        projection on blackseeds.LifeCycles {
+            key ID,
+                days,
+                description,
+                calDayType,
+                sequence
         }
 
     // entity States as
@@ -160,5 +173,3 @@ service BlackSeedsService {
                 color
         }
 }
-
-

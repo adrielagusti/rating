@@ -8,6 +8,7 @@
         title="{= ${collectionModel>/selectedSpecimens}.length }"
         contentWidth="60%"
         busy="{collectionModel>/createDialogBusy}"
+           stretch="true"
     >
         <content>
             <f:Form editable="true">

@@ -2,13 +2,51 @@
 	xmlns="sap.m"
 	xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form"
-	xmlns:core="sap.ui.core">
+	xmlns:core="sap.ui.core"
+	xmlns:unified="sap.ui.unified">
 	<VBox class="sapUiSmallMargin">
-		<f:Form id="FormDisplay354"
+
+	<SinglePlanningCalendar
+			id="planing"
+			class="sapUiSmallMarginTop"
+			title= "My Calendar"
+			viewChange="handleViewChange"
+			appointmentSelect="handleAppointmentSelect"
+			headerDateSelect="handleHeaderDateSelect"
+			startDateChange="handleStartDateChange"
+			appointmentDrop="handleAppointmentDrop"
+			appointmentResize="handleAppointmentResize"
+			appointmentCreate="handleAppointmentCreateDnD"
+			moreLinkPress="handleMoreLinkPress"
+			startDate="{path: 'plantedDate'}"
+			enableAppointmentsCreate="true"
+			>
+			<actions>
+				<Button id="addNewAppointment" text="Create" press="handleAppointmentCreate" tooltip="Add new appointment" />
+				<Button id="legendButton" icon="sap-icon://legend" press="handleOpenLegend" tooltip="Open SinglePlanningCalendar legend" ariaHasPopup="Dialog" />
+			</actions>
+			<views>
+				<!-- <SinglePlanningCalendarDayView key="DayView" title="Day" />
+				<SinglePlanningCalendarWorkWeekView key="WorkWeekView" title="Work Week" />
+				<SinglePlanningCalendarWeekView key="WeekView" title="Week" /> -->
+				<SinglePlanningCalendarMonthView key="MonthView" title="Month" />
+			</views>
+					<!-- title= "{careD}" -->
+					<!-- text= "{description}" -->
+			<appointments>
+				<unified:CalendarAppointment
+					key="{ID}"
+					type= "{dayType}"
+					icon= "{icon}"
+					startDate= "{date}"
+					endDate= "{date}">
+				</unified:CalendarAppointment>
+			</appointments>
+		</SinglePlanningCalendar>
+
+		<f:Form visible="false"
 			editable="false">
-			<f:title>
-				<core:Title text="Address" />
-			</f:title>
+			
 			<f:layout>
 				<f:ResponsiveGridLayout
 					labelSpanXL="3"
@@ -23,29 +61,19 @@
 					columnsXL="1"
 					columnsL="1"
 					columnsM="1"
-					singleContainerFullSize="false" />
+					/>
 			</f:layout>
 			<f:formContainers>
 				<f:FormContainer>
 					<f:formElements>
 						<f:FormElement label="Name">
 							<f:fields>
-								<Text text="{SupplierName}" id="nameText"  />
+								<Text text="{name}"   />
 							</f:fields>
 						</f:FormElement>
-						<f:FormElement label="Street">
+						<f:FormElement label="Tag ID">
 							<f:fields>
-								<Text text="{Street} {HouseNumber}" />
-							</f:fields>
-						</f:FormElement>
-						<f:FormElement label="ZIP Code/City">
-							<f:fields>
-								<Text text="{ZIPCode} {City}" />
-							</f:fields>
-						</f:FormElement>
-						<f:FormElement label="Country">
-							<f:fields>
-								<Text text="{Country}" id="countryText" />
+								<Text text="{tagID}" />
 							</f:fields>
 						</f:FormElement>
 					</f:formElements>
