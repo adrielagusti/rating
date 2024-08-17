@@ -28,7 +28,7 @@
     "heroku-postbuild": "echo heroku postbuild skipped",
     "heroku:pg:deploy": "PGHOST=localhost PGUSER=postgres PGPASSWORD=postgres heroku pg:push rating postgresql-acute-84663 --app blackseeds-ratings",
     "pg:deploy": "npx cds-dbm deploy --create-db --load-via delta",
-    "build": "cds build --clean;cp gen/srv/srv/csn.json srv/gen/;cp -r gen/db/src/gen db/src npx cds-dbm deploy  --create-db --load-via delta docker-compose up",
+    "build": "cds build --clean;cp gen/srv/srv/csn.json srv/gen/;cp -r gen/db/src/gen db/src npx cds-dbm deploy --load-via delta docker-compose up",
     "adri:1": "cds add data",
     "adri:2": "heroku pg:push rating postgresql-acute-84663 --app blackseeds-ratings",
     "adri:3": "heroku pg:reset --app blackseeds-ratings"
