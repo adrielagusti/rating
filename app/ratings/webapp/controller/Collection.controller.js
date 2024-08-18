@@ -537,24 +537,11 @@ sap.ui.define(
       },
 
       _createSpecimen(data) {
-        delete data.status
-        delete data.multiple
-        delete data.value
-        delete data.strainAlias
-        delete data.strainName
-        delete data.strainTagID
-        delete data.comments
 
-        data.strain = { ID: data.strainID };
-        if (!data.parentID) {
-          data.seqNumber = 0;
-          delete data.parentID;
-        } else {
-          data.seqNumber = 1;
-        }
+       var specimen =  this._formatSpecimen(data)
 
         return new Promise((resolve, reject) => {
-          this.getView().getModel().create("/Specimens", data, {
+          this.getView().getModel().create("/Specimens", specimen, {
             success: resolve,
             error: reject
           });
@@ -582,6 +569,28 @@ sap.ui.define(
           method: water.method
           // ...water,
         }
+      },
+
+      _formatSpecimen(data){ 
+        delete data.status
+        delete data.multiple
+        delete data.value
+        delete data.strainAlias
+        delete data.strainName
+        delete data.strainTagID
+        delete data.comments
+
+        data.state = { ID: 'e8c8bfd3-95de-498e-b4b1-aa591480db28' }
+
+        data.strain = { ID: data.strainID };
+        if (!data.parentID) {
+          data.seqNumber = 0;
+          delete data.parentID;
+        } else {
+          data.seqNumber = 1;
+        }
+
+        return data;
       },
 
       _createApplication(specimen, product) {

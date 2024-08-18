@@ -1,84 +1,64 @@
 <core:FragmentDefinition
-	xmlns="sap.m"
-	xmlns:l="sap.ui.layout"
-	xmlns:f="sap.ui.layout.form"
-	xmlns:core="sap.ui.core"
-	xmlns:unified="sap.ui.unified">
-	<VBox class="sapUiSmallMargin">
-
-	<SinglePlanningCalendar
-			id="planing"
-			class="sapUiSmallMarginTop"
-			title= "My Calendar"
-			viewChange="handleViewChange"
-			appointmentSelect="handleAppointmentSelect"
-			headerDateSelect="handleHeaderDateSelect"
-			startDateChange="handleStartDateChange"
-			appointmentDrop="handleAppointmentDrop"
-			appointmentResize="handleAppointmentResize"
-			appointmentCreate="handleAppointmentCreateDnD"
-			moreLinkPress="handleMoreLinkPress"
-			startDate="{path: 'plantedDate'}"
-			enableAppointmentsCreate="true"
-			>
-			<actions>
-				<Button id="addNewAppointment" text="Create" press="handleAppointmentCreate" tooltip="Add new appointment" />
-				<Button id="legendButton" icon="sap-icon://legend" press="handleOpenLegend" tooltip="Open SinglePlanningCalendar legend" ariaHasPopup="Dialog" />
-			</actions>
-			<views>
-				<!-- <SinglePlanningCalendarDayView key="DayView" title="Day" />
-				<SinglePlanningCalendarWorkWeekView key="WorkWeekView" title="Work Week" />
-				<SinglePlanningCalendarWeekView key="WeekView" title="Week" /> -->
-				<SinglePlanningCalendarMonthView key="MonthView" title="Month" />
-			</views>
-					<!-- title= "{careD}" -->
-					<!-- text= "{description}" -->
-			<appointments>
-				<unified:CalendarAppointment
-					key="{ID}"
-					type= "{dayType}"
-					icon= "{icon}"
-					startDate= "{date}"
-					endDate= "{date}">
-				</unified:CalendarAppointment>
-			</appointments>
-		</SinglePlanningCalendar>
-
-		<f:Form visible="false"
-			editable="false">
-			
-			<f:layout>
-				<f:ResponsiveGridLayout
-					labelSpanXL="3"
-					labelSpanL="3"
-					labelSpanM="3"
-					labelSpanS="12"
-					adjustLabelSpan="false"
-					emptySpanXL="4"
-					emptySpanL="4"
-					emptySpanM="4"
-					emptySpanS="0"
-					columnsXL="1"
-					columnsL="1"
-					columnsM="1"
-					/>
-			</f:layout>
-			<f:formContainers>
-				<f:FormContainer>
-					<f:formElements>
-						<f:FormElement label="Name">
-							<f:fields>
-								<Text text="{name}"   />
-							</f:fields>
-						</f:FormElement>
-						<f:FormElement label="Tag ID">
-							<f:fields>
-								<Text text="{tagID}" />
-							</f:fields>
-						</f:FormElement>
-					</f:formElements>
-				</f:FormContainer>
-			</f:formContainers>
-		</f:Form>
-	</VBox>
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:unified="sap.ui.unified"
+>
+    <VBox class="sapUiSmallMargin">
+        <f:Form editable="false">
+            <f:layout>
+                <f:ResponsiveGridLayout
+                    labelSpanXL="3"
+                    labelSpanL="3"
+                    labelSpanM="3"
+                    labelSpanS="12"
+                    adjustLabelSpan="false"
+                    emptySpanXL="4"
+                    emptySpanL="4"
+                    emptySpanM="4"
+                    emptySpanS="0"
+                    columnsXL="1"
+                    columnsL="1"
+                    columnsM="1"
+                />
+            </f:layout>
+            <f:formContainers>
+                <f:FormContainer>
+                    <f:formElements>
+                        <f:FormElement label="Specimen name">
+                            <f:fields>
+                                <Text text="{name}" />
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement label="Tag ID">
+                            <f:fields>
+                                <Text text="{tagID}" />
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement label="Planted On">
+                            <f:fields>
+                                <Text text="{plantedDate}" />
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement label="Strain Name">
+                            <f:fields>
+                                <Text text="{strainName}" />
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement label="State">
+                            <f:fields>
+                                <Text text="{stateDescription}" />
+                            </f:fields>
+                        </f:FormElement>
+						     <f:FormElement label="Last Care">
+                            <f:fields>
+                                <Text text="{lastCare}" />
+                            </f:fields>
+                        </f:FormElement>
+                    </f:formElements>
+                </f:FormContainer>
+            </f:formContainers>
+        </f:Form>
+    </VBox>
 </core:FragmentDefinition>

@@ -19,7 +19,11 @@ sap.ui.define(
       onInit() {
 
         this.getRouter().getRoute("specimen").attachPatternMatched(this._onObjectMatched, this);
-        // this.getRouter().getRoute("ratingChange").attachPatternMatched(this._onObjectMatched, this);
+        this.getView().setModel(new JSONModel($.extend(true, {}, {
+          careTypes: [],
+          water: models.initialWater,
+          application: []
+        })), 'dayDetailModel');
 
       },
 
@@ -31,12 +35,61 @@ sap.ui.define(
         history.go(-1);
       },
 
+      handleAppointmentSelect: function (oEvent) {
+
+        var selectedDate = oEvent.getParameter("appointment").getProperty('startDate');
+
+        let p1 = this._getDayApplications(selectedDate);
+        let p2 = this._getDayWaterings(selectedDate);
+
+        Promise.all([p1, p2])
+          .then(results => {
+
+            const [applications, waterings] = results;
+
+            // this.getView().getModel('dayDetailModel').setProperty('/warerings', waterings.results)
+            this.getView().getModel('dayDetailModel').setProperty('/applications', applications.results)
+
+            // debugger;
+            if (!this._pCareDetail) {
+              this._pCareDetail = sap.ui.core.Fragment.load({
+                id: this.getView().getId(),
+                name: "blackseeds.ratings.view.fragments.CareDetailDialog",
+                controller: this
+              }).then(function name(oFragment) {
+                this.getView().addDependent(oFragment);
+                return oFragment;
+              }.bind(this));
+            }
+            this._pCareDetail.then(function (oFragment) {
+              oFragment.open();
+            });
+
+          }
+          )
+
+      },
+
+      onStatusCancelPress: function () {
+        this._pCareDetail.then(function (oFragment) {
+          oFragment.close();
+        });
+      },
+
+      onStatusConfirmPress: function () {
+        var aItems = this.getView().getModel('collectionModel').getProperty("/selectedSpecimens");
+        this.changeSpecimenStatus(aItems).then((result) => {
+          sap.m.MessageToast.show('Specimens updated');
+          this.onStatusCancelPress();
+        })
+      },
+
       _onObjectMatched(oEvent) {
         let sObjectId = oEvent.getParameter("arguments").objectId;
         this._bindView("/Specimens(guid'" + sObjectId + "')");
 
         var oCalendar = this.byId('legend');
-        oCalendar.setStandardItems(['Today']);
+        // oCalendar.setStandardItems(['Today']);
         // this.onAddCare();
         this._setSpecimenResults()
       },
@@ -48,40 +101,6 @@ sap.ui.define(
         });
       },
 
-      createCalendar: function () {
-
-        var oCal = this.byId("calendar"),
-          oLeg = this.byId("legend"),
-          // oRefDate = UI5Date.getInstance(),
-          sType;
-
-        for (var i = 1; i <= 10; i++) {
-          if (i < 10) {
-            sType = "Type0" + i;
-          } else {
-            sType = "Type" + i;
-          }
-
-          oLeg.addItem(new CalendarLegendItem({
-            type: sType,
-            text: "Placeholder " + i
-          }));
-
-          // oRefDate.setDate(i);
-          // oCal.addSpecialDate(new DateTypeRange({
-          // 	// startDate: UI5Date.getInstance(oRefDate),
-          // 	type: sType,
-          // 	tooltip: "Placeholder " + i
-          // }));
-
-          // oRefDate.setDate(i + 12);
-          // oCal.addSpecialDate(new DateTypeRange({
-          // 	// startDate: UI5Date.getInstance(oRefDate),
-          // 	type: sType,
-          // 	tooltip: "Placeholder " + i
-          // }));
-        }
-      },
       // onAddCare() {
       //   // 
       //   // this.getView().getModel("specimenCreationModel").setProperty("/", models.initialSpecimen);
@@ -112,12 +131,12 @@ sap.ui.define(
         // let p3 = this._getNotes();
         // let p1 = this._getWatering();
 
-        var oLeg = this.byId("legend");
-        var oCal = this.byId("calendar");
+        // var oLeg = this.byId("legend");
+        // var oCal = this.byId("calendar");
         var oPla = this.byId("planing");
-        var index = 0;
-        oCal.removeAllSpecialDates();
-        oLeg.removeAllItems();
+        // var index = 0;
+        // oCal.removeAllSpecialDates();
+        // oLeg.removeAllItems();
         // debugger; 
         oPla.removeAllAppointments();
 
@@ -130,55 +149,44 @@ sap.ui.define(
             var aLifeCycles = lifeCycles.results.sort((a, b) => a.sequence - b.sequence);
             // oRefDate = UI5Date.getInstance(),
             var sType;
-            
-            oLeg.addItem(new CalendarLegendItem({
-              type: sap.ui.unified.CalendarDayType.Type08,
-              text: 'Planted on'
-            }));
 
-            oCal.addSpecialDate(new DateTypeRange({
-              startDate: specimen.plantedDate,
-              type: sap.ui.unified.CalendarDayType.Type08
-            }));
+            // oLeg.addItem(new CalendarLegendItem({
+            //   type: sap.ui.unified.CalendarDayType.Type08,
+            //   text: 'Planted on'
+            // }));
+
+            // oCal.addSpecialDate(new DateTypeRange({
+            //   startDate: specimen.plantedDate,
+            //   type: sap.ui.unified.CalendarDayType.Type08
+            // }));
 
             careTypes.results.forEach((careType, index) => {
 
               var aCares = cares.results.filter((care) => care.careName === careType.name)
 
-              if (aCares.length > 0) {
-                sType = "Type0" + index;
-                calDayType = sap.ui.unified.CalendarDayType[careType.calDayType]
-                oLeg.addItem(new CalendarLegendItem({
-                  type: calDayType,
-                  text: careType.description
-                }));
+              // if (aCares.length > 0) {
+              //   sType = "Type0" + index;
+              //   calDayType = sap.ui.unified.CalendarDayType[careType.calDayType]
+              //   // oLeg.addItem(new CalendarLegendItem({
+              //   //   type: calDayType,
+              //   //   text: careType.description
+              //   // }));
 
-              } else {
-                calDayType = sap.ui.unified.CalendarDayType.Type09
-              }
+              // } else {
+              //   calDayType = sap.ui.unified.CalendarDayType.Type09
+              // }
 
 
-              aCares.forEach((care, i) => {
-                // oCal.addSpecialDate(new DateTypeRange({
-                //   startDate: care.date,
-                //   type: calDayType,
-                //   tooltip: careType.description
-                // }));
+              aCares.forEach((care) => {
 
                 oPla.addAppointment(new sap.ui.unified.CalendarAppointment({
-                  key: 'AA' + i,
                   type: sap.ui.unified.CalendarDayType[care.dayType],
-                  // text: careType.description,
-                  // title: careType.description,
-                  // description: careType.description,
                   startDate: care.date,
                   endDate: care.date,
                   icon: care.icon
                 }));
-                // debugger;
-
               })
-              
+
 
             })
 
@@ -187,25 +195,27 @@ sap.ui.define(
 
             aLifeCycles.forEach((cycle, i) => {
 
-              if (endDate === null){
+              if (endDate === null) {
                 startDate = new Date(specimen.plantedDate);
                 endDate = new Date(specimen.plantedDate);
-                // debugger
               }
               else {
                 startDate = new Date(endDate);
                 startDate.setDate(startDate.getDate() + 1);
                 endDate = new Date(endDate);
-                // debugger;
               }
-      
+
               endDate.setDate(endDate.getDate() + cycle.days);
 
+              // startDate.setHours("1","0","0", "0")
+              // endDate.setHours("1","0","0", "0")
+
+              // debugger;
               sType = "Type08";
               calDayType = sap.ui.unified.CalendarDayType[sType]
-          
+
               oPla.addAppointment(new sap.ui.unified.CalendarAppointment({
-                key: 'AA' + i,
+                // key: 'AA' + i,
                 type: sap.ui.unified.CalendarDayType[cycle.calDayType],
                 text: cycle.description,
                 title: cycle.description,
@@ -262,6 +272,35 @@ sap.ui.define(
           })
         });
 
+      },
+
+      _getDayApplications(date) {
+
+        let midnightDate = new Date(date);
+        midnightDate.setHours(0, 0, 0, 0); 
+        let endOfDayDate = new Date(date);
+        endOfDayDate.setHours(23, 59, 59, 999); 
+
+        var aFilter = [new Filter("date", FilterOperator.BT, midnightDate, endOfDayDate)];
+        aFilter.push(new Filter("specimen_ID", FilterOperator.EQ, this.getView().getBindingContext().getObject().ID));
+
+        return new Promise((res, rej) => {
+          this.getView().getModel().read('/Applications', {
+            filters: aFilter,
+            success: res,
+            error: rej
+          })
+        });
+      },
+
+      _getDayWaterings(date) {
+        // debugger;
+        // return new Promise((res, rej) => {
+        //   this.getView().getModel().read(sPath, {
+        //     success: res,
+        //     error: rej
+        //   })
+        // });
       }
 
     });

@@ -56,6 +56,7 @@ service BlackSeedsService {
                 strain.alias      as strainAlias,
                 strain.name       as strainName,
                 cares,
+                waterings,
                 MAX(cares.date)   as lastCare : DateTime,
         }
           group by
@@ -111,6 +112,7 @@ service BlackSeedsService {
         projection on blackseeds.Waterings {
             ID,
             specimen,
+            specimen.ID as specimenID,
             date,
             liters,
             method
@@ -121,6 +123,7 @@ service BlackSeedsService {
             key ID,
                 specimen,
                 product,
+                product.name as productName,
                 date,
                 amount,
                 method

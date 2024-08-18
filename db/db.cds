@@ -39,12 +39,13 @@ entity Specimens {
       strain      : Association to Strains;
       name        : String;
       tagID       : String;
-      plantedDate : Date;
+      plantedDate : DateTime;
       place       : Association to Places;
       state       : Association to SpecimenStates;
       sex         : String(1) default 'F';
       
       cares       : Composition of many Care on cares.specimen = $self;
+      waterings   : Composition of many Waterings on waterings.specimen = $self;
 }
 
 entity Care : managed  {

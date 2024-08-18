@@ -2,7 +2,7 @@
     controllerName="blackseeds.ratings.controller.Specimen"
     xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns:u="sap.ui.unified"
+    xmlns:unified="sap.ui.unified"
     xmlns:c="sap.suite.ui.commons"
     displayBlock="true"
     xmlns:core="sap.ui.core"
@@ -21,7 +21,10 @@
             </Toolbar>
         </subHeader>
         <content>
-            <Panel class="sapUiTinyMarginBottom">
+            <Panel
+                class="sapUiTinyMarginBottom"
+                visible="false"
+            >
                 <HBox justifyContent="SpaceBetween">
                     <Image
                         class="sapUiTinyMarginTopBottom"
@@ -85,13 +88,19 @@
                     </VBox>
                 </HBox>
             </Panel>
-            <IconTabBar class="sapUiResponsiveContentPadding" tabDensityMode="Compact">
+            <IconTabBar
+                class="sapUiResponsiveContentPadding"
+                tabDensityMode="Compact"
+            >
                 <items>
                     <IconTabFilter
                         key="info"
                         icon="sap-icon://hint"
                     >
-                        <core:Fragment fragmentName="blackseeds.ratings.view.fragments.Display" type="XML" />
+                        <core:Fragment
+                            fragmentName="blackseeds.ratings.view.fragments.Display"
+                            type="XML"
+                        />
                     </IconTabFilter>
                     <!-- <IconTabSeparator icon="" />
                     <IconTabSeparator icon="sap-icon://vertical-grip" /> -->
@@ -100,23 +109,37 @@
                         icon="sap-icon://notes"
                     >
                         <VBox>
-                            <FlexBox
-                                alignContent="Center"
-                                justifyContent="Center"
+                            <SinglePlanningCalendar
+                                id="planing"
+                                appointmentSelect="handleAppointmentSelect"
+                                startDate="{path: 'plantedDate'}"
+                                enableAppointmentsCreate="true"
                             >
-                                <u:Calendar
-                                    id="calendar"
-                                    select="handleCalendarSelect"
-                                    class="sapUiTinyMarginTop"
-                                    minDate="{plantedDate}"
-                                    maxDate="{specimenModel>/deadDate}"
-                                    legend="legend"
-                                />
-                                <VBox class="sapUiTinyMarginBegin">
-                                <Button icon="sap-icon://notes"/>
-                                </VBox>
-                            </FlexBox>
-                            <u:CalendarLegend id="legend" />
+                                <!-- <actions>
+				<Button id="addNewAppointment" text="Create" press="handleAppointmentCreate" tooltip="Add new appointment" />
+				<Button id="legendButton" icon="sap-icon://legend" press="handleOpenLegend" tooltip="Open SinglePlanningCalendar legend" ariaHasPopup="Dialog" />
+			</actions> -->
+                                <views>
+                                    <SinglePlanningCalendarMonthView
+                                        key="MonthView"
+                                        title="Month"
+                                    />
+                                    <!-- <SinglePlanningCalendarDayView key="DayView" title="Day" />
+				<SinglePlanningCalendarWorkWeekView key="WorkWeekView" title="Work Week" /> -->
+                                    <!-- <SinglePlanningCalendarWeekView key="WeekView" title="Week" /> -->
+                                </views>
+                                <!-- title= "{careD}" -->
+                                <!-- text= "{description}" -->
+                                <appointments>
+                                    <unified:CalendarAppointment
+                                        key="{ID}"
+                                        type="{dayType}"
+                                        icon="{icon}"
+                                        startDate="{date}"
+                                        endDate="{date}"
+                                    />
+                                </appointments>
+                            </SinglePlanningCalendar>
                         </VBox>
                     </IconTabFilter>
 
