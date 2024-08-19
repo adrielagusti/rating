@@ -175,4 +175,16 @@ service BlackSeedsService {
                 icon,
                 color
         }
+
+    entity SpecimenPhotos as
+        projection on blackseeds.SpecimenPhotos {
+            key ID,
+                name,
+                content
+        }
+
+
+    // service MediaService {
+     entity Pictures as projection on blackseeds.SpecimenPhotos;
+     entity Media as projection on blackseeds.Media;
 }

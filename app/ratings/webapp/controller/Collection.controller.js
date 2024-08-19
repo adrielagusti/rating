@@ -23,10 +23,12 @@ sap.ui.define(
         this.getView().setModel(new JSONModel($.extend(true, {}, models.initialStatus)), 'statusModel');
         this.getView().setModel(new JSONModel($.extend(true, {}, models.initialSpecimen)), 'specimenCreationModel');
         this.getView().setModel(new JSONModel($.extend(true, {}, models.initialCollection)), 'collectionModel');
-        this.getView().setModel(new JSONModel($.extend(true, {}, { careTypes: [],
-                                                                   water: models.initialWater,
-                                                                   application: models.initialApplication,
-                                                                   description: '', date: new Date() })), 'careModel');
+        this.getView().setModel(new JSONModel($.extend(true, {}, {
+          careTypes: [],
+          water: models.initialWater,
+          application: models.initialApplication,
+          description: '', date: new Date()
+        })), 'careModel');
       },
 
       getRouter() {
@@ -39,6 +41,8 @@ sap.ui.define(
 
       _onObjectMatched(oEvent) {
         this._setUserResults();
+        // this._deletePhoto('bcbc4120-a7fc-4dbb-8bf4-7d058ca8e9d4').then((data) => { });
+        // this._deletePhoto('cd6af24e-a68b-4a4b-bfe1-ade9750fe81e').then((data) => { });
         // this._deleteGD();
       },
 
@@ -46,10 +50,10 @@ sap.ui.define(
         let p1 = this._getSpecimens();
         let p2 = this._getCares();
 
-        Promise.all([p1,p2])
+        Promise.all([p1, p2])
           .then(results => {
 
-            const [specimens,careTypes] = results;
+            const [specimens, careTypes] = results;
 
             function buildTree(items) {
 
@@ -69,10 +73,11 @@ sap.ui.define(
 
               // Inicializa todos los elementos en un mapa
               items.forEach(item => {
-                map[item.ID] = { 
-                              ID: item.ID,
-                              name: item.name,
-                              stateIcon: item.stateIcon, nodes: [] };
+                map[item.ID] = {
+                  ID: item.ID,
+                  name: item.name,
+                  stateIcon: item.stateIcon, nodes: []
+                };
               });
 
               // Construye la estructura de árbol
@@ -171,7 +176,7 @@ sap.ui.define(
       //   });
       // },
 
-      
+
       onDisplay(oEvent) {
         let oItem = this.getView().getModel('collectionModel').getProperty('/selectedSpecimens')[0].getBindingContext().getObject()
 
@@ -272,19 +277,19 @@ sap.ui.define(
       applicateToSpecimens(specimens) {
         var aPromises = [];
 
-        var addedProducts = this.getView().getModel("careModel").getProperty("/water").onlyWater === true ? [ ] : 
-        this.getView().getModel("careModel").getProperty("/application").products.filter((a) => parseFloat(a.amount) > 0 )
+        var addedProducts = this.getView().getModel("careModel").getProperty("/water").onlyWater === true ? [] :
+          this.getView().getModel("careModel").getProperty("/application").products.filter((a) => parseFloat(a.amount) > 0)
 
-        var careTypeName = addedProducts.length > 0 ? 'WP' : 'OW' ; // Water product or Only Water
+        var careTypeName = addedProducts.length > 0 ? 'WP' : 'OW'; // Water product or Only Water
 
         return new Promise((resolve, reject) => {
           // debugger;
           specimens.forEach(specimenModel => {
-        
+
             var specimen = specimenModel.getBindingContext().getObject()
-        
+
             aPromises.push(
-              this._createCare(specimen,careTypeName)
+              this._createCare(specimen, careTypeName)
             );
             aPromises.push(
               this._createWater(specimen)
@@ -304,7 +309,7 @@ sap.ui.define(
             .catch(error => {
               console.error("ERROR", error);
             });
-            
+
         })
 
       },
@@ -538,7 +543,7 @@ sap.ui.define(
 
       _createSpecimen(data) {
 
-       var specimen =  this._formatSpecimen(data)
+        var specimen = this._formatSpecimen(data)
 
         return new Promise((resolve, reject) => {
           this.getView().getModel().create("/Specimens", specimen, {
@@ -559,19 +564,19 @@ sap.ui.define(
         });
       },
 
-      _formatWatering(specimen, water){
+      _formatWatering(specimen, water) {
         var selected = this.getView().getModel('collectionModel').getProperty('/selectedSpecimens').length;
         return {
-          specimen: {ID: specimen.ID},
+          specimen: { ID: specimen.ID },
           // product: {ID: product.ID},
           date: this.getView().getModel("careModel").getProperty("/date"),
-          liters: parseFloat( (water.liters / selected), 2).toFixed(2),
+          liters: parseFloat((water.liters / selected), 2).toFixed(2),
           method: water.method
           // ...water,
         }
       },
 
-      _formatSpecimen(data){ 
+      _formatSpecimen(data) {
         delete data.status
         delete data.multiple
         delete data.value
@@ -603,19 +608,19 @@ sap.ui.define(
         });
       },
 
-      _formatApplication(specimen, product){
+      _formatApplication(specimen, product) {
         var selected = this.getView().getModel('collectionModel').getProperty('/selectedSpecimens').length;
 
         return {
-          specimen: {ID: specimen.ID},
-          product: {ID: product.ID},
+          specimen: { ID: specimen.ID },
+          product: { ID: product.ID },
           date: this.getView().getModel("careModel").getProperty("/date"),
-          amount: parseFloat( (product.amount / selected) , 2).toFixed(2),
+          amount: parseFloat((product.amount / selected), 2).toFixed(2),
           method: 'Water'
         }
       },
 
-      _createCare(specimen,careTypeName) {
+      _createCare(specimen, careTypeName) {
         var oData = this._formatCare(specimen, careTypeName);
         return new Promise((resolve, reject) => {
           this.getView().getModel().create('/Cares', oData, {
@@ -624,14 +629,58 @@ sap.ui.define(
           });
         });
       },
-      _formatCare(specimen, careTypeName){
+      _formatCare(specimen, careTypeName) {
         return {
-          specimen    : {ID: specimen.ID},
-          date        : this.getView().getModel("careModel").getProperty("/date"),
-          careType    : { ID: this.getView().getModel("careModel").getProperty("/careTypes").find((a) => a.name === careTypeName ).ID },
-          description : this.getView().getModel("careModel").getProperty("/description")
+          specimen: { ID: specimen.ID },
+          date: this.getView().getModel("careModel").getProperty("/date"),
+          careType: { ID: this.getView().getModel("careModel").getProperty("/careTypes").find((a) => a.name === careTypeName).ID },
+          description: this.getView().getModel("careModel").getProperty("/description")
         }
-      }
+      },
+
+      handleUploadComplete(oEvent) {
+        var sResponse = oEvent.getParameter("response"),
+          aRegexResult = /\d{4}/.exec(sResponse),
+          iHttpStatusCode = aRegexResult && parseInt(aRegexResult[0]),
+          sMessage;
+          if (sResponse) {
+            sMessage = iHttpStatusCode === 200 ? sResponse + " (Upload Success)" : sResponse + " (Upload Error)";
+            // debugger
+
+          sap.m.MessageToast.show(sMessage);
+          debugger
+        }
+      },
+
+      handleUploadPress: function () {
+        var oFileUploader = this.byId("fileUploader");
+        var that = this;
+        oFileUploader.checkFileReadable().then(function () {
+          // that._createPhoto().then((data) => { 
+          // debugger;
+          oFileUploader.setProperty('name','TESTNAME');
+          oFileUploader.setName('asd');
+          oFileUploader.upload();
+          // debugger  
+        // });
+        }, function (error) {
+          MessageToast.show("The file cannot be read. It may have changed.");
+        }).then(function () {
+          oFileUploader.clear();
+        });
+      },
+
+      _deletePhoto(guid) {
+        // var oData = ({name: 'test' , content: 'AAAAAAAAA'});
+        var sPath = "/SpecimenPhotos(guid'" + guid + "')"
+
+        return new Promise((resolve, reject) => {
+          this.getView().getModel().remove(sPath, {
+            success: resolve,
+            error: reject
+          });
+        });
+      },
     });
   }
 );

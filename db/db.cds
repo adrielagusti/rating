@@ -111,3 +111,25 @@ entity SpecimenStates {
       icon        : String;
       color       : String;
 }
+
+
+entity SpecimenPhotos {
+  key ID       : UUID;
+      name     : String;
+      @Core.MediaType: 'image/jpeg'
+      content : LargeBinary;
+      @Core.IsMediaType: true
+      mediaType : String;
+
+      // specimen : Association to Specimens;
+}
+
+entity Media : managed {
+    key ID      : UUID;
+    fileName    : String;
+    description : String;
+    @Core.MediaType: mediaType
+    content      : LargeBinary;
+    @Core.IsMediaType: true  
+    mediaType : String;
+}

@@ -5,6 +5,7 @@
     xmlns:grid="sap.ui.layout.cssgrid"
     xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:mvc="sap.ui.core.mvc"
+    xmlns:u="sap.ui.unified"
     xmlns:core="sap.ui.core"
     displayBlock="true"
 >
@@ -65,6 +66,21 @@
                 class="sapUiTinyMarginTop"
                 visible="{= ${collectionModel>/mode} === 'grid' }"
             >
+                <!-- <Image
+                    src="http://localhost:4004/v2/black-seeds/Pictures(guid'd8096b21-0479-49c8-b476-bdbe2d8c0a3e')/$value"
+                /> -->
+                <u:FileUploader
+                    id="fileUploader"
+                    name="myFileUpload"
+                    uploadUrl="/v2/black-seeds/Media"
+                    tooltip="Upload your file to the local server"
+                    uploadComplete="handleUploadComplete"
+                />
+                <Button
+                    text="Upload File"
+                    press="handleUploadPress"
+                />
+
                 <List
                     id='list'
                     items="{
@@ -131,7 +147,6 @@
                         <ObjectStatus
                             icon="{ parts: [ 'lastCare','stateIcon'], formatter: '.formatter.showWarning' }"
                             state="{ parts: [ 'lastCare','stateColor'], formatter: '.formatter.showWarningColor' }"
-                        
                         />
 
                         <ObjectStatus
