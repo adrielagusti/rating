@@ -124,12 +124,26 @@ entity SpecimenPhotos {
       // specimen : Association to Specimens;
 }
 
-entity Media : managed {
-    key ID      : UUID;
-    fileName    : String;
-    description : String;
-    @Core.MediaType: mediaType
-    content      : LargeBinary;
-    @Core.IsMediaType: true  
-    mediaType : String;
+// entity Media : managed {
+//     key ID      : UUID;
+//     fileName    : String;
+//     description : String;
+//     // @Core.MediaType: mediaType
+//     image      : LargeBinary;
+//     // @Core.IsMediaType: true  
+//     mediaType : String;
+//     imageType : String;
+// }
+
+// entity Books { //...
+//   key ID      : UUID;
+//   image : LargeBinary @Core.MediaType: 
+//   imageType @Core.ContentDisposition.Filename: 
+//   fileName @Core.ContentDisposition.Type: 'inline';
+//   // imageType : String  @Core.IsMediaType;
+// }
+
+entity Books3 { //...
+key ID      : UUID;
+    image : LargeBinary @Core.MediaType: 'image/jpeg';
 }

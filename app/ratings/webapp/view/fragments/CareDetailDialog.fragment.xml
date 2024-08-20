@@ -52,6 +52,7 @@
                     </f:FormContainer>
                 </f:formContainers>
             </f:Form>
+            <Image src="https://res.cloudinary.com/demo/image/upload/e_sepia/front_face"/>
         </content>
         <!-- <beginButton>
             <Button

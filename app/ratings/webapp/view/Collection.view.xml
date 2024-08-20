@@ -69,17 +69,17 @@
                 <!-- <Image
                     src="http://localhost:4004/v2/black-seeds/Pictures(guid'd8096b21-0479-49c8-b476-bdbe2d8c0a3e')/$value"
                 /> -->
-                <u:FileUploader
+                <!-- <u:FileUploader
                     id="fileUploader"
                     name="myFileUpload"
-                    uploadUrl="/v2/black-seeds/Media"
+                    uploadUrl="/v2/black-seeds/Books"
                     tooltip="Upload your file to the local server"
                     uploadComplete="handleUploadComplete"
                 />
                 <Button
                     text="Upload File"
                     press="handleUploadPress"
-                />
+                /> -->
 
                 <List
                     id='list'

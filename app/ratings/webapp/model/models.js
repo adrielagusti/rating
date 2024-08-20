@@ -57,7 +57,11 @@ sap.ui.define([
 
             initialWater: {
                 date: '',
-                liters: '',
+                liters: 2,
+                temp: 14,
+                ec: 500,
+                ph: 12,
+
                 method: '',
                 onlyWater: false
             },

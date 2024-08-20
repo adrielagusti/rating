@@ -8,7 +8,6 @@
         title="{= ${collectionModel>/selectedSpecimens}.length }"
         contentWidth="60%"
         busy="{collectionModel>/createDialogBusy}"
-           stretch="true"
     >
         <content>
             <f:Form editable="true">
@@ -35,6 +34,7 @@
                         <f:formElements>
                             <f:FormElement>
                                 <f:fields>
+  
                                     <CheckBox
                                         text="Update sex"
                                         selected="{statusModel>/sexUpdate}"
@@ -56,6 +56,7 @@
                                             />
                                         </items>
                                     </SegmentedButton>
+                                    
                                 </f:fields>
                             </f:FormElement>
                         </f:formElements>

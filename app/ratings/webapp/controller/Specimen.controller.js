@@ -9,9 +9,19 @@ sap.ui.define(
     "../model/models",
     'sap/ui/unified/CalendarLegendItem',
     'sap/ui/unified/DateTypeRange',
+    // "../controls/Cloudinary"
   ],
 
-  function (UIComponent, Controller, JSONModel, Filter, FilterOperator, models, CalendarLegendItem, DateTypeRange) {
+  function (UIComponent,
+    Controller,
+    JSONModel,
+    Filter,
+    FilterOperator,
+    models,
+    CalendarLegendItem,
+    DateTypeRange,
+    // Cloudinary
+  ) {
     "use strict";
 
     return Controller.extend("blackseeds.ratings.controller.Specimen", {
@@ -84,7 +94,81 @@ sap.ui.define(
         })
       },
 
+      getData: async function () {
+        // const url = "https://res.cloudinary.com/demo/image/upload/getting-started/shoes.jpg";
+        // try {
+        //   const response = await fetch(url);
+        //   if (!response.ok) {
+        //     throw new Error(`Response status: ${response.status}`);
+        //   }
+
+        //   const json = await response.json();
+        //   console.log(json);
+        // } catch (error) {
+        //   console.error(error.message);
+        // }
+
+        // Configuration
+        // debugger;
+        cloudinary.setCloudName('hgyusg0s0');
+        cloudinary.setAPIKey('641639681197656');
+        // debugger;
+        var widget = cloudinary.createUploadWidget({  uploadPreset: "preset1" }, (error, result) => { console.log(error) });
+        widget.open();
+        widget.show();
+
+
+        // cloudinary.openUploadWidget({
+        //   cloudName: "hgyusg0s0", uploadPreset: "preset1" }, (error, result) => { console.log(error) });
+
+          // debugger;
+        // cloudinary.config({
+        //   cloud_name: 'hgyusg0s0',
+        //   api_key: '641639681197656',
+      
+        // });
+          return;
+        // Upload an image
+        const uploadResult = await cloudinary.uploader
+          .upload(
+            'https://res.cloudinary.com/demo/image/upload/getting-started/shoes.jpg', {
+            public_id: 'shoes',
+          }
+          )
+          .catch((error) => {
+            console.log(error);
+          });
+
+        console.log(uploadResult);
+
+        // Optimize delivery by resizing and applying auto-format and auto-quality
+        const optimizeUrl = cloudinary.url('shoes', {
+          fetch_format: 'auto',
+          quality: 'auto'
+        });
+
+        console.log(optimizeUrl);
+
+        // Transform the image: auto-crop to square aspect_ratio
+        const autoCropUrl = cloudinary.url('shoes', {
+          crop: 'auto',
+          gravity: 'auto',
+          width: 500,
+          height: 500,
+        });
+
+        console.log(autoCropUrl);
+        debugger;
+
+      },
+
       _onObjectMatched(oEvent) {
+        // debugger;
+        // var oCloudinary =  new Cloudinary;
+        // debugger;
+        // Cloudinary.uploadImage()
+        var a = this.getData();
+
         let sObjectId = oEvent.getParameter("arguments").objectId;
         this._bindView("/Specimens(guid'" + sObjectId + "')");
 
@@ -277,9 +361,9 @@ sap.ui.define(
       _getDayApplications(date) {
 
         let midnightDate = new Date(date);
-        midnightDate.setHours(0, 0, 0, 0); 
+        midnightDate.setHours(0, 0, 0, 0);
         let endOfDayDate = new Date(date);
-        endOfDayDate.setHours(23, 59, 59, 999); 
+        endOfDayDate.setHours(23, 59, 59, 999);
 
         var aFilter = [new Filter("date", FilterOperator.BT, midnightDate, endOfDayDate)];
         aFilter.push(new Filter("specimen_ID", FilterOperator.EQ, this.getView().getBindingContext().getObject().ID));

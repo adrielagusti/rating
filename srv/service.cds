@@ -185,6 +185,10 @@ service BlackSeedsService {
 
 
     // service MediaService {
-     entity Pictures as projection on blackseeds.SpecimenPhotos;
-     entity Media as projection on blackseeds.Media;
+    //  entity Pictures as projection on blackseeds.SpecimenPhotos;
+     entity Books as projection on blackseeds.Books3{
+            key ID,
+                image
+        };
+
 }

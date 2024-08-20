@@ -41,9 +41,13 @@ sap.ui.define(
 
       _onObjectMatched(oEvent) {
         this._setUserResults();
+        this.onApplication();
+
         // this._deletePhoto('bcbc4120-a7fc-4dbb-8bf4-7d058ca8e9d4').then((data) => { });
         // this._deletePhoto('cd6af24e-a68b-4a4b-bfe1-ade9750fe81e').then((data) => { });
-        // this._deleteGD();
+
+        // this._getPhoto().then((data) => { debugger;});
+
       },
 
       _setUserResults() {
@@ -167,15 +171,6 @@ sap.ui.define(
           })
         });
       },
-      // _deleteGD() {
-      //   return new Promise((res, rej) => {
-      //     this.getView().getModel().remove("/SpecimenStates(guid'29cf3630-7ee0-4d5a-8f80-a43bc77676e9')", {
-      //       success: res,
-      //       error: rej
-      //     })
-      //   });
-      // },
-
 
       onDisplay(oEvent) {
         let oItem = this.getView().getModel('collectionModel').getProperty('/selectedSpecimens')[0].getBindingContext().getObject()
@@ -648,7 +643,7 @@ sap.ui.define(
             // debugger
 
           sap.m.MessageToast.show(sMessage);
-          debugger
+          // debugger
         }
       },
 
@@ -658,8 +653,8 @@ sap.ui.define(
         oFileUploader.checkFileReadable().then(function () {
           // that._createPhoto().then((data) => { 
           // debugger;
-          oFileUploader.setProperty('name','TESTNAME');
-          oFileUploader.setName('asd');
+          // oFileUploader.setProperty('name','TESTNAME');
+          // oFileUploader.setName('asd');
           oFileUploader.upload();
           // debugger  
         // });
@@ -681,6 +676,16 @@ sap.ui.define(
           });
         });
       },
+
+      _getPhoto(){
+        return new Promise((resolve, reject) => {
+          this.getView().getModel().read("/Books(guid'339b059c-c37b-44d7-8b0f-44f2bdf31d64')", {
+            success: resolve,
+            error: reject
+          });
+        });
+        
+      }
     });
   }
 );

@@ -6,6 +6,18 @@
     xmlns:unified="sap.ui.unified"
 >
     <VBox class="sapUiSmallMargin">
+
+           <!-- <u:FileUploader
+                    id="fileUploader"
+                    name="myFileUpload"
+                    uploadUrl="/v2/black-seeds/Books"
+                    tooltip="Upload your file to the local server"
+                    uploadComplete="handleUploadComplete"
+                />
+                <Button
+                    text="Upload File"
+                    press="handleUploadPress"
+                /> -->
         <f:Form editable="false">
             <f:layout>
                 <f:ResponsiveGridLayout
