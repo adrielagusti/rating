@@ -129,6 +129,14 @@ service BlackSeedsService {
                 method
         }
 
+    entity Photos   as
+        projection on blackseeds.Photos {
+            key ID,
+                specimen,
+                date,
+                public_id
+        }
+
     entity Products       as
         projection on blackseeds.Products {
             key ID,
@@ -162,12 +170,6 @@ service BlackSeedsService {
                 sequence
         }
 
-    // entity States as
-    //     projection on blackseeds.States {
-    //         key ID,
-    //             description
-    //     }
-
     entity SpecimenStates as
         projection on blackseeds.SpecimenStates {
             key ID,
@@ -175,20 +177,5 @@ service BlackSeedsService {
                 icon,
                 color
         }
-
-    entity SpecimenPhotos as
-        projection on blackseeds.SpecimenPhotos {
-            key ID,
-                name,
-                content
-        }
-
-
-    // service MediaService {
-    //  entity Pictures as projection on blackseeds.SpecimenPhotos;
-     entity Books as projection on blackseeds.Books3{
-            key ID,
-                image
-        };
 
 }

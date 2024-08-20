@@ -73,6 +73,13 @@ entity Applications : managed {
       method      : String; //Spraying, water
 }
 
+entity Photos {
+  key ID          : UUID;
+      specimen    : Association to Specimens;
+      date        : DateTime;
+      public_id   : String;
+}
+
 entity Products {
   key ID          : UUID;
       name        : String;
@@ -110,40 +117,4 @@ entity SpecimenStates {
       description : String; // Dead , alive, sick
       icon        : String;
       color       : String;
-}
-
-
-entity SpecimenPhotos {
-  key ID       : UUID;
-      name     : String;
-      @Core.MediaType: 'image/jpeg'
-      content : LargeBinary;
-      @Core.IsMediaType: true
-      mediaType : String;
-
-      // specimen : Association to Specimens;
-}
-
-// entity Media : managed {
-//     key ID      : UUID;
-//     fileName    : String;
-//     description : String;
-//     // @Core.MediaType: mediaType
-//     image      : LargeBinary;
-//     // @Core.IsMediaType: true  
-//     mediaType : String;
-//     imageType : String;
-// }
-
-// entity Books { //...
-//   key ID      : UUID;
-//   image : LargeBinary @Core.MediaType: 
-//   imageType @Core.ContentDisposition.Filename: 
-//   fileName @Core.ContentDisposition.Type: 'inline';
-//   // imageType : String  @Core.IsMediaType;
-// }
-
-entity Books3 { //...
-key ID      : UUID;
-    image : LargeBinary @Core.MediaType: 'image/jpeg';
 }

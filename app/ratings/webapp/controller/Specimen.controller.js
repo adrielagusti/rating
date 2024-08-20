@@ -94,71 +94,32 @@ sap.ui.define(
         })
       },
 
-      getData: async function () {
-        // const url = "https://res.cloudinary.com/demo/image/upload/getting-started/shoes.jpg";
-        // try {
-        //   const response = await fetch(url);
-        //   if (!response.ok) {
-        //     throw new Error(`Response status: ${response.status}`);
-        //   }
+      takePicture: async function () {
 
-        //   const json = await response.json();
-        //   console.log(json);
-        // } catch (error) {
-        //   console.error(error.message);
-        // }
-
-        // Configuration
-        // debugger;
+        
         cloudinary.setCloudName('hgyusg0s0');
-        cloudinary.setAPIKey('641639681197656');
-        // debugger;
-        var widget = cloudinary.createUploadWidget({  uploadPreset: "preset1" }, (error, result) => { console.log(error) });
-        widget.open();
-        widget.show();
+
+        cloudinary.openUploadWidget({
+          uploadPreset: "xondth9e",
+          showAdvancedOptions: true
+        }, (error, result) => {
+          
+
+          console.log(result.info.secure_url)
+        });
+
+
+        // widget.open();
+        // widget.show();
 
 
         // cloudinary.openUploadWidget({
         //   cloudName: "hgyusg0s0", uploadPreset: "preset1" }, (error, result) => { console.log(error) });
 
-          // debugger;
+        // debugger;
         // cloudinary.config({
         //   cloud_name: 'hgyusg0s0',
         //   api_key: '641639681197656',
-      
-        // });
-          return;
-        // Upload an image
-        const uploadResult = await cloudinary.uploader
-          .upload(
-            'https://res.cloudinary.com/demo/image/upload/getting-started/shoes.jpg', {
-            public_id: 'shoes',
-          }
-          )
-          .catch((error) => {
-            console.log(error);
-          });
-
-        console.log(uploadResult);
-
-        // Optimize delivery by resizing and applying auto-format and auto-quality
-        const optimizeUrl = cloudinary.url('shoes', {
-          fetch_format: 'auto',
-          quality: 'auto'
-        });
-
-        console.log(optimizeUrl);
-
-        // Transform the image: auto-crop to square aspect_ratio
-        const autoCropUrl = cloudinary.url('shoes', {
-          crop: 'auto',
-          gravity: 'auto',
-          width: 500,
-          height: 500,
-        });
-
-        console.log(autoCropUrl);
-        debugger;
 
       },
 
