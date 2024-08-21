@@ -51,8 +51,6 @@ sap.ui.define(
 
       handleAppointmentSelect: function (oEvent) {
 
-        this.takePhoto();
-        return;
         var selectedDate = oEvent.getParameter("appointment").getProperty('startDate');
 
         let p1 = this._getDayApplications(selectedDate);
@@ -108,8 +106,6 @@ sap.ui.define(
         const regex = /guid'([0-9a-fA-F-]{36})'/;
         const specimen = path.match(regex)[1];
         
-        cloudinary.setCloudName('hgyusg0s0');
-        cloudinary.setAPIKey('641639681197656');
 
         cloudinary.openUploadWidget({
           uploadPreset: "xondth9e",
