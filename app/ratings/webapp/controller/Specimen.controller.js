@@ -106,7 +106,9 @@ sap.ui.define(
         const regex = /guid'([0-9a-fA-F-]{36})'/;
         const specimen = path.match(regex)[1];
         
-
+        cloudinary.setCloudName('hgyusg0s0');
+        cloudinary.setAPIKey(process.env.CLOUDINARY_API);
+        
         cloudinary.openUploadWidget({
           uploadPreset: "xondth9e",
           showAdvancedOptions: true,
