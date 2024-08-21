@@ -170,6 +170,7 @@
                         key="people"
                         icon="sap-icon://camera"
                     >
+                    <Button press="takePhoto"/>
                         <VBox
                             items="{photos}"
                         >
