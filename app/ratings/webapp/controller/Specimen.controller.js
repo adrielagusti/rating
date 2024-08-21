@@ -107,7 +107,8 @@ sap.ui.define(
         const specimen = path.match(regex)[1];
         
         cloudinary.setCloudName('hgyusg0s0');
-        cloudinary.setAPIKey(process.env.CLOUDINARY_API);
+        // cloudinary.setAPIKey(process.env.CLOUDINARY_API);
+        cloudinary.setAPIKey('641639681197656');
         
         cloudinary.openUploadWidget({
           uploadPreset: "xondth9e",

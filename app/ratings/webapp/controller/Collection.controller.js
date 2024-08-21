@@ -41,7 +41,7 @@ sap.ui.define(
 
       _onObjectMatched(oEvent) {
         this._setUserResults();
-        this.onApplication();
+        // this.onApplication();
 
         // this._deletePhoto('bcbc4120-a7fc-4dbb-8bf4-7d058ca8e9d4').then((data) => { });
         // this._deletePhoto('cd6af24e-a68b-4a4b-bfe1-ade9750fe81e').then((data) => { });
