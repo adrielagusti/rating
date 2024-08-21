@@ -57,6 +57,7 @@ service BlackSeedsService {
                 strain.name       as strainName,
                 cares,
                 waterings,
+                photos,
                 MAX(cares.date)   as lastCare : DateTime,
         }
           group by
@@ -134,7 +135,7 @@ service BlackSeedsService {
             key ID,
                 specimen,
                 date,
-                public_id
+                publicId
         }
 
     entity Products       as

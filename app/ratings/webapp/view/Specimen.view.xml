@@ -166,33 +166,35 @@
                             </c:content>
                         </c:Timeline>
                     </IconTabFilter>
+                    <IconTabFilter
+                        key="people"
+                        icon="sap-icon://camera"
+                    >
+                        <VBox
+                            items="{photos}"
+                        >
+                            <Panel
+                                width="100%"
+                                class="sapUiResponsiveMargin"
+                                expandable="true"
+                            >
+                                <headerToolbar>
+                                    <OverflowToolbar>
+                                        <Title text="{date}" />
+                                    </OverflowToolbar>
+                                </headerToolbar>
+                                <content>
+                                    <Image
+                                        class="sapUiTinyMarginTopBottom"
+                                        src="{publicId}"
+                                        width="20rem"
+                                    />
+                                </content>
+                            </Panel>
+                        </VBox>
+                    </IconTabFilter>
                 </items>
             </IconTabBar>
-
-            <!-- <VBox
-                id="vbox-atts"
-                visible="false"
-                items="{specimenModel>/photos}"
-            >
-                <Panel
-                    width="100%"
-                    class="sapUiResponsiveMargin"
-                    expandable="true"
-                >
-                    <headerToolbar>
-                        <OverflowToolbar>
-                            <Title text="{specimenModel>daysAlive} Days" />
-                        </OverflowToolbar>
-                    </headerToolbar>
-                    <content>
-                        <Image
-                            class="sapUiTinyMarginTopBottom"
-                            src="{specimenModel>url}"
-                            width="20rem"
-                        />
-                    </content>
-                </Panel>
-            </VBox> -->
 
             <!-- <Image
                         class="sapUiTinyMarginTopBottom"

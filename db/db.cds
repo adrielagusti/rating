@@ -46,6 +46,7 @@ entity Specimens {
       
       cares       : Composition of many Care on cares.specimen = $self;
       waterings   : Composition of many Waterings on waterings.specimen = $self;
+      photos      : Composition of many Photos on photos.specimen = $self;
 }
 
 entity Care : managed  {
@@ -77,7 +78,7 @@ entity Photos {
   key ID          : UUID;
       specimen    : Association to Specimens;
       date        : DateTime;
-      public_id   : String;
+      publicId   : String;
 }
 
 entity Products {

@@ -35,6 +35,10 @@ sap.ui.define(
           application: []
         })), 'dayDetailModel');
 
+        this.getView().setModel(new JSONModel($.extend(true, {}, {
+          careTypes: []
+        })), 'careModel');
+
       },
 
       getRouter() {
@@ -47,6 +51,8 @@ sap.ui.define(
 
       handleAppointmentSelect: function (oEvent) {
 
+        this.takePhoto();
+        return;
         var selectedDate = oEvent.getParameter("appointment").getProperty('startDate');
 
         let p1 = this._getDayApplications(selectedDate);
@@ -94,41 +100,31 @@ sap.ui.define(
         })
       },
 
-      takePicture: async function () {
+      takePhoto: async function () {
 
+        var that = this;
+        var path = this.getView().getObjectBinding().getPath();
+
+        const regex = /guid'([0-9a-fA-F-]{36})'/;
+        const specimen = path.match(regex)[1];
         
-        cloudinary.setCloudName('hgyusg0s0');
 
         cloudinary.openUploadWidget({
           uploadPreset: "xondth9e",
-          showAdvancedOptions: true
+          showAdvancedOptions: true,
+          sources: ['camera']
         }, (error, result) => {
-          
 
-          console.log(result.info.secure_url)
+          if (result.info.secure_url !== undefined) {
+            that._createCare(specimen, 'PH')
+            that._createPhoto(specimen, result.info.secure_url)
+          }
+          // console.log(result.info.secure_url)
         });
-
-
-        // widget.open();
-        // widget.show();
-
-
-        // cloudinary.openUploadWidget({
-        //   cloudName: "hgyusg0s0", uploadPreset: "preset1" }, (error, result) => { console.log(error) });
-
-        // debugger;
-        // cloudinary.config({
-        //   cloud_name: 'hgyusg0s0',
-        //   api_key: '641639681197656',
 
       },
 
       _onObjectMatched(oEvent) {
-        // debugger;
-        // var oCloudinary =  new Cloudinary;
-        // debugger;
-        // Cloudinary.uploadImage()
-        var a = this.getData();
 
         let sObjectId = oEvent.getParameter("arguments").objectId;
         this._bindView("/Specimens(guid'" + sObjectId + "')");
@@ -166,17 +162,11 @@ sap.ui.define(
       //   });
       // },
 
-      _setSpecimenResults() {
-        let p0 = this._getSpecimen();
-        let p1 = this._getCareTypes();
-        let p2 = this._getCares();
+      _setCalendar(specimen, careTypes, cares, lifeCycles) {
 
-        let p4 = this._getLifeCycles();
-        // let p2 = this._getApplications();
-        // let p3 = this._getNotes();
-        // let p1 = this._getWatering();
-
-        // var oLeg = this.byId("legend");
+        var aLifeCycles = lifeCycles.results.sort((a, b) => a.sequence - b.sequence);
+        var sType;
+                // var oLeg = this.byId("legend");
         // var oCal = this.byId("calendar");
         var oPla = this.byId("planing");
         // var index = 0;
@@ -186,90 +176,95 @@ sap.ui.define(
         oPla.removeAllAppointments();
 
         var calDayType;
+        // oLeg.addItem(new CalendarLegendItem({
+        //   type: sap.ui.unified.CalendarDayType.Type08,
+        //   text: 'Planted on'
+        // }));
 
-        Promise.all([p0, p1, p2, p4])
+        // oCal.addSpecialDate(new DateTypeRange({
+        //   startDate: specimen.plantedDate,
+        //   type: sap.ui.unified.CalendarDayType.Type08
+        // }));
+        careTypes.results.forEach((careType, index) => {
+
+          var aCares = cares.results.filter((care) => care.careName === careType.name)
+          aCares.forEach((care) => {
+
+            oPla.addAppointment(new sap.ui.unified.CalendarAppointment({
+              type: sap.ui.unified.CalendarDayType[care.dayType],
+              startDate: care.date,
+              endDate: care.date,
+              icon: care.icon
+            }));
+          })
+
+
+        })
+
+        var startDate = null;
+        var endDate = null;
+
+        aLifeCycles.forEach((cycle, i) => {
+
+          if (endDate === null) {
+            startDate = new Date(specimen.plantedDate);
+            endDate = new Date(specimen.plantedDate);
+          }
+          else {
+            startDate = new Date(endDate);
+            startDate.setDate(startDate.getDate() + 1);
+            endDate = new Date(endDate);
+          }
+
+          endDate.setDate(endDate.getDate() + cycle.days);
+
+          // startDate.setHours("1","0","0", "0")
+          // endDate.setHours("1","0","0", "0")
+
+          // debugger;
+          sType = "Type08";
+          calDayType = sap.ui.unified.CalendarDayType[sType]
+
+          oPla.addAppointment(new sap.ui.unified.CalendarAppointment({
+            // key: 'AA' + i,
+            type: sap.ui.unified.CalendarDayType[cycle.calDayType],
+            text: cycle.description,
+            title: cycle.description,
+            description: cycle.description,
+            startDate: startDate,
+            endDate: endDate
+          }));
+   
+        })
+
+      },
+
+      _setPhotos(photos){
+
+
+
+      },
+
+      _setSpecimenResults() {
+        let p0 = this._getSpecimen();
+        let p1 = this._getCareTypes();
+        let p2 = this._getCares();
+
+        let p4 = this._getLifeCycles();
+        let p5 = this._getPhotos();
+        // let p2 = this._getApplications();
+        // let p3 = this._getNotes();
+        // let p1 = this._getWatering();
+
+        Promise.all([p0, p1, p2, p4, p5])
           .then(results => {
 
-            const [specimen, careTypes, cares, lifeCycles] = results;
-            var aLifeCycles = lifeCycles.results.sort((a, b) => a.sequence - b.sequence);
-            // oRefDate = UI5Date.getInstance(),
-            var sType;
+            const [specimen, careTypes, cares, lifeCycles, photos] = results;
 
-            // oLeg.addItem(new CalendarLegendItem({
-            //   type: sap.ui.unified.CalendarDayType.Type08,
-            //   text: 'Planted on'
-            // }));
+            this.getView().getModel('careModel').setProperty('/careTypes', careTypes.results)
 
-            // oCal.addSpecialDate(new DateTypeRange({
-            //   startDate: specimen.plantedDate,
-            //   type: sap.ui.unified.CalendarDayType.Type08
-            // }));
-
-            careTypes.results.forEach((careType, index) => {
-
-              var aCares = cares.results.filter((care) => care.careName === careType.name)
-
-              // if (aCares.length > 0) {
-              //   sType = "Type0" + index;
-              //   calDayType = sap.ui.unified.CalendarDayType[careType.calDayType]
-              //   // oLeg.addItem(new CalendarLegendItem({
-              //   //   type: calDayType,
-              //   //   text: careType.description
-              //   // }));
-
-              // } else {
-              //   calDayType = sap.ui.unified.CalendarDayType.Type09
-              // }
-
-
-              aCares.forEach((care) => {
-
-                oPla.addAppointment(new sap.ui.unified.CalendarAppointment({
-                  type: sap.ui.unified.CalendarDayType[care.dayType],
-                  startDate: care.date,
-                  endDate: care.date,
-                  icon: care.icon
-                }));
-              })
-
-
-            })
-
-            var startDate = null;
-            var endDate = null;
-
-            aLifeCycles.forEach((cycle, i) => {
-
-              if (endDate === null) {
-                startDate = new Date(specimen.plantedDate);
-                endDate = new Date(specimen.plantedDate);
-              }
-              else {
-                startDate = new Date(endDate);
-                startDate.setDate(startDate.getDate() + 1);
-                endDate = new Date(endDate);
-              }
-
-              endDate.setDate(endDate.getDate() + cycle.days);
-
-              // startDate.setHours("1","0","0", "0")
-              // endDate.setHours("1","0","0", "0")
-
-              // debugger;
-              sType = "Type08";
-              calDayType = sap.ui.unified.CalendarDayType[sType]
-
-              oPla.addAppointment(new sap.ui.unified.CalendarAppointment({
-                // key: 'AA' + i,
-                type: sap.ui.unified.CalendarDayType[cycle.calDayType],
-                text: cycle.description,
-                title: cycle.description,
-                description: cycle.description,
-                startDate: startDate,
-                endDate: endDate
-              }));
-              // debugger;
-            })
+            this._setCalendar(specimen, careTypes, cares, lifeCycles);
+            this._setPhotos(photos.results);
 
           })
 
@@ -298,6 +293,18 @@ sap.ui.define(
       _getCares() {
 
         var sPath = this.getView().getObjectBinding().sPath + '/cares'
+        return new Promise((res, rej) => {
+          this.getView().getModel().read(sPath, {
+            success: res,
+            error: rej
+          })
+        });
+
+      },
+
+      _getPhotos() {
+
+        var sPath = this.getView().getObjectBinding().sPath + '/photos'
         return new Promise((res, rej) => {
           this.getView().getModel().read(sPath, {
             success: res,
@@ -346,7 +353,45 @@ sap.ui.define(
         //     error: rej
         //   })
         // });
-      }
+      },
+      _createCare(specimen, careType) {
+        var oData = this._formatCare(specimen, careType);
+        return new Promise((resolve, reject) => {
+          this.getView().getModel().create('/Cares', oData, {
+            success: resolve,
+            error: reject
+          });
+        });
+      },
+      _formatCare(specimen, careType) {
+        
+        return {
+          specimen: { ID: specimen },
+          date: new Date(),
+          careType: { ID: this.getView().getModel("careModel").getProperty("/careTypes").find((a) => a.name === 'PH').ID },
+          // description: this.getView().getModel("careModel").getProperty("/description")
+        }
+      },
+
+      _createPhoto(specimen, publicId) {
+        var oData = this._formatPhoto(specimen, publicId);
+        return new Promise((resolve, reject) => {
+          this.getView().getModel().create('/Photos', oData, {
+            success: resolve,
+            error: reject
+          });
+        });
+      },
+
+      _formatPhoto(specimen, publicId) {
+        
+        return {
+          specimen: { ID: specimen },
+          date: new Date(),
+          publicId: publicId,
+          // description: this.getView().getModel("careModel").getProperty("/description")
+        }
+      },
 
     });
   }
