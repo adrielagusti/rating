@@ -266,6 +266,51 @@ sap.ui.define(
 
       },
 
+
+      ////////////////////////////////
+      // watering & products
+      /////////////////////////
+      pruneSpecimens(specimens) {
+        var aPromises = [];
+
+        var addedProducts = this.getView().getModel("careModel").getProperty("/water").onlyWater === true ? [] :
+          this.getView().getModel("careModel").getProperty("/application").products.filter((a) => parseFloat(a.amount) > 0)
+
+        var careTypeName = 'PR'; // prunning
+
+        return new Promise((resolve, reject) => {
+          // debugger;
+          specimens.forEach(specimenModel => {
+
+            var specimen = specimenModel.getBindingContext().getObject()
+
+            aPromises.push(
+              this._createCare(specimen, careTypeName)
+            );
+
+          });
+
+          Promise.all(aPromises)
+            .then(results => {
+              resolve();
+            })
+            .catch(error => {
+              console.error("ERROR", error);
+            });
+
+        })
+
+      },
+
+      onPrune(){
+        var aItems = this.getView().getModel('collectionModel').getProperty("/selectedSpecimens");
+        var that = this;
+        this.pruneSpecimens(aItems).then((result) => {
+          sap.m.MessageToast.show('Pruned');
+          that.byId('list').getBinding("items").refresh(true);
+        });
+      },
+
       ////////////////////////////////
       // watering & products
       /////////////////////////
@@ -647,23 +692,23 @@ sap.ui.define(
         }
       },
 
-      handleUploadPress: function () {
-        var oFileUploader = this.byId("fileUploader");
-        var that = this;
-        oFileUploader.checkFileReadable().then(function () {
-          // that._createPhoto().then((data) => { 
-          // debugger;
-          // oFileUploader.setProperty('name','TESTNAME');
-          // oFileUploader.setName('asd');
-          oFileUploader.upload();
-          // debugger  
-        // });
-        }, function (error) {
-          MessageToast.show("The file cannot be read. It may have changed.");
-        }).then(function () {
-          oFileUploader.clear();
-        });
-      },
+      // handleUploadPress: function () {
+      //   var oFileUploader = this.byId("fileUploader");
+      //   var that = this;
+      //   oFileUploader.checkFileReadable().then(function () {
+      //     // that._createPhoto().then((data) => { 
+      //     // debugger;
+      //     // oFileUploader.setProperty('name','TESTNAME');
+      //     // oFileUploader.setName('asd');
+      //     oFileUploader.upload();
+      //     // debugger  
+      //   // });
+      //   }, function (error) {
+      //     MessageToast.show("The file cannot be read. It may have changed.");
+      //   }).then(function () {
+      //     oFileUploader.clear();
+      //   });
+      // },
 
       _deletePhoto(guid) {
         // var oData = ({name: 'test' , content: 'AAAAAAAAA'});

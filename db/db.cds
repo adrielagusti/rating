@@ -61,7 +61,10 @@ entity Waterings : managed  {
   key ID          : UUID;
       specimen    : Association to Specimens;
       date        : DateTime;
-      liters      : Decimal(5,2);
+      liters      : Decimal(6,2);
+      ph          : Decimal(6,2);
+      ec          : Decimal(6,2);
+      temp        : Decimal(6,2);
       method      : String;
 }
 
@@ -70,7 +73,7 @@ entity Applications : managed {
       specimen    : Association to Specimens;
       product     : Association to Products;
       date        : DateTime;
-      amount      : Decimal(5,2);
+      amount      : Decimal(6,2);
       method      : String; //Spraying, water
 }
 
@@ -78,7 +81,7 @@ entity Photos {
   key ID          : UUID;
       specimen    : Association to Specimens;
       date        : DateTime;
-      publicId   : String;
+      publicId    : String;
 }
 
 entity Products {

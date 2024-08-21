@@ -5,7 +5,7 @@
     xmlns:l="sap.ui.layout"
 >
     <Dialog
-        title="{= ${collectionModel>/selectedSpecimens}.length }"
+        title="{= ${collectionModel>/selectedSpecimens}.length } {i18n>dialog.selectedspe}"
         contentWidth="60%"
         busy="{collectionModel>/createDialogBusy}"
     >

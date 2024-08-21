@@ -9,6 +9,7 @@ sap.ui.define(
     "../model/models",
     'sap/ui/unified/CalendarLegendItem',
     'sap/ui/unified/DateTypeRange',
+    "../model/formatter",
     // "../controls/Cloudinary"
   ],
 
@@ -20,11 +21,14 @@ sap.ui.define(
     models,
     CalendarLegendItem,
     DateTypeRange,
+    formatter
     // Cloudinary
   ) {
     "use strict";
 
     return Controller.extend("blackseeds.ratings.controller.Specimen", {
+
+      formatter: formatter,
 
       onInit() {
 
@@ -98,7 +102,7 @@ sap.ui.define(
         })
       },
 
-      takePhoto: async function () {
+      onTakePhoto: async function () {
 
         var that = this;
         var path = this.getView().getObjectBinding().getPath();
@@ -240,11 +244,11 @@ sap.ui.define(
 
       },
 
-      _setPhotos(photos){
+      // _setPhotos(photos){
 
 
 
-      },
+      // },
 
       _setSpecimenResults() {
         let p0 = this._getSpecimen();
@@ -252,20 +256,20 @@ sap.ui.define(
         let p2 = this._getCares();
 
         let p4 = this._getLifeCycles();
-        let p5 = this._getPhotos();
+        // let p5 = this._getPhotos();
         // let p2 = this._getApplications();
         // let p3 = this._getNotes();
         // let p1 = this._getWatering();
 
-        Promise.all([p0, p1, p2, p4, p5])
+        Promise.all([p0, p1, p2, p4])
           .then(results => {
 
-            const [specimen, careTypes, cares, lifeCycles, photos] = results;
+            const [specimen, careTypes, cares, lifeCycles] = results;
 
             this.getView().getModel('careModel').setProperty('/careTypes', careTypes.results)
 
             this._setCalendar(specimen, careTypes, cares, lifeCycles);
-            this._setPhotos(photos.results);
+            // this._setPhotos(photos.results);
 
           })
 
@@ -303,17 +307,17 @@ sap.ui.define(
 
       },
 
-      _getPhotos() {
+      // _getPhotos() {
 
-        var sPath = this.getView().getObjectBinding().sPath + '/photos'
-        return new Promise((res, rej) => {
-          this.getView().getModel().read(sPath, {
-            success: res,
-            error: rej
-          })
-        });
+      //   var sPath = this.getView().getObjectBinding().sPath + '/photos'
+      //   return new Promise((res, rej) => {
+      //     this.getView().getModel().read(sPath, {
+      //       success: res,
+      //       error: rej
+      //     })
+      //   });
 
-      },
+      // },
 
       _getSpecimen() {
 

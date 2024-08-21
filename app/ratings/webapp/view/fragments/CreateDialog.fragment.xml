@@ -32,51 +32,19 @@
                 <f:formContainers>
                     <f:FormContainer title="{i18n>form.specimen}">
                         <f:formElements>
-                        <f:FormElement >
-                                <f:fields>
-                                    <Input
-                                        value="{specimenCreationModel>/name}"
-                                        placeholder="Enter Specimen NAME"
-                                        required="true"
-                                    />
-                                </f:fields>
-                            </f:FormElement>
-                
-                            <f:FormElement label="{i18n>form.breedtype}">
-                                <f:fields>
-                                
-                                    <SegmentedButton
-                                        selectedKey="{specimenCreationModel>/breedType}"
-                                    >
-                                        <items>
-                                            <SegmentedButtonItem
-                                                text="From a Cutting"
-                                                key="C"
-                                    
-                                            />
-                                            <SegmentedButtonItem
-                                                text="Planted a Seed"
-                                                key="S"
-                                              
-                                            />
-                                        </items>
-                                    </SegmentedButton>
-                                </f:fields>
-                            </f:FormElement>
-                        </f:formElements>
-  </f:FormContainer>
-                            <f:FormContainer >
-                        <f:formElements>  
                             <f:FormElement>
                                 <f:fields>
+                
                                     <Input
                                         value="{specimenCreationModel>/tagID}"
-                                        placeholder="Enter the Specimen TAG (Ex 14000102)"
+                                        placeholder="Enter the Specimen TAG ID (14000102)"
                                         type="Number"
                                     />
+                            
+                  
                                 </f:fields>
                             </f:FormElement>
-                                       <f:FormElement>
+                            <f:FormElement>
                                 <f:fields>
                                     <HBox>
                                         <CheckBox
@@ -105,6 +73,38 @@
                             </f:FormElement>
                         </f:formElements>
                     </f:FormContainer>
+                            <f:FormContainer >
+                        <f:formElements>
+
+                            <f:FormElement label="{i18n>form.breedtype}">
+                                <f:fields>
+                                    <SegmentedButton
+                                        selectedKey="{specimenCreationModel>/breedType}"
+                                    >
+                                        <items>
+                                            <SegmentedButtonItem
+                                                text="From a Cutting"
+                                                key="C"
+                                            />
+                                            <SegmentedButtonItem
+                                                text="Planted a Seed"
+                                                key="S"
+                                            />
+                                        </items>
+                                    </SegmentedButton>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement>
+                                <f:fields>
+                                    <Input
+                                        value="{specimenCreationModel>/name}"
+                                        placeholder="Enter Specimen name (Optional)"
+                                        required="true"
+                                    />
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
                     <f:FormContainer title="{i18n>form.strain}">
                         <!-- ID;parentID;breedType;seqNumber;strain_ID;clone;name;comments;tagID -->
                         <f:formElements>
@@ -124,14 +124,14 @@
                                             />
                                         </items>
                                     </SegmentedButton>
-                                     <MessageStrip
+                                    <MessageStrip
                                         class="sapUiTinyMarginTopBottom"
                                         visible="{= ${specimenCreationModel>/status} === 'new' ? true : false}"
                                         text="{i18n>strip.newstrain}"
                                         type="Warning"
                                         showCloseButton="false"
                                         showIcon="true"
-                                    /> 
+                                    />
                                     <Input
                                         visible="{= ${specimenCreationModel>/status} === 'new' ? true : false}"
                                         value="{specimenCreationModel>/strainName}"
@@ -148,7 +148,7 @@
                                         value="{specimenCreationModel>/strainTagID}"
                                         placeholder="Enter Tag ID"
                                     /> -->
-                               
+
                                     <Select
                                         forceSelection="false"
                                         selectedKey="{specimenCreationModel>/strainID}"
@@ -190,13 +190,10 @@
                                     </Select>
                                 </f:fields>
                             </f:FormElement>
-
-                            
                         </f:formElements>
                     </f:FormContainer>
-                          <f:FormContainer title="{i18n>form.extrainfo}">
+                    <f:FormContainer title="{i18n>form.extrainfo}">
                         <f:formElements>
-                     
                             <f:FormElement label="Planted on">
                                 <f:fields>
                                     <DateTimePicker

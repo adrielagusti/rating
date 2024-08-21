@@ -91,6 +91,7 @@
             <IconTabBar
                 class="sapUiResponsiveContentPadding"
                 tabDensityMode="Compact"
+                expandable="false"
             >
                 <items>
                     <IconTabFilter
@@ -170,9 +171,14 @@
                         key="people"
                         icon="sap-icon://camera"
                     >
-                    <Button press="takePhoto"/>
+                   
                         <VBox
-                            items="{photos}"
+                            items="{ 
+                                path: 'photos',
+                                sorter: {
+                                        path: 'date'
+                                    } 
+                                }"
                         >
                             <Panel
                                 width="100%"
@@ -181,7 +187,13 @@
                             >
                                 <headerToolbar>
                                     <OverflowToolbar>
-                                        <Title text="{date}" />
+                                        <Title text="{ parts: [ 
+                                         { path: 'plantedDate' }, 
+                                         { path: 'date' }               
+                                      
+                                        
+                                        ], formatter: '.formatter.getDifferenceOfDays' }"/>
+                                          <!-- 'plantedDate','date' -->
                                     </OverflowToolbar>
                                 </headerToolbar>
                                 <content>
@@ -193,6 +205,7 @@
                                 </content>
                             </Panel>
                         </VBox>
+                         <Button press="onTakePhoto" text="{i18n>button.take}" icon="sap-icon://camera"/>
                     </IconTabFilter>
                 </items>
             </IconTabBar>

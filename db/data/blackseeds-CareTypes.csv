@@ -1,7 +1,7 @@
 ID;name;description;calDayType;icon
 550e8400-e29b-41d4-a716-446655440100;OW;Only water;Type06;sap-icon://blur
 550e8400-e29b-41d4-a716-446655440101;FE;Fertilizing;Type07;sap-icon://program-triangles
-550e8400-e29b-41d4-a716-446655440102;PR;Pruning;Type08;sap-icon://scissors
+550e8400-e29b-41d4-a716-446655440102;PR;Pruning;Type08;sap-icon://e-care
 550e8400-e29b-41d4-a716-446655440103;RE;Repotting;Type01;sap-icon://toaster-down
 550e8400-e29b-41d4-a716-446655440104;IN;Inspection;Type10;sap-icon://complete
 88b7aef4-8813-43ce-991f-84506b92d1a7;WP;Water and nutrients;Type02;sap-icon://lab

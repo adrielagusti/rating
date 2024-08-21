@@ -66,21 +66,6 @@
                 class="sapUiTinyMarginTop"
                 visible="{= ${collectionModel>/mode} === 'grid' }"
             >
-                <!-- <Image
-                    src="http://localhost:4004/v2/black-seeds/Pictures(guid'd8096b21-0479-49c8-b476-bdbe2d8c0a3e')/$value"
-                /> -->
-                <!-- <u:FileUploader
-                    id="fileUploader"
-                    name="myFileUpload"
-                    uploadUrl="/v2/black-seeds/Books"
-                    tooltip="Upload your file to the local server"
-                    uploadComplete="handleUploadComplete"
-                />
-                <Button
-                    text="Upload File"
-                    press="handleUploadPress"
-                /> -->
-
                 <List
                     id='list'
                     items="{
@@ -138,6 +123,12 @@
                                     text="{= ${collectionModel>/selectedSpecimens}.length >= 1 ? 'Add new specimens' : 'Add' }"
                                     icon="sap-icon://add"
                                     press="onAddSpecimen"
+                                />
+                                <Button
+                                    text="Pruned the leafs"
+                                    icon="sap-icon://e-care"
+                                    visible="{= ${collectionModel>/selectedSpecimens}.length >= 1 }"
+                                    press="onPrune"
                                 />
                             </content>
                         </OverflowToolbar>

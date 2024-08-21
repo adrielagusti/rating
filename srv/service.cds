@@ -116,6 +116,9 @@ service BlackSeedsService {
             specimen.ID as specimenID,
             date,
             liters,
+            temp,
+            ec,
+            ph,
             method
         }
 
@@ -134,6 +137,7 @@ service BlackSeedsService {
         projection on blackseeds.Photos {
             key ID,
                 specimen,
+                specimen.plantedDate,
                 date,
                 publicId
         }

@@ -47,7 +47,13 @@ sap.ui.define([], function () {
             else {
                 return 'Error';
             }
-        }
+        }, 
+        getDifferenceOfDays: function (olderDate, newestDate) {
+            // debugger;
+            const diffTime = Math.abs(newestDate - olderDate);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            return (diffDays + ' Days') ;
+        },
 
     };
 });
