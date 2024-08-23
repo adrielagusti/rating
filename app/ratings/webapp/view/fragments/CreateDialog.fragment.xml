@@ -36,10 +36,10 @@
                                 <f:fields>
                                     <Input
                                         value="{specimenCreationModel>/tagID}"
-                                        placeholder="Enter the Specimen TAG ID (14000102)"
-                                        type="Number"
-                                        liveChange="tagIDLiveChange"
+                                        placeholder="Enter the Specimen Tag ID (only numbers)"
+                                        maxLength="7"
                                     />
+                                        <!-- liveChange="tagIDLiveChange" -->
                                 </f:fields>
                             </f:FormElement>
                             <f:FormElement>
@@ -96,7 +96,7 @@
                                 <f:fields>
                                     <Input
                                         value="{specimenCreationModel>/name}"
-                                        placeholder="Enter Specimen name (Optional)"
+                                        placeholder="Enter Specimen name (optional)"
                                         required="true"
                                     />
                                 </f:fields>

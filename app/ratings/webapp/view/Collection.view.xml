@@ -142,6 +142,7 @@
                             justifyContent="SpaceBetween"
                         >
                             <!-- <Title title="{specimenName}"/> -->
+                                <!-- text="{nameAlias}" -->
                             <Link
                                 text="( {tagID} ) {strainName}"
                                 press="onLinkPress"
@@ -186,7 +187,7 @@
                                 }"
                             >
                                 <StandardTreeItem
-                                    title="{dataModel>name}"
+                                    title="{dataModel>strainAlias}"
                                     icon="{dataModel>stateIcon}"
                                 />
                             </Tree>

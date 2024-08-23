@@ -50,12 +50,12 @@ sap.ui.define(
 
       },
 
-      tagIDLiveChange(oEvent) {
-        var _oInput = oEvent.getSource();
-        var val = _oInput.getValue();
-        val = val.replace(/[^\d]/g, '');
-        _oInput.setValue(val);
-      },
+      // tagIDLiveChange(oEvent) {
+      //   var _oInput = oEvent.getSource();
+      //   var val = _oInput.getValue();
+      //   val = val.replace(/[^\d]/g, '');
+      //   _oInput.setValue(val);
+      // },
 
       onLinkPress(oEvent) {
 
@@ -82,23 +82,32 @@ sap.ui.define(
 
               const map = [];
 
-              function concatAliasName(parent, child) {
-                switch (parent.sequenceNumber) {
-                  case 0:
-                    return parent.strainAlias + '.' + child.breedType + child.sequenceNumber;
-                    break;
+              // function concatAliasName(parent, child) {
+              //   switch (parent.sequenceNumber) {
+              //     case 0:
+              //       return parent.strainAlias + '.' + child.breedType + child.sequenceNumber;
+              //       break;
 
-                  default:
-                    return parent.nameAlias + '.' + child.breedType + child.sequenceNumber;
-                    break;
-                }
-              }
+              //     default:
+              //       return parent.nameAlias + '.' + child.breedType + child.sequenceNumber;
+              //       break;
+              //   }
+              // }
 
               // Inicializa todos los elementos en un mapa
               items.forEach(item => {
+                // debugger;
+
+                var num = parseInt(item.seqNumber, 10); 
+                // Increment the number by 1
+                num += 1;
+                // Convert the number back to a string and pad with leading zeros
+                var nextSeq = num.toString().padStart(3, '0');
+
                 map[item.ID] = {
                   ID: item.ID,
                   name: item.name,
+                  strainAlias: item.strainAlias + nextSeq + ' - ' + item.tagID,
                   stateIcon: item.stateIcon, nodes: []
                 };
               });
@@ -349,6 +358,8 @@ sap.ui.define(
 
         var careTypeName = addedProducts.length > 0 ? 'WP' : 'OW'; // Water product or Only Water
 
+        // var sDescription = this.getView().getModel("careModel").getProperty("/description");
+
         return new Promise((resolve, reject) => {
           // debugger;
           specimens.forEach(specimenModel => {
@@ -474,10 +485,10 @@ sap.ui.define(
         }
 
         // Validations
-        if (!aData.tagID) {
-          sap.m.MessageToast.show('Specify a Tag Identification');
+        if (!aData.tagID || !/^\d{7,}$/.test(aData.tagID)) {
+          sap.m.MessageToast.show('TAG ID must be a number with at least 7 digits');
           return;
-        }
+      }
 
         if (aData.status === 'new') {
 
