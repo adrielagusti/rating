@@ -9,8 +9,7 @@ sap.ui.define(
     "../model/models",
     'sap/ui/unified/CalendarLegendItem',
     'sap/ui/unified/DateTypeRange',
-    "../model/formatter",
-	"sap/ca/ui/model/type/DateTime",
+    "../model/formatter"
     // "../controls/Cloudinary"
   ],
 
@@ -22,8 +21,7 @@ sap.ui.define(
 	models,
 	CalendarLegendItem,
 	DateTypeRange,
-	formatter,
-	DateTime
+	formatter
     // Cloudinary
   ) {
     "use strict";
@@ -381,7 +379,7 @@ sap.ui.define(
         
         return {
           specimen: { ID: specimen },
-          date: new Date(),
+          date: this.getView().getModel('dayDetailModel').getProperty('/photoDate'),
           careType: { ID: this.getView().getModel("careModel").getProperty("/careTypes").find((a) => a.name === 'PH').ID },
           // description: this.getView().getModel("careModel").getProperty("/description")
         }
@@ -401,7 +399,7 @@ sap.ui.define(
         
         return {
           specimen: { ID: specimen },
-          date: new Date(),
+          date: this.getView().getModel('dayDetailModel').getProperty('/photoDate'),
           publicId: publicId,
           // description: this.getView().getModel("careModel").getProperty("/description")
         }

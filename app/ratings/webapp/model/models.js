@@ -76,7 +76,9 @@ sap.ui.define([
 
             createViewModel: function () {
                 var oModel = new JSONModel({
-                    details: "MORE"
+                    details: "MORE",
+                    busy: false,
+                    busyDialog: false
                 });
                 return oModel;
             },

@@ -38,6 +38,7 @@
                                         value="{specimenCreationModel>/tagID}"
                                         placeholder="Enter the Specimen TAG ID (14000102)"
                                         type="Number"
+                                        liveChange="tagIDLiveChange"
                                     />
                                 </f:fields>
                             </f:FormElement>

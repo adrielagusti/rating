@@ -50,6 +50,13 @@ sap.ui.define(
 
       },
 
+      tagIDLiveChange(oEvent) {
+        var _oInput = oEvent.getSource();
+        var val = _oInput.getValue();
+        val = val.replace(/[^\d]/g, '');
+        _oInput.setValue(val);
+      },
+
       onLinkPress(oEvent) {
 
         var oList = oEvent.getSource().getParent().getParent().getParent();
@@ -227,6 +234,7 @@ sap.ui.define(
       // Dialog logic
 
       onChangeStatus() {
+        this.getOwnerComponent().getModel("view").setProperty("/busy", true)
         if (!this._pStatusDialog) {
           this._pStatusDialog = sap.ui.core.Fragment.load({
             id: this.getView().getId(),
@@ -243,6 +251,9 @@ sap.ui.define(
       },
 
       onStatusCancelPress: function () {
+        this.getOwnerComponent().getModel("view").setProperty("/busy", false)
+        this.getOwnerComponent().getModel("view").setProperty("/busyDialog", false)
+        
         this._pStatusDialog.then(function (oFragment) {
           oFragment.close();
         });
@@ -250,6 +261,7 @@ sap.ui.define(
 
       onStatusConfirmPress: function () {
         var aItems = this.getView().getModel('collectionModel').getProperty("/selectedSpecimens");
+        this.getOwnerComponent().getModel("view").setProperty("/busyDialog", true)
         this.changeSpecimenStatus(aItems).then((result) => {
           sap.m.MessageToast.show('Specimens updated');
           this.onStatusCancelPress();
@@ -317,9 +329,12 @@ sap.ui.define(
       onPrune() {
         var aItems = this.getView().getModel('collectionModel').getProperty("/selectedSpecimens");
         var that = this;
+        this.getOwnerComponent().getModel("view").setProperty("/busy", true)
         this.pruneSpecimens(aItems).then((result) => {
+      
           sap.m.MessageToast.show('Pruned');
           that.byId('list').getBinding("items").refresh(true);
+          this.getOwnerComponent().getModel("view").setProperty("/busy", false)
         });
       },
 
@@ -368,6 +383,7 @@ sap.ui.define(
 
       onApplicationConfirmPress() {
         var aItems = this.getView().getModel('collectionModel').getProperty("/selectedSpecimens");
+        this.getOwnerComponent().getModel("view").setProperty("/busyDialog", true)
         var that = this;
         this.applicateToSpecimens(aItems).then((result) => {
           sap.m.MessageToast.show('Specimens have ate');
@@ -405,6 +421,8 @@ sap.ui.define(
       onApplicationCancelPress: function () {
 
         this.getView().getModel("careModel").setProperty("/application", models.initialApplication);
+        this.getOwnerComponent().getModel("view").setProperty("/busy", false)
+        this.getOwnerComponent().getModel("view").setProperty("/busyDialog", false)
 
         this._pProductDialog.then(function (oFragment) {
           oFragment.close();
@@ -414,6 +432,9 @@ sap.ui.define(
 
       // Add specimen
       onAddSpecimen(oEvent) {
+
+        this.getOwnerComponent().getModel("view").setProperty("/busy", true)
+
         if (!this._pCreateDialog) {
           this._pCreateDialog = sap.ui.core.Fragment.load({
             id: this.getView().getId(),
@@ -431,12 +452,17 @@ sap.ui.define(
 
       onCreateCancelPress: function () {
         this.getView().setModel(new JSONModel($.extend(true, {}, models.initialSpecimen)), 'specimenCreationModel');
+        this.getOwnerComponent().getModel("view").setProperty("/busy", false)
+        this.getOwnerComponent().getModel("view").setProperty("/busyDialog", true)
         this._pCreateDialog.then(function (oFragment) {
           oFragment.close();
         });
       },
 
       onCreateConfirmPress: function () {
+        
+        this.getOwnerComponent().getModel("view").setProperty("/busyDialog", true)
+
         var aData = $.extend(true, {
         }, this.getView().getModel("specimenCreationModel").getProperty("/"));
 
@@ -589,7 +615,7 @@ sap.ui.define(
         return new Promise((resolve, reject) => {
 
           this._getStrainsNumber().then((seqNumber) => {
-          
+
             var num = parseInt(seqNumber, 10);
             // Increment the number by 1
             num += 1;

@@ -12,6 +12,7 @@
     <Page
         showHeader="false"
         class="sapUiContentPadding"
+        busy="{view>/busy}"
     >
         <subHeader>
             <Toolbar>
@@ -32,19 +33,19 @@
                         items="{ 
                                 path: '/SpecimenStates',
                                 sorter: {
-                                        path: 'ID'
+                                        path: 'description'
                                     } 
                                 }"
                     >
                         <HBox justifyContent="End">
                             <ObjectStatus
-                                active="true"
+                             
                                 text="{description}"
                                 state="{color}"
                                 class=" sapUiTinyMarginTop sapUiTinyMarginEnd"
                             />
                             <ObjectStatus
-                                active="true"
+                             
                                 state="{color}"
                                 icon="{icon}"
                                 class=" sapUiTinyMarginTop"
@@ -71,7 +72,7 @@
                     items="{
                         path: '/Specimens',
                         sorter: {
-                            path: 'strainName'
+                            path: 'plantedDate'
                         }
                     }"
                     mode="MultiSelect"
