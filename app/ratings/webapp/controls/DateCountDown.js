@@ -97,11 +97,13 @@ sap.ui.define([
 
 		var iTotalHours = (oTimeMeasures.days * 24) + oTimeMeasures.hours;
 		if (iTotalHours > this.getCriticalTimeInHours()) {
-			this.setState(bIsFuture ? sap.ui.core.ValueState.Success : sap.ui.core.ValueState.Error);
+			this.setState(sap.ui.core.ValueState.Success);
+			// this.setState(bIsFuture ? sap.ui.core.ValueState.Success : sap.ui.core.ValueState.Error);
 		} else if (iTotalHours > this.getWarningTimeInHours()) {
-			this.setState(sap.ui.core.ValueState.Warning);
+			this.setState(sap.ui.core.ValueState.Success);
 		} else {
-			this.setState(bIsFuture ? sap.ui.core.ValueState.Error : sap.ui.core.ValueState.Success);
+			// this.setState(bIsFuture ? sap.ui.core.ValueState.Error : sap.ui.core.ValueState.Success);
+			this.setState(sap.ui.core.ValueState.Success);
 		}
 	};
 

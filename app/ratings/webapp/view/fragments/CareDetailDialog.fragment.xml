@@ -8,7 +8,7 @@
         title="{= ${collectionModel>/selectedSpecimens}.length }"
         contentWidth="60%"
         busy="{collectionModel>/createDialogBusy}"
-           stretch="true"
+   
     >
         <content>
             <f:Form editable="true">
@@ -52,7 +52,6 @@
                     </f:FormContainer>
                 </f:formContainers>
             </f:Form>
-            <Image src="https://res.cloudinary.com/hgyusg0s0/image/upload/v1724186961/js7lejkxw66eht8cfujp.jpg"/>
         </content>
         <!-- <beginButton>
             <Button

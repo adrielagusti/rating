@@ -119,37 +119,49 @@
                                     icon="sap-icon://notes"
                                     visible="{= ${collectionModel>/selectedSpecimens}.length >= 1 }"
                                 />
+                          
                                 <Button
-                                    text="{= ${collectionModel>/selectedSpecimens}.length >= 1 ? 'Add new specimens' : 'Add' }"
-                                    icon="sap-icon://add"
-                                    press="onAddSpecimen"
-                                />
-                                <Button
-                                    text="Pruned the leafs"
+                                    text="Remove some leafs"
                                     icon="sap-icon://e-care"
                                     visible="{= ${collectionModel>/selectedSpecimens}.length >= 1 }"
                                     press="onPrune"
                                 />
+                                      <Button
+                                    text="{= ${collectionModel>/selectedSpecimens}.length >= 1 ? 'Add new specimens' : 'Add Specimen' }"
+                                    type="Accept"
+                                    icon="sap-icon://add"
+                                    press="onAddSpecimen"
+                                />
                             </content>
                         </OverflowToolbar>
                     </headerToolbar>
-                    <InputListItem label="{strainName} - {tagID} ">
-                        <!-- <Title title="{specimenName}"/> -->
-                        <ObjectStatus
-                            icon="{ parts: [ 'lastCare','stateIcon'], formatter: '.formatter.showWarning' }"
-                            state="{ parts: [ 'lastCare','stateColor'], formatter: '.formatter.showWarningColor' }"
-                        />
+                    <InputListItem>
+                        <HBox
+                            alignContent="SpaceBetween"
+                            justifyContent="SpaceBetween"
+                        >
+                            <!-- <Title title="{specimenName}"/> -->
+                            <Link
+                                text="( {tagID} ) {strainName}"
+                                press="onLinkPress"
+                            />
+                            <HBox>
+                                <ObjectStatus
+                                    icon="{ parts: [ 'lastCare','stateIcon'], formatter: '.formatter.showWarning' }"
+                                    state="{ parts: [ 'lastCare','stateColor'], formatter: '.formatter.showWarningColor' }"
+                                />
 
-                        <ObjectStatus
-                            icon="{stateIcon}"
-                            state="{stateColor}"
-                        />
-
-                        <!-- <ObjectStatus
+                                <ObjectStatus
+                                    icon="{stateIcon}"
+                                    state="{stateColor}"
+                                />
+                            </HBox>
+                            <!-- <ObjectStatus
                            
                             text="{tagID}"
                         /> -->
-                        <!-- <CheckBox /> -->
+                            <!-- <CheckBox /> -->
+                        </HBox>
                     </InputListItem>
                 </List>
             </Panel>

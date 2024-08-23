@@ -10,18 +10,20 @@ sap.ui.define(
     'sap/ui/unified/CalendarLegendItem',
     'sap/ui/unified/DateTypeRange',
     "../model/formatter",
+	"sap/ca/ui/model/type/DateTime",
     // "../controls/Cloudinary"
   ],
 
   function (UIComponent,
-    Controller,
-    JSONModel,
-    Filter,
-    FilterOperator,
-    models,
-    CalendarLegendItem,
-    DateTypeRange,
-    formatter
+	Controller,
+	JSONModel,
+	Filter,
+	FilterOperator,
+	models,
+	CalendarLegendItem,
+	DateTypeRange,
+	formatter,
+	DateTime
     // Cloudinary
   ) {
     "use strict";
@@ -36,7 +38,8 @@ sap.ui.define(
         this.getView().setModel(new JSONModel($.extend(true, {}, {
           careTypes: [],
           water: models.initialWater,
-          application: []
+          application: [],
+          photoDate: new Date()
         })), 'dayDetailModel');
 
         this.getView().setModel(new JSONModel($.extend(true, {}, {
@@ -121,8 +124,14 @@ sap.ui.define(
         }, (error, result) => {
 
           if (result.info.secure_url !== undefined) {
-            that._createCare(specimen, 'PH')
-            that._createPhoto(specimen, result.info.secure_url)
+            var p1 = that._createCare(specimen, 'PH')
+            var p2 = that._createPhoto(specimen, result.info.secure_url)
+           
+            Promise.all([p1, p2])
+            .then(results => {
+              that._setSpecimenResults();
+            })
+
           }
           // console.log(result.info.secure_url)
         });
@@ -134,7 +143,7 @@ sap.ui.define(
         let sObjectId = oEvent.getParameter("arguments").objectId;
         this._bindView("/Specimens(guid'" + sObjectId + "')");
 
-        var oCalendar = this.byId('legend');
+        // var oCalendar = this.byId('legend');
         // oCalendar.setStandardItems(['Today']);
         // this.onAddCare();
         this._setSpecimenResults()

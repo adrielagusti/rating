@@ -150,6 +150,7 @@ service BlackSeedsService {
                 description,
                 instructions,
                 unit,
+                false as selected : Boolean,
                 0 as amount : Decimal(5, 2)
         }
 

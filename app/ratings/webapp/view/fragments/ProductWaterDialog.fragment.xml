@@ -117,9 +117,9 @@
                                        
                                     </HBox> -->
                                     <VBox
-                                        justifyContent="Start"
-                                        alignContent="Start"
-                                        alignItems="Start"
+                                        justifyContent="End"
+                                        alignContent="End"
+                                        alignItems="End"
                                     >
                                         <FlexBox>
                                             <Text
@@ -185,20 +185,30 @@
                                                         text="{name} "
                                                     />
                                                 </Select> -->
-                                                <CheckBox
-                                                    selected="{= ${careModel>amount} > 0 }"
-                                                    valueState="Information"
-                                                    enabled="false"
+
+                                                <StepInput
+                                                    value="{careModel>amount}"
+                                                    displayValuePrecision="2"
+                                                    min="0.5"
+                                                    step="0.5"
+                                                    width="90%"
+                                                    enabled="{= ${careModel>selected} === true }"
                                                 />
+                                                <!-- <Input
+                                                    value="{careModel>amount}"
+                                                    class="sapUiTinyMarginBegin"
+                                                    width="70%"
+                                                    type="Number"
+                                                /> -->
+
                                                 <Text
                                                     text="{careModel>name}"
                                                     width="170px"
                                                 />
-                                                <Input
-                                                    value="{careModel>amount}"
-                                                    class="sapUiTinyMarginBegin"
-                                                    width="85%"
-                                                    type="Number"
+
+                                                <CheckBox selected="{careModel>selected}"
+                                            
+                           
                                                 />
                                                 <!-- <Label text="{careModel>unit}" class="sapUiTinyMarginTop"/> -->
                                             </FlexBox>

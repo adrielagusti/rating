@@ -34,14 +34,11 @@
                         <f:formElements>
                             <f:FormElement>
                                 <f:fields>
-                
                                     <Input
                                         value="{specimenCreationModel>/tagID}"
                                         placeholder="Enter the Specimen TAG ID (14000102)"
                                         type="Number"
                                     />
-                            
-                  
                                 </f:fields>
                             </f:FormElement>
                             <f:FormElement>

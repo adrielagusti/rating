@@ -50,6 +50,18 @@ sap.ui.define(
 
       },
 
+      onLinkPress(oEvent) {
+
+        var oList = oEvent.getSource().getParent().getParent().getParent();
+        oList.removeSelections();
+        var oItem = oEvent.getSource().getParent().getParent().getBindingContext().getObject();
+
+        this.getRouter().navTo("specimen", {
+          objectId: oItem.ID
+        });
+
+      },
+
       _setUserResults() {
         let p1 = this._getSpecimens();
         let p2 = this._getCares();
@@ -63,17 +75,17 @@ sap.ui.define(
 
               const map = [];
 
-              // function concatAliasName(parent, child) {
-              //   switch (parent.sequenceNumber) {
-              //     case 0:
-              //       return parent.strainAlias + '-' + child.breedType + child.sequenceNumber;
-              //       break;
+              function concatAliasName(parent, child) {
+                switch (parent.sequenceNumber) {
+                  case 0:
+                    return parent.strainAlias + '.' + child.breedType + child.sequenceNumber;
+                    break;
 
-              //     default:
-              //       return parent.nameAlias + '-' + child.breedType + child.sequenceNumber;
-              //       break;
-              //   }
-              // }
+                  default:
+                    return parent.nameAlias + '.' + child.breedType + child.sequenceNumber;
+                    break;
+                }
+              }
 
               // Inicializa todos los elementos en un mapa
               items.forEach(item => {
@@ -302,7 +314,7 @@ sap.ui.define(
 
       },
 
-      onPrune(){
+      onPrune() {
         var aItems = this.getView().getModel('collectionModel').getProperty("/selectedSpecimens");
         var that = this;
         this.pruneSpecimens(aItems).then((result) => {
@@ -318,7 +330,7 @@ sap.ui.define(
         var aPromises = [];
 
         var addedProducts = this.getView().getModel("careModel").getProperty("/water").onlyWater === true ? [] :
-          this.getView().getModel("careModel").getProperty("/application").products.filter((a) => parseFloat(a.amount) > 0)
+          this.getView().getModel("careModel").getProperty("/application").products.filter((a) => a.selected === true)
 
         var careTypeName = addedProducts.length > 0 ? 'WP' : 'OW'; // Water product or Only Water
 
@@ -435,16 +447,21 @@ sap.ui.define(
           return;
         }
 
-        if (aData.status === 'new') {
-          delete aData.parentID;
-          delete aData.strainID;
+        // Validations
+        if (!aData.tagID) {
+          sap.m.MessageToast.show('Specify a Tag Identification');
+          return;
+        }
 
-          // Validations
+        if (aData.status === 'new') {
+
           if (!aData.strainName) {
-            sap.m.MessageToast.show('Specify a name');
+            sap.m.MessageToast.show('Specify a name for the Strain');
             return;
           }
 
+          delete aData.parentID;
+          delete aData.strainID;
 
           this._createStrain(aData).then((result) => {
 
@@ -459,14 +476,11 @@ sap.ui.define(
 
           // Validations
           if (!aData.strainID) {
-            sap.m.MessageToast.show('Select or create a Strain');
+            sap.m.MessageToast.show('Select a Strain');
             return;
           }
 
-          if (!aData.name) {
-            sap.m.MessageToast.show('Specify a name');
-            return;
-          }
+
 
           this._saveSpecimens(aData).then((result) => {
             this._setUserResults();
@@ -572,11 +586,22 @@ sap.ui.define(
 
 
       _createStrain(data) {
-        let oData = { tagID: data.strainTagID, name: data.strainName, alias: data.strainAlias };
         return new Promise((resolve, reject) => {
-          this.getView().getModel().create("/Strains", oData, {
-            success: resolve,
-            error: reject
+
+          this._getStrainsNumber().then((seqNumber) => {
+          
+            var num = parseInt(seqNumber, 10);
+            // Increment the number by 1
+            num += 1;
+            // Convert the number back to a string and pad with leading zeros
+            var nextSeq = num.toString().padStart(3, '0');
+
+            let oData = { tagID: nextSeq, name: data.strainName, alias: (data.strainName).toUpperCase().substring(0, 2) };
+
+            this.getView().getModel().create("/Strains", oData, {
+              success: resolve,
+              error: reject
+            });
           });
         });
       },
@@ -625,7 +650,7 @@ sap.ui.define(
         delete data.strainTagID
         delete data.comments
 
-        data.state = { ID: 'e8c8bfd3-95de-498e-b4b1-aa591480db28' }
+        data.state = { ID: 'e8c8bfd3-95de-498e-b4b1-aa591480db28' } // Alive
 
         data.strain = { ID: data.strainID };
         if (!data.parentID) {
@@ -634,7 +659,7 @@ sap.ui.define(
         } else {
           data.seqNumber = 1;
         }
-
+        // debugger ;
         return data;
       },
 
@@ -683,9 +708,9 @@ sap.ui.define(
           aRegexResult = /\d{4}/.exec(sResponse),
           iHttpStatusCode = aRegexResult && parseInt(aRegexResult[0]),
           sMessage;
-          if (sResponse) {
-            sMessage = iHttpStatusCode === 200 ? sResponse + " (Upload Success)" : sResponse + " (Upload Error)";
-            // debugger
+        if (sResponse) {
+          sMessage = iHttpStatusCode === 200 ? sResponse + " (Upload Success)" : sResponse + " (Upload Error)";
+          // debugger
 
           sap.m.MessageToast.show(sMessage);
           // debugger
@@ -722,14 +747,14 @@ sap.ui.define(
         });
       },
 
-      _getPhoto(){
+      _getStrainsNumber() {
         return new Promise((resolve, reject) => {
-          this.getView().getModel().read("/Books(guid'339b059c-c37b-44d7-8b0f-44f2bdf31d64')", {
+          this.getView().getModel().read("/Strains/$count", {
             success: resolve,
             error: reject
           });
         });
-        
+
       }
     });
   }

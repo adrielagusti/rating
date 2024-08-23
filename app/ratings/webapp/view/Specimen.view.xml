@@ -16,23 +16,22 @@
         <subHeader>
             <Toolbar>
                 <ToolbarSpacer />
-                <Title text="{name} ({tagID})" />
+                <Title text=" {i18n>form.specimen} ( {tagID} ) " />
                 <ToolbarSpacer />
             </Toolbar>
         </subHeader>
         <content>
-            <Panel
-                class="sapUiTinyMarginBottom"
-                visible="false"
-            >
+            <Panel class="sapUiTinyMarginBottom">
                 <HBox justifyContent="SpaceBetween">
                     <Image
                         class="sapUiTinyMarginTopBottom"
                         src="./img/logo.png"
-                        width="8rem"
+                        width="5rem"
                     />
+                    <VBox />
+
                     <VBox>
-                        <HBox justifyContent="End">
+                        <!-- <HBox justifyContent="End">
                             <ObjectStatus
                                 text="{strainName}"
                                 state="Success"
@@ -42,7 +41,7 @@
                                 state="Success"
                                 icon="sap-icon://e-care"
                             />
-                        </HBox>
+                        </HBox> -->
                         <HBox justifyContent="End">
                             <ObjectStatus
                                 text="{
@@ -94,15 +93,6 @@
                 expandable="false"
             >
                 <items>
-                    <IconTabFilter
-                        key="info"
-                        icon="sap-icon://hint"
-                    >
-                        <core:Fragment
-                            fragmentName="blackseeds.ratings.view.fragments.Display"
-                            type="XML"
-                        />
-                    </IconTabFilter>
                     <!-- <IconTabSeparator icon="" />
                     <IconTabSeparator icon="sap-icon://vertical-grip" /> -->
                     <IconTabFilter
@@ -112,10 +102,10 @@
                         <VBox>
                             <SinglePlanningCalendar
                                 id="planing"
-                                appointmentSelect="handleAppointmentSelect"
                                 startDate="{path: 'plantedDate'}"
                                 enableAppointmentsCreate="true"
                             >
+                                <!-- appointmentSelect="handleAppointmentSelect" -->
                                 <!-- <actions>
 				<Button id="addNewAppointment" text="Create" press="handleAppointmentCreate" tooltip="Add new appointment" />
 				<Button id="legendButton" icon="sap-icon://legend" press="handleOpenLegend" tooltip="Open SinglePlanningCalendar legend" ariaHasPopup="Dialog" />
@@ -143,7 +133,15 @@
                             </SinglePlanningCalendar>
                         </VBox>
                     </IconTabFilter>
-
+                    <IconTabFilter
+                        key="info"
+                        icon="sap-icon://hint"
+                    >
+                        <core:Fragment
+                            fragmentName="blackseeds.ratings.view.fragments.Display"
+                            type="XML"
+                        />
+                    </IconTabFilter>
                     <IconTabFilter
                         key="people"
                         icon="sap-icon://timesheet"
@@ -171,7 +169,6 @@
                         key="people"
                         icon="sap-icon://camera"
                     >
-                   
                         <VBox
                             items="{ 
                                 path: 'photos',
@@ -187,13 +184,15 @@
                             >
                                 <headerToolbar>
                                     <OverflowToolbar>
-                                        <Title text="{ parts: [ 
+                                        <Title
+                                            text="{ parts: [ 
                                          { path: 'plantedDate' }, 
                                          { path: 'date' }               
                                       
                                         
-                                        ], formatter: '.formatter.getDifferenceOfDays' }"/>
-                                          <!-- 'plantedDate','date' -->
+                                        ], formatter: '.formatter.getDifferenceOfDays' }"
+                                        />
+                                        <!-- 'plantedDate','date' -->
                                     </OverflowToolbar>
                                 </headerToolbar>
                                 <content>
@@ -205,7 +204,19 @@
                                 </content>
                             </Panel>
                         </VBox>
-                         <Button press="onTakePhoto" text="{i18n>button.take}" icon="sap-icon://camera"/>
+                        <HBox>
+                        <DateTimePicker
+                            value="{
+                                    'path': 'dayDetailModel>/photoDate',
+                                    'type': 'sap.ui.model.type.DateTime'}"
+                        />
+         
+                        <Button
+                            press="onTakePhoto"
+                            text="{i18n>button.take}"
+                            icon="sap-icon://camera"
+                        />
+                        </HBox>
                     </IconTabFilter>
                 </items>
             </IconTabBar>

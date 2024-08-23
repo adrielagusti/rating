@@ -26,24 +26,19 @@
             <f:formContainers>
                 <f:FormContainer>
                     <f:formElements>
-                        <f:FormElement label="Specimen name">
-                            <f:fields>
-                                <Text text="{name}" />
-                            </f:fields>
-                        </f:FormElement>
                         <f:FormElement label="Tag ID">
                             <f:fields>
                                 <Text text="{tagID}" />
                             </f:fields>
                         </f:FormElement>
-                        <f:FormElement label="Planted On">
-                            <f:fields>
-                                <Text text="{plantedDate}" />
-                            </f:fields>
-                        </f:FormElement>
                         <f:FormElement label="Strain Name">
                             <f:fields>
                                 <Text text="{strainName}" />
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement label="Planted On">
+                            <f:fields>
+                                <Text text="{plantedDate}" />
                             </f:fields>
                         </f:FormElement>
                         <f:FormElement label="State">
@@ -54,6 +49,11 @@
 						     <f:FormElement label="Last Care">
                             <f:fields>
                                 <Text text="{lastCare}" />
+                            </f:fields>
+                        </f:FormElement>
+                          <f:FormElement label="Specimen name">
+                            <f:fields>
+                                <Text text="{name}" />
                             </f:fields>
                         </f:FormElement>
                     </f:formElements>

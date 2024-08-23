@@ -49,7 +49,9 @@ sap.ui.define([
             },
 
             initialApplication: {
-                products: [],
+                products: [{
+                    selected: false
+                }],
                 // date: '',
                 amount: '',
                 method: 'Manual'
