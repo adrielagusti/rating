@@ -31,7 +31,7 @@ entity Attributes {
 
 
 //  Collection 
-entity Specimens {
+entity Specimens : managed {
   key ID          : UUID;
       parentID    : UUID;
       breedType   : String;
@@ -77,7 +77,7 @@ entity Applications : managed {
       method      : String; //Spraying, water
 }
 
-entity Photos {
+entity Photos : managed {
   key ID          : UUID;
       specimen    : Association to Specimens;
       date        : DateTime;

@@ -22,7 +22,7 @@ service BlackSeedsService {
     //     ratings.ratingID : UUID
     // }
 
-    entity Strains        as
+    entity Strains                as
         projection on blackseeds.Strains {
             key ID,
                 tagID,
@@ -37,7 +37,7 @@ service BlackSeedsService {
         group by
             ID;
 
-    entity Specimens      as
+    entity Specimens              as
         projection on blackseeds.Specimens {
             key ID,
                 parentID,
@@ -58,16 +58,23 @@ service BlackSeedsService {
                 cares,
                 waterings,
                 photos,
-                MAX(cares.date)   as lastCare : DateTime,
+                MAX(
+                    cares.date
+                )                 as lastCare : DateTime,
         }
-          group by
-            ID, strain.name, strain.ID, state.color, state.icon, state.description;
-            
+        group by
+            ID,
+            strain.name,
+            strain.ID,
+            state.color,
+            state.icon,
+            state.description;
+
 
     entity Ratings @(restrict: [{
         grant: '*',
         where: 'createdBy = $user'
-    }])                   as
+    }])                           as
         projection on blackseeds.Ratings {
             key ID,
                 strain.ID    as strainID,
@@ -87,7 +94,7 @@ service BlackSeedsService {
         }
 
 
-    entity Attributes     as
+    entity Attributes             as
         projection on blackseeds.Attributes {
             key ID,
                 description,
@@ -95,21 +102,21 @@ service BlackSeedsService {
                 step
         }
 
-    entity Cares          as
+    entity Cares                  as
         projection on blackseeds.Care {
             key ID,
                 specimen,
                 careType.name        as careName,
                 careType.description as careD,
-                careType.calDayType as dayType,
-                careType.icon       as icon,
+                careType.calDayType  as dayType,
+                careType.icon        as icon,
                 careType,
                 date,
                 description
         }
 
 
-    entity Waterings      as
+    entity Waterings              as
         projection on blackseeds.Waterings {
             ID,
             specimen,
@@ -122,7 +129,7 @@ service BlackSeedsService {
             method
         }
 
-    entity Applications   as
+    entity Applications           as
         projection on blackseeds.Applications {
             key ID,
                 specimen,
@@ -133,7 +140,7 @@ service BlackSeedsService {
                 method
         }
 
-    entity Photos   as
+    entity Photos                 as
         projection on blackseeds.Photos {
             key ID,
                 specimen,
@@ -142,7 +149,7 @@ service BlackSeedsService {
                 publicId
         }
 
-    entity Products       as
+    entity Products               as
         projection on blackseeds.Products {
             key ID,
                 name,
@@ -151,23 +158,23 @@ service BlackSeedsService {
                 instructions,
                 unit,
                 false as selected : Boolean,
-                0 as amount : Decimal(5, 2)
+                0     as amount   : Decimal(5, 2)
         }
 
-    entity CareTypes      as
+    entity CareTypes              as
         projection on blackseeds.CareTypes {
             key ID,
                 name,
                 description
         }
 
-    entity Places         as
+    entity Places                 as
         projection on blackseeds.Places {
             key ID,
                 description
         }
 
-    entity LifeCycles         as
+    entity LifeCycles             as
         projection on blackseeds.LifeCycles {
             key ID,
                 days,
@@ -176,12 +183,29 @@ service BlackSeedsService {
                 sequence
         }
 
-    entity SpecimenStates as
+    entity SpecimenStates         as
         projection on blackseeds.SpecimenStates {
             key ID,
                 description,
                 icon,
                 color
         }
+
+    entity CompanySpecimensStatus as
+        select from SpecimenStates as ST
+        left join Specimens as S
+            on ST.ID = S.state.ID
+        {
+            key ST.ID,
+            ST.description,
+            ST.color,
+            ST.icon,
+            count(
+                S.ID
+            ) as numberOf: Integer
+        } 
+        group by
+            ST.ID, ST.description, ST.color, ST.icon
+        having count(S.ID) > 0
 
 }

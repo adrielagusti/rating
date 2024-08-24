@@ -29,39 +29,44 @@
                         src="./img/logo.png"
                         width="8rem"
                     />
-                    <VBox
-                        items="{ 
-                                path: '/SpecimenStates',
+                    <VBox>
+                        <MessageStrip
+                            class=" sapUiTinyMarginBot"
+                            text="Need water or revision"
+                            type="Warning"
+                            showIcon="true"
+                        />
+                        <VBox
+                            items="{ 
+                                path: '/CompanySpecimensStatus',
                                 sorter: {
-                                        path: 'description'
+                                        path: 'ID'
                                     } 
                                 }"
-                    >
-                        <HBox justifyContent="End">
-                            <ObjectStatus
-                             
-                                text="{description}"
+                        >
+                            <HBox justifyContent="End">
+                                <!-- <ObjectStatus
+                                text="{numberOf}"
                                 state="{color}"
                                 class=" sapUiTinyMarginTop sapUiTinyMarginEnd"
-                            />
-                            <ObjectStatus
-                             
-                                state="{color}"
-                                icon="{icon}"
-                                class=" sapUiTinyMarginTop"
-                            />
-                            <!-- <ObjectStatus
-                                state="None"
-                                class=""
-                                icon="sap-icon://e-care"
                             /> -->
-                            <!-- </VBox>
-                        <VBox justifyContent="End"> -->
-                        </HBox>
-                        <!-- <HBox justifyContent="End" /> -->
+                                <ObjectStatus
+                                    text="{numberOf} {description}"
+                                    state="{color}"
+                                    class=" sapUiTinyMarginTop sapUiTinyMarginEnd"
+                                />
+                                <ObjectStatus
+                                    state="{color}"
+                                    icon="{icon}"
+                                    class=" sapUiTinyMarginTop"
+                                />
+                            </HBox>
+                        </VBox>
                     </VBox>
+                    <!-- showCloseButton="true" -->
                 </HBox>
             </Panel>
+
             <Panel
                 expanded="true"
                 class="sapUiTinyMarginTop"
@@ -72,7 +77,8 @@
                     items="{
                         path: '/Specimens',
                         sorter: {
-                            path: 'plantedDate'
+                            path: 'strainName', 
+                            group: '.getName'
                         }
                     }"
                     mode="MultiSelect"
@@ -89,12 +95,12 @@
                                 <ToolbarSpacer />
                                 <ToolbarSpacer />
                                 <Button
-                                    icon="sap-icon://multiselect-all"
-                                    press="onSelectAction('all',$event)"
-                                />
-                                <Button
                                     icon="sap-icon://multiselect-none"
                                     press="onSelectAction('none',$event)"
+                                />
+                                <Button
+                                    icon="sap-icon://multiselect-all"
+                                    press="onSelectAction('all',$event)"
                                 />
                                 <Button
                                     text="Display"
@@ -119,16 +125,17 @@
                                     text="Leave a note"
                                     icon="sap-icon://notes"
                                     visible="{= ${collectionModel>/selectedSpecimens}.length >= 1 }"
+                                    press="onChangeStatus"
                                 />
-                          
+
                                 <Button
                                     text="Remove some leafs"
                                     icon="sap-icon://e-care"
                                     visible="{= ${collectionModel>/selectedSpecimens}.length >= 1 }"
                                     press="onPrune"
                                 />
-                                      <Button
-                                    text="{= ${collectionModel>/selectedSpecimens}.length >= 1 ? 'Add new specimens' : 'Add Specimen' }"
+                                <Button
+                                    text="{= ${collectionModel>/selectedSpecimens}.length >= 1 ? 'Add new specimens' : 'Add Specimen #' }"
                                     type="Accept"
                                     icon="sap-icon://add"
                                     press="onAddSpecimen"
@@ -142,17 +149,36 @@
                             justifyContent="SpaceBetween"
                         >
                             <!-- <Title title="{specimenName}"/> -->
-                                <!-- text="{nameAlias}" -->
-                            <Link
-                                text="( {tagID} ) {strainName}"
-                                press="onLinkPress"
-                            />
+                            <!-- text="{nameAlias}" -->
                             <HBox>
+                                <Link
+                                    text="#{tagID}"
+                                    press="onLinkPress"
+                                />
                                 <ObjectStatus
+                                    class="sapUiTinyMarginBegin"
                                     icon="{ parts: [ 'lastCare','stateIcon'], formatter: '.formatter.showWarning' }"
                                     state="{ parts: [ 'lastCare','stateColor'], formatter: '.formatter.showWarningColor' }"
                                 />
-
+                            </HBox>
+                            <!-- <HBox>
+                              
+                            
+                            </HBox> -->
+                            <HBox>
+                                <!-- <Label
+                                    text="{ path: 'plantedDate',
+                                    type: 'sap.ui.model.type.Date',
+                                    formatOptions: {
+                                        style: 'short'
+                                    }}"
+                                    class="sapUiMediumMarginEnd"
+                                /> -->
+                                <Label
+                                    text="{strainAlias} {seqNumber}"
+                                    class="sapUiTinyMarginEnd"
+                                />
+                                <!-- text="{stateDescription}" -->
                                 <ObjectStatus
                                     icon="{stateIcon}"
                                     state="{stateColor}"

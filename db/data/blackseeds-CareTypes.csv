@@ -8,3 +8,5 @@ ID;name;description;calDayType;icon
 d5817966-a593-43f6-9894-f94b45d1ed37;VI;Visit;Type06;sap-icon://visits
 0a3db691-62ce-4ba1-bfe0-acba66de8aba;JN;Just a note;Type09;sap-icon://customer-order-entry
 f08ed2ff-c8ed-43a1-a39d-30b7a41bfc8f;PH;Photo;Type09;sap-icon://camera
+a7fbe4ec-edda-4c4b-8b73-2852df1c7dc3;SX;Sex Change;Type09;sap-icon://gender-male-and-female
+91be4cd4-f478-4a98-9750-40b6ca22c7f5;ST;Status Change;Type09;sap-icon://journey-change

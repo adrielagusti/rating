@@ -14,14 +14,14 @@ sap.ui.define(
   ],
 
   function (UIComponent,
-	Controller,
-	JSONModel,
-	Filter,
-	FilterOperator,
-	models,
-	CalendarLegendItem,
-	DateTypeRange,
-	formatter
+    Controller,
+    JSONModel,
+    Filter,
+    FilterOperator,
+    models,
+    CalendarLegendItem,
+    DateTypeRange,
+    formatter
     // Cloudinary
   ) {
     "use strict";
@@ -110,11 +110,11 @@ sap.ui.define(
 
         const regex = /guid'([0-9a-fA-F-]{36})'/;
         const specimen = path.match(regex)[1];
-        
+
         cloudinary.setCloudName('hgyusg0s0');
         // cloudinary.setAPIKey(process.env.CLOUDINARY_API);
         cloudinary.setAPIKey('641639681197656');
-        
+
         cloudinary.openUploadWidget({
           uploadPreset: "xondth9e",
           showAdvancedOptions: true,
@@ -124,11 +124,11 @@ sap.ui.define(
           if (result.info.secure_url !== undefined) {
             var p1 = that._createCare(specimen, 'PH')
             var p2 = that._createPhoto(specimen, result.info.secure_url)
-           
+
             Promise.all([p1, p2])
-            .then(results => {
-              that._setSpecimenResults();
-            })
+              .then(results => {
+                that._setSpecimenResults();
+              })
 
           }
           // console.log(result.info.secure_url)
@@ -174,11 +174,33 @@ sap.ui.define(
       //   });
       // },
 
+      onLinkPress(oEvent) {
+
+        // var oItem = oEvent.getSource().getText();
+        // var result = oItem.substring(1);
+
+        this.getRouter().navTo("specimen", {
+          objectId: this.getView().getBindingContext().getObject().parentID
+        });
+
+      },
+
+      _setParent(specimen) {
+        
+        if (specimen.parentID) {
+          this._getSpecimen(specimen.parentID).then((parent) => {
+            // debugger;
+            // this.getView().getModel().setProperty("/parentTagID", parent.tagID)
+            this.getView().byId('link-parent').setText('#' + parent.tagID)
+          })
+        }
+      },
+
       _setCalendar(specimen, careTypes, cares, lifeCycles) {
 
         var aLifeCycles = lifeCycles.results.sort((a, b) => a.sequence - b.sequence);
         var sType;
-                // var oLeg = this.byId("legend");
+        // var oLeg = this.byId("legend");
         // var oCal = this.byId("calendar");
         var oPla = this.byId("planing");
         // var index = 0;
@@ -246,7 +268,7 @@ sap.ui.define(
             startDate: startDate,
             endDate: endDate
           }));
-   
+
         })
 
       },
@@ -258,7 +280,7 @@ sap.ui.define(
       // },
 
       _setSpecimenResults() {
-        let p0 = this._getSpecimen();
+        let p0 = this._getSpecimen('');
         let p1 = this._getCareTypes();
         let p2 = this._getCares();
 
@@ -276,11 +298,11 @@ sap.ui.define(
             this.getView().getModel('careModel').setProperty('/careTypes', careTypes.results)
 
             this._setCalendar(specimen, careTypes, cares, lifeCycles);
+
+            this._setParent(specimen);
             // this._setPhotos(photos.results);
 
           })
-
-
       },
 
       _getCareTypes() {
@@ -326,9 +348,14 @@ sap.ui.define(
 
       // },
 
-      _getSpecimen() {
+      _getSpecimen(path) {
+        var sPath;
 
-        var sPath = this.getView().getObjectBinding().sPath
+        if (path) {
+          sPath = "/Specimens(guid'" + path + "')";
+        } else {
+          sPath = this.getView().getObjectBinding().sPath
+        }
         return new Promise((res, rej) => {
           this.getView().getModel().read(sPath, {
             success: res,
@@ -376,7 +403,7 @@ sap.ui.define(
         });
       },
       _formatCare(specimen, careType) {
-        
+
         return {
           specimen: { ID: specimen },
           date: this.getView().getModel('dayDetailModel').getProperty('/photoDate'),
@@ -396,7 +423,7 @@ sap.ui.define(
       },
 
       _formatPhoto(specimen, publicId) {
-        
+
         return {
           specimen: { ID: specimen },
           date: this.getView().getModel('dayDetailModel').getProperty('/photoDate'),

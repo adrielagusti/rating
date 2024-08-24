@@ -16,7 +16,7 @@
         <subHeader>
             <Toolbar>
                 <ToolbarSpacer />
-                <Title text=" {i18n>form.specimen} ( {tagID} ) " />
+                <Title text=" {i18n>form.specimen} ( #{tagID} ) " />
                 <ToolbarSpacer />
             </Toolbar>
         </subHeader>
@@ -55,33 +55,36 @@
                             />
                         </HBox>
                         <HBox justifyContent="End">
+                           
                             <dc:DateCountDown
                                 date="{plantedDate}"
                                 isFuture="true"
                                 criticalTimeInHours="10"
                                 warningTimeInHours="15"
                                 class="sapUiTinyMarginTop sapUiTinyMarginEnd"
+                                visible="{= ${stateColor} !== 'None' }"
                             />
-                            <!-- <ObjectStatus
-                                text="{specimenModel>/weeks} Weeks"
-                                class=" sapUiTinyMarginEnd sapUiTinyMarginTop"
-                            /> -->
+                            <ObjectStatus
+                                class="sapUiTinyMarginTop sapUiTinyMarginEnd"
+                                text="{stateDescription}"
+                                state="{stateColor}"
+                            />
                             <ObjectStatus
                                 class="sapUiTinyMarginTop"
-                                icon="sap-icon://electrocardiogram"
-                                state="Success"
+                                icon="{stateIcon}"
+                                state="{stateColor}"
                             />
                         </HBox>
                         <HBox justifyContent="End">
                             <ObjectStatus
-                                text="Female"
+                                text="{= ${sex} === 'F' ? 'Female' : 'Male' }"
                                 class="sapUiTinyMarginEnd sapUiTinyMarginTop"
                                 state="Warning"
                             />
                             <ObjectStatus
                                 state="Warning"
                                 class="sapUiTinyMarginTop"
-                                icon="sap-icon://female"
+                                icon= "{= ${sex} === 'F' ? 'sap-icon://female' : 'sap-icon://male' }"
                             />
                         </HBox>
                     </VBox>
@@ -93,8 +96,15 @@
                 expandable="false"
             >
                 <items>
-                    <!-- <IconTabSeparator icon="" />
-                    <IconTabSeparator icon="sap-icon://vertical-grip" /> -->
+                      <IconTabFilter
+                        key="info"
+                        icon="sap-icon://hint"
+                    >
+                        <core:Fragment
+                            fragmentName="blackseeds.ratings.view.fragments.Display"
+                            type="XML"
+                        />
+                    </IconTabFilter>
                     <IconTabFilter
                         key="notes"
                         icon="sap-icon://notes"
@@ -105,22 +115,15 @@
                                 startDate="{path: 'plantedDate'}"
                                 enableAppointmentsCreate="true"
                             >
-                                <!-- appointmentSelect="handleAppointmentSelect" -->
-                                <!-- <actions>
-				<Button id="addNewAppointment" text="Create" press="handleAppointmentCreate" tooltip="Add new appointment" />
-				<Button id="legendButton" icon="sap-icon://legend" press="handleOpenLegend" tooltip="Open SinglePlanningCalendar legend" ariaHasPopup="Dialog" />
-			</actions> -->
+                              
                                 <views>
                                     <SinglePlanningCalendarMonthView
                                         key="MonthView"
                                         title="Month"
                                     />
-                                    <!-- <SinglePlanningCalendarDayView key="DayView" title="Day" />
-				<SinglePlanningCalendarWorkWeekView key="WorkWeekView" title="Work Week" /> -->
-                                    <!-- <SinglePlanningCalendarWeekView key="WeekView" title="Week" /> -->
+                          
                                 </views>
-                                <!-- title= "{careD}" -->
-                                <!-- text= "{description}" -->
+                            
                                 <appointments>
                                     <unified:CalendarAppointment
                                         key="{ID}"
@@ -133,15 +136,7 @@
                             </SinglePlanningCalendar>
                         </VBox>
                     </IconTabFilter>
-                    <IconTabFilter
-                        key="info"
-                        icon="sap-icon://hint"
-                    >
-                        <core:Fragment
-                            fragmentName="blackseeds.ratings.view.fragments.Display"
-                            type="XML"
-                        />
-                    </IconTabFilter>
+                 
                     <IconTabFilter
                         key="people"
                         icon="sap-icon://timesheet"

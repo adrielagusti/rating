@@ -36,10 +36,12 @@
                                 <f:fields>
                                     <Input
                                         value="{specimenCreationModel>/tagID}"
-                                        placeholder="Enter the Specimen Tag ID (only numbers)"
+                                        placeholder="Enter the Specimen # Tag ID (7 numbers)"
                                         maxLength="7"
+                                        change="onTagIDInputChange"
                                     />
-                                        <!-- liveChange="tagIDLiveChange" -->
+
+                                    <!-- liveChange="tagIDLiveChange" -->
                                 </f:fields>
                             </f:FormElement>
                             <f:FormElement>
@@ -63,17 +65,51 @@
                                             value="{specimenCreationModel>/value}"
                                             displayValuePrecision="{displayValuePrecision}"
                                             min="1"
-                                            change="onChange"
+                                            change="onChangeSpecimenNumber"
                                             enabled="{= ${specimenCreationModel>/multiple} }"
                                         />
                                     </HBox>
                                 </f:fields>
                             </f:FormElement>
+                            <!-- <f:FormElement
+                                visible="{= ${specimenCreationModel>/multiple} &amp;&amp; ${specimenCreationModel>/tagID} !== '' }"
+                            >
+                                <f:fields>
+                                    <Label id='label-tag' />
+                                </f:fields>
+                            </f:FormElement> -->
                         </f:formElements>
                     </f:FormContainer>
-                            <f:FormContainer >
+                    <f:FormContainer>
                         <f:formElements>
-
+                            <f:FormElement
+                                visible="{= ${specimenCreationModel>/multiple} &amp;&amp; ${specimenCreationModel>/tagID} !== '' }"
+                            >
+                                <f:fields>
+                                <!-- <HBox> -->
+                                   <Label id='label-tag' />
+                                <!-- <CheckBox
+                                            activeHandling="true"
+                                            displayOnly="false"
+                                            editable="true"
+                                            enabled="true"
+                                            partiallySelected="false"
+                                       
+                                            text="Confirm last tag"
+                                            textAlign="Begin"
+                                            textDirection="Inherit"
+                                            useEntireWidth="false"
+                                            valueState="None"
+                                            wrapping="false"
+                                        />
+                                 
+                                    </HBox> -->
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                    <f:FormContainer>
+                        <f:formElements>
                             <f:FormElement label="{i18n>form.breedtype}">
                                 <f:fields>
                                     <SegmentedButton

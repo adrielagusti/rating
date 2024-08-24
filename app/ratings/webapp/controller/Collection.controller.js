@@ -50,18 +50,37 @@ sap.ui.define(
 
       },
 
-      // tagIDLiveChange(oEvent) {
-      //   var _oInput = oEvent.getSource();
-      //   var val = _oInput.getValue();
-      //   val = val.replace(/[^\d]/g, '');
-      //   _oInput.setValue(val);
-      // },
+      onChangeSpecimenNumber(oEvent) {
+        var _oInput = oEvent.getSource();
+        var qty = _oInput.getValue();
+        var val = this.getView().getModel('specimenCreationModel').getProperty('/tagID');
+        val = val.replace(/[^\d]/g, '');
+        var result = parseInt(val) + qty - 1;
+
+        var padded = result.toString().padStart(7, '0');
+        this.byId('label-tag').setText('Last Tag ID : #' + padded);
+
+      },
+
+      onTagIDInputChange(oEvent) {
+        var _oInput = oEvent.getSource();
+        var val = _oInput.getValue();
+        val = val.replace(/[^\d]/g, '');
+
+        var qty = this.getView().getModel('specimenCreationModel').getProperty('/value');
+        // {specimenCreationModel>/value}
+
+        var result = parseInt(val) + qty - 1;
+
+        var padded = result.toString().padStart(7, '0');
+        this.byId('label-tag').setText('Last Tag ID : #' + padded);
+      },
 
       onLinkPress(oEvent) {
 
-        var oList = oEvent.getSource().getParent().getParent().getParent();
-        oList.removeSelections();
-        var oItem = oEvent.getSource().getParent().getParent().getBindingContext().getObject();
+        // var oList = oEvent.getSource().getParent().getParent().getParent().getParent();
+        // oList.removeSelections();
+        var oItem = oEvent.getSource().getParent().getParent().getParent().getBindingContext().getObject();
 
         this.getRouter().navTo("specimen", {
           objectId: oItem.ID
@@ -98,16 +117,16 @@ sap.ui.define(
               items.forEach(item => {
                 // debugger;
 
-                var num = parseInt(item.seqNumber, 10); 
+                var num = parseInt(item.seqNumber, 10);
                 // Increment the number by 1
-                num += 1;
+                // num += 1;
                 // Convert the number back to a string and pad with leading zeros
                 var nextSeq = num.toString().padStart(3, '0');
 
                 map[item.ID] = {
                   ID: item.ID,
                   name: item.name,
-                  strainAlias: item.strainAlias + nextSeq + ' - ' + item.tagID,
+                  strainAlias: item.strainAlias + ' ' + item.seqNumber + ' -  #' + item.tagID,
                   stateIcon: item.stateIcon, nodes: []
                 };
               });
@@ -162,6 +181,12 @@ sap.ui.define(
           }
           )
 
+      },
+
+      getName: function (oContext) {
+
+        // return oContext.getProperty('strainName') + ' ( ' +  oContext.getProperty('plantedDate').toLocaleDateString() + ' ' + oContext.getProperty('plantedDate').toLocaleTimeString() + ' ) ';
+        return oContext.getProperty('strainName');//+ ' ( ' +  oContext.getProperty('plantedDate').toLocaleDateString() + ' ' + oContext.getProperty('plantedDate').toLocaleTimeString() + ' ) ';
       },
 
       _getProducts() {
@@ -262,7 +287,7 @@ sap.ui.define(
       onStatusCancelPress: function () {
         this.getOwnerComponent().getModel("view").setProperty("/busy", false)
         this.getOwnerComponent().getModel("view").setProperty("/busyDialog", false)
-        
+
         this._pStatusDialog.then(function (oFragment) {
           oFragment.close();
         });
@@ -272,6 +297,7 @@ sap.ui.define(
         var aItems = this.getView().getModel('collectionModel').getProperty("/selectedSpecimens");
         this.getOwnerComponent().getModel("view").setProperty("/busyDialog", true)
         this.changeSpecimenStatus(aItems).then((result) => {
+
           sap.m.MessageToast.show('Specimens updated');
           this.onStatusCancelPress();
         })
@@ -287,6 +313,26 @@ sap.ui.define(
             aPromises.push(
               this._updateSpecimen(specimen.getBindingContext().getObject(), statusModel)
             );
+
+
+            if (statusModel.sexUpdate) {
+              aPromises.push(
+                this._createCare(specimen.getBindingContext().getObject(), 'SX')
+              );
+            }
+
+            if (statusModel.stateUpdate) {
+              aPromises.push(
+                this._createCare(specimen.getBindingContext().getObject(), 'ST')
+              );
+            }
+
+            // Check the condition outside the switch for the default case
+            if (!statusModel.sexUpdate && !statusModel.stateUpdate && statusModel.comments !== '') {
+              // Add your logic here for when sexUpdate and stateUpdate are false, and comments is not 'initial'
+              aPromises.push(this._createCare(specimen.getBindingContext().getObject(), 'JN'));
+            }
+
           });
           Promise.all(aPromises)
             .then(results => {
@@ -340,7 +386,7 @@ sap.ui.define(
         var that = this;
         this.getOwnerComponent().getModel("view").setProperty("/busy", true)
         this.pruneSpecimens(aItems).then((result) => {
-      
+
           sap.m.MessageToast.show('Pruned');
           that.byId('list').getBinding("items").refresh(true);
           this.getOwnerComponent().getModel("view").setProperty("/busy", false)
@@ -471,8 +517,10 @@ sap.ui.define(
       },
 
       onCreateConfirmPress: function () {
-        
+
         this.getOwnerComponent().getModel("view").setProperty("/busyDialog", true)
+
+        // debugger;
 
         var aData = $.extend(true, {
         }, this.getView().getModel("specimenCreationModel").getProperty("/"));
@@ -488,7 +536,7 @@ sap.ui.define(
         if (!aData.tagID || !/^\d{7,}$/.test(aData.tagID)) {
           sap.m.MessageToast.show('TAG ID must be a number with at least 7 digits');
           return;
-      }
+        }
 
         if (aData.status === 'new') {
 
@@ -544,7 +592,7 @@ sap.ui.define(
             filters: new Filter("strainID", FilterOperator.EQ, strainID),
             template: new sap.ui.core.Item({
               key: "{ID}",
-              text: "{name} - {tagID}"
+              text: "{strainAlias} {seqNumber} - #{tagID}"
             })
           });
         } else {
@@ -679,6 +727,17 @@ sap.ui.define(
       },
 
       _formatSpecimen(data) {
+
+        var dialogSelect = this.byId('select.specimens');
+        var selectedItem = dialogSelect.getSelectedItem();
+        var seqNumber = 1;
+
+        if (selectedItem) {
+          var context = selectedItem.getBindingContext();
+          var object = context.getObject();
+          seqNumber = object.seqNumber;
+        }
+
         delete data.status
         delete data.multiple
         delete data.value
@@ -687,6 +746,8 @@ sap.ui.define(
         delete data.strainTagID
         delete data.comments
 
+        data.tagID = data.tagID.padStart(7, '0');
+
         data.state = { ID: 'e8c8bfd3-95de-498e-b4b1-aa591480db28' } // Alive
 
         data.strain = { ID: data.strainID };
@@ -694,7 +755,7 @@ sap.ui.define(
           data.seqNumber = 0;
           delete data.parentID;
         } else {
-          data.seqNumber = 1;
+          data.seqNumber = seqNumber + 1;
         }
         // debugger ;
         return data;

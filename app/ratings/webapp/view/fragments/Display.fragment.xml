@@ -28,7 +28,7 @@
                     <f:formElements>
                         <f:FormElement label="Tag ID">
                             <f:fields>
-                                <Text text="{tagID}" />
+                                <Text text="#{tagID}" />
                             </f:fields>
                         </f:FormElement>
                         <f:FormElement label="Strain Name">
@@ -38,7 +38,9 @@
                         </f:FormElement>
                         <f:FormElement label="Planted On">
                             <f:fields>
-                                <Text text="{plantedDate}" />
+                                <Text text="{
+                                        'path': 'plantedDate',
+                                        'type': 'sap.ui.model.type.DateTime'}" />
                             </f:fields>
                         </f:FormElement>
                         <f:FormElement label="State">
@@ -46,14 +48,26 @@
                                 <Text text="{stateDescription}" />
                             </f:fields>
                         </f:FormElement>
+                         <f:FormElement label="Generation">
+                            <f:fields>
+                                <Text text="{strainAlias} {seqNumber}" />
+                            </f:fields>
+                        </f:FormElement>
 						     <f:FormElement label="Last Care">
                             <f:fields>
-                                <Text text="{lastCare}" />
+                                <Text text="{
+                                        'path': 'lastCare',
+                                        'type': 'sap.ui.model.type.DateTime'}" />
                             </f:fields>
                         </f:FormElement>
                           <f:FormElement label="Specimen name">
                             <f:fields>
                                 <Text text="{name}" />
+                            </f:fields>
+                        </f:FormElement>
+                           <f:FormElement label="Parent" visible="{= ${parentID} !== null }">
+                            <f:fields>
+                                <Link id='link-parent' press="onLinkPress" />
                             </f:fields>
                         </f:FormElement>
                     </f:formElements>

@@ -39,13 +39,13 @@ sap.ui.define([], function () {
                 var days = Math.floor(delta / 86400);
 
                 if (days >= 4){
-                    return 'Error'
+                    return 'Warning'
                 } else {
                     // return color
                 }
             }
             else {
-                return 'Error';
+                return 'Warning';
             }
         }, 
         getDifferenceOfDays: function (olderDate, newestDate) {

@@ -138,7 +138,7 @@
 
                             <f:FormElement label="Comments">
                                 <f:fields>
-                                    <TextArea value="{careModel>/comments}" />
+                                    <TextArea value="{careModel>/description}" />
                                 </f:fields>
                             </f:FormElement>
                         </f:formElements>
