@@ -213,7 +213,7 @@
                                         autoAdjustWidth="true"
                                         items="{
 												path: '/Specimens',
-												sorter: { path: 'name' }
+												sorter: { path: 'seqNumber' }
 												}"
                                         enabled="{= ${specimenCreationModel>/strainID} !== '' ? true : false }"
                                     >

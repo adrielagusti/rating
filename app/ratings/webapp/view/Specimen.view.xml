@@ -16,7 +16,7 @@
         <subHeader>
             <Toolbar>
                 <ToolbarSpacer />
-                <Title text=" {i18n>form.specimen} ( #{tagID} ) " />
+                <Title text=" {i18n>form.specimen}" />
                 <ToolbarSpacer />
             </Toolbar>
         </subHeader>
@@ -43,19 +43,24 @@
                             />
                         </HBox> -->
                         <HBox justifyContent="End">
-                            <ObjectStatus
+                            <!-- <ObjectStatus
                                 text="{
                                         'path': 'plantedDate',
                                         'type': 'sap.ui.model.type.DateTime'}"
                                 class=" sapUiTinyMarginEnd sapUiTinyMarginTop"
+                            /> -->
+                            <ObjectStatus
+                                class="sapMObjectStatusLarge sapUiTinyMarginEnd"
+                                text="#{tagID}"
+                                state="{stateColor}"
                             />
                             <ObjectStatus
                                 class="sapUiTinyMarginTop"
-                                icon="sap-icon://appointment"
+                                icon="sap-icon://tag"
+                                state="{stateColor}"
                             />
                         </HBox>
                         <HBox justifyContent="End">
-                           
                             <dc:DateCountDown
                                 date="{plantedDate}"
                                 isFuture="true"
@@ -84,7 +89,7 @@
                             <ObjectStatus
                                 state="Warning"
                                 class="sapUiTinyMarginTop"
-                                icon= "{= ${sex} === 'F' ? 'sap-icon://female' : 'sap-icon://male' }"
+                                icon="{= ${sex} === 'F' ? 'sap-icon://female' : 'sap-icon://male' }"
                             />
                         </HBox>
                     </VBox>
@@ -96,12 +101,12 @@
                 expandable="false"
             >
                 <items>
-                      <IconTabFilter
+                    <IconTabFilter
                         key="info"
                         icon="sap-icon://hint"
                     >
                         <core:Fragment
-                            fragmentName="blackseeds.ratings.view.fragments.Display"
+                            fragmentName="blackseeds.ratings.view.fragments.SpecimenInformation"
                             type="XML"
                         />
                     </IconTabFilter>
@@ -109,21 +114,21 @@
                         key="notes"
                         icon="sap-icon://notes"
                     >
+                        <ObjectStatus
+                            class="sapUiSmallMargin"
+                            text="The specimen was planted on {
+                                        'path': 'plantedDate',
+                                        'type': 'sap.ui.model.type.DateTime'}"
+                            state="Information"
+                        />
                         <VBox>
-                            <SinglePlanningCalendar
-                                id="planing"
-                                startDate="{path: 'plantedDate'}"
-                                enableAppointmentsCreate="true"
-                            >
-                              
+                            <SinglePlanningCalendar id="planing">
                                 <views>
                                     <SinglePlanningCalendarMonthView
                                         key="MonthView"
                                         title="Month"
                                     />
-                          
                                 </views>
-                            
                                 <appointments>
                                     <unified:CalendarAppointment
                                         key="{ID}"
@@ -136,7 +141,7 @@
                             </SinglePlanningCalendar>
                         </VBox>
                     </IconTabFilter>
-                 
+
                     <IconTabFilter
                         key="people"
                         icon="sap-icon://timesheet"
@@ -164,7 +169,20 @@
                         key="people"
                         icon="sap-icon://camera"
                     >
+                        <HBox class="sapUiMediumMargin">
+                            <DateTimePicker
+                                value="{
+                                    'path': 'dayDetailModel>/photoDate',
+                                    'type': 'sap.ui.model.type.DateTime'}"
+                            />
+                            <Button
+                                press="onTakePhoto"
+                                text="{i18n>button.take}"
+                                icon="sap-icon://camera"
+                            />
+                        </HBox>
                         <VBox
+                            class="sapUiTinyMarginTop"
                             items="{ 
                                 path: 'photos',
                                 sorter: {
@@ -199,34 +217,161 @@
                                 </content>
                             </Panel>
                         </VBox>
-                        <HBox>
-                        <DateTimePicker
-                            value="{
-                                    'path': 'dayDetailModel>/photoDate',
-                                    'type': 'sap.ui.model.type.DateTime'}"
-                        />
-                        <Button
-                            press="onTakePhoto"
-                            text="{i18n>button.take}"
-                            icon="sap-icon://camera"
-                        />
-                        </HBox>
+                    </IconTabFilter>
+                    <IconTabFilter
+                        key="watering"
+                        icon="sap-icon://blur"
+                    >
+                        <Panel
+                            width="100%"
+                            expandable="true"
+                            expanded="true"
+                            headerText="Waterings"
+                            class="sapUiTinyMarginTop"
+                        >
+                            <Table
+                                items="{
+                            path: 'waterings',
+                            sorter: {
+                                path: 'date'
+                            }
+                        }"
+                            >
+                                <!-- <infoToolbar>
+                                <OverflowToolbar>
+                                    <Label text="Waterings of specimen" />
+                                </OverflowToolbar>
+                            </infoToolbar> -->
+                                <columns>
+                                    <Column width="50px">
+                                        <Text text="Liters" />
+                                    </Column>
+                                   <Column width="60px">
+                                        <Text text="Temp" />
+                                    </Column>
+                                      <Column width="60px">
+                                        <Text text="Electr" />
+                                    </Column>
+                                   <Column width="60px">
+                                        <Text text="pH" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="Date" />
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem vAlign="Middle">
+                                        <cells>
+                                            <!-- <ObjectIdentifier
+                                            title="{Name}"
+                                            text="{ProductId}"
+                                        />
+                                         -->
+                                            <!-- <Text
+                                            text="{Width} x {Depth} x {Height} {DimUnit}"
+                                        /> -->
+                                            <!-- <HBox justifyContent="SpaceBetween"> -->
+                                                <ObjectNumber
+                                                    number="{liters}"
+                                                    unit="lts"
+                                                />
+                                                <ObjectNumber
+                                                    number="{temp}"
+                                                    unit="°C"
+                                                />
+                                            <!-- </HBox> -->
+                                            <!-- <HBox justifyContent="SpaceBetween"> -->
+                                                <ObjectNumber
+                                                    number="{ec}"
+                                   
+                                                />
+                                                <ObjectNumber
+                                                    number="{ph}"
+                                       
+                                                />
+                                            <!-- </HBox> -->
+                                            <Text
+                                                text="{
+                                        'path': 'date',
+                                        'type': 'sap.ui.model.type.Date'}"
+                                            />
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </Panel>
+                        <Panel
+                            width="100%"
+                            expandable="true"
+                            expanded="false"
+                            headerText="Applications"
+                            class="sapUiTinyMarginTop"
+                        >
+                            <Table
+                                items="{
+                            path: 'applications',
+                            sorter: {
+                                path: 'date',
+                                group: true
+                                }
+                            }"
+                            >
+                                <columns>
+                                    <Column>
+                                        <Text text="Product" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="Quantity" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="Date" />
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem vAlign="Middle">
+                                        <cells>
+                                            <!-- <ObjectIdentifier
+                                            title="{Name}"
+                                            text="{ProductId}"
+                                        />
+                                         -->
+                                            <ObjectIdentifier
+                                                text="{productName}"
+                                            />
+
+                                            <ObjectNumber
+                                                number="{amount}"
+                                                unit="{unit}"
+                                            />
+
+                                            <Text
+                                                text="{
+                                                        'path': 'date',
+                                                        'type': 'sap.ui.model.type.Date'}"
+                                            />
+                                            <!-- <ObjectNumber
+                                                number="{temp}"
+                                                unit="°C"
+                                            />
+                                            <ObjectNumber
+                                                number="{ec}"
+                                                unit="S/m"
+                                            />
+                                            <ObjectNumber
+                                                number="{ph}"
+                                                unit="pH"
+                                            /> -->
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </Panel>
                     </IconTabFilter>
                 </items>
             </IconTabBar>
-
-            <!-- <Image
-                        class="sapUiTinyMarginTopBottom"
-                        src="https://www.johnlennon.com/wp-content/uploads/2024/05/250xNxJYMG-B-800a.jpg.pagespeed.ic.E9NGOhL7K3.webp"
-                        width="15rem"
-                    /> -->
         </content>
         <footer>
             <Toolbar>
-                <!-- <Button
-                    text="Add"
-                    press="onAddSpecimen"
-                /> -->
                 <ToolbarSpacer />
                 <Button
                     text="Back"

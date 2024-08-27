@@ -44,20 +44,25 @@ entity Specimens : managed {
       state       : Association to SpecimenStates;
       sex         : String(1) default 'F';
       
-      cares       : Composition of many Care on cares.specimen = $self;
+      cares       : Composition of many Cares on cares.specimen = $self;
       waterings   : Composition of many Waterings on waterings.specimen = $self;
       photos      : Composition of many Photos on photos.specimen = $self;
+      applications : Composition of many Applications on applications.specimen = $self;
 }
 
-entity Care : managed  {
+entity Cares : managed  {
   key ID          : UUID;
       specimen    : Association to Specimens;
       careType    : Association to CareTypes;
       date        : DateTime;
       description : String;
+      
+      waterings    : Composition of many Waterings on waterings.care = $self;
+      applications : Composition of many Applications on applications.care = $self;
+      photos       : Composition of many Photos on photos.care = $self;
 }
 
-entity Waterings : managed  {
+entity Waterings  {
   key ID          : UUID;
       specimen    : Association to Specimens;
       date        : DateTime;
@@ -66,22 +71,25 @@ entity Waterings : managed  {
       ec          : Decimal(6,2);
       temp        : Decimal(6,2);
       method      : String;
+      care        : Association to Cares;
 }
 
-entity Applications : managed {
+entity Applications {
   key ID          : UUID;
       specimen    : Association to Specimens;
       product     : Association to Products;
       date        : DateTime;
       amount      : Decimal(6,2);
       method      : String; //Spraying, water
+      care        : Association to Cares;
 }
 
-entity Photos : managed {
+entity Photos {
   key ID          : UUID;
       specimen    : Association to Specimens;
       date        : DateTime;
       publicId    : String;
+      care        : Association to Cares;
 }
 
 entity Products {

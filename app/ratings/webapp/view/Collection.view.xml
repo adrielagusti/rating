@@ -32,11 +32,12 @@
                     <VBox>
                         <MessageStrip
                             class=" sapUiTinyMarginBot"
-                            text="Need water or revision"
+                            text="Need revision or water"
                             type="Warning"
                             showIcon="true"
                         />
                         <VBox
+                            id='company-status'
                             items="{ 
                                 path: '/CompanySpecimensStatus',
                                 sorter: {
@@ -76,10 +77,11 @@
                     id='list'
                     items="{
                         path: '/Specimens',
-                        sorter: {
-                            path: 'strainName', 
-                            group: '.getName'
-                        }
+                        sorter: [
+                              { path: 'seqNumber', descending: false },
+                              { path: 'strainAlias', descending: true },
+                              { path: 'tagID', descending: false }
+                        ]
                     }"
                     mode="MultiSelect"
                     selectionChange="onSelectionChange"
@@ -102,11 +104,12 @@
                                     icon="sap-icon://multiselect-all"
                                     press="onSelectAction('all',$event)"
                                 />
+                               
                                 <Button
-                                    text="Display"
-                                    icon="sap-icon://display"
-                                    visible="{= ${collectionModel>/selectedSpecimens}.length === 1 }"
-                                    press="onDisplay"
+                                    text="Photo"
+                                    icon="sap-icon://camera"
+                                    visible="{= ${collectionModel>/selectedSpecimens}.length >= 1 }"
+                                    press="onMultiplePhotos"
                                 />
                                 <Button
                                     text="Water"
@@ -114,7 +117,12 @@
                                     visible="{= ${collectionModel>/selectedSpecimens}.length >= 1 }"
                                     press="onApplication"
                                 />
-
+                             <!-- <Button
+                                    text="Display"
+                                    icon="sap-icon://display"
+                                    visible="{= ${collectionModel>/selectedSpecimens}.length === 1 }"
+                                    press="onDisplay"
+                                /> -->
                                 <Button
                                     text="Change status"
                                     icon="sap-icon://electronic-medical-record"
@@ -175,7 +183,7 @@
                                     class="sapUiMediumMarginEnd"
                                 /> -->
                                 <Label
-                                    text="{strainAlias} {seqNumber}"
+                                    text="{strainName} {seqNumber}"
                                     class="sapUiTinyMarginEnd"
                                 />
                                 <!-- text="{stateDescription}" -->

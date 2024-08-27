@@ -9,7 +9,8 @@ sap.ui.define(
     "../model/models",
     'sap/ui/unified/CalendarLegendItem',
     'sap/ui/unified/DateTypeRange',
-    "../model/formatter"
+    "../model/formatter",
+    'sap/m/GroupHeaderListItem',
     // "../controls/Cloudinary"
   ],
 
@@ -21,7 +22,8 @@ sap.ui.define(
     models,
     CalendarLegendItem,
     DateTypeRange,
-    formatter
+    formatter,
+    GroupHeaderListItem
     // Cloudinary
   ) {
     "use strict";
@@ -44,6 +46,11 @@ sap.ui.define(
           careTypes: []
         })), 'careModel');
 
+        this.getView().setModel(new JSONModel($.extend(true, {}, {
+          parent: {},
+          childs: []
+        })), 'specimenModel');
+
       },
 
       getRouter() {
@@ -51,7 +58,9 @@ sap.ui.define(
       },
 
       onBroBack: function () {
-        history.go(-1);
+        this.getRouter().navTo("collection", {
+        });
+
       },
 
       handleAppointmentSelect: function (oEvent) {
@@ -106,24 +115,26 @@ sap.ui.define(
       onTakePhoto: async function () {
 
         var that = this;
-        var path = this.getView().getObjectBinding().getPath();
+        // var path = this.getView().getObjectBinding().getPath();
 
-        const regex = /guid'([0-9a-fA-F-]{36})'/;
-        const specimen = path.match(regex)[1];
+        // const regex = /guid'([0-9a-fA-F-]{36})'/;
+        // const specimen = path.match(regex)[1];
+
+        var specimen = this.getView().getBindingContext().getObject()
 
         cloudinary.setCloudName('hgyusg0s0');
-        // cloudinary.setAPIKey(process.env.CLOUDINARY_API);
         cloudinary.setAPIKey('641639681197656');
 
         cloudinary.openUploadWidget({
           uploadPreset: "xondth9e",
           showAdvancedOptions: true,
-          sources: ['camera']
+          sources: ['camera'],
+          folder: specimen.tagID,
         }, (error, result) => {
 
           if (result.info.secure_url !== undefined) {
-            var p1 = that._createCare(specimen, 'PH')
-            var p2 = that._createPhoto(specimen, result.info.secure_url)
+            var p1 = that._createCare(specimen.ID, 'PH')
+            var p2 = that._createPhoto(specimen.ID, result.info.secure_url)
 
             Promise.all([p1, p2])
               .then(results => {
@@ -154,25 +165,26 @@ sap.ui.define(
         });
       },
 
-      // onAddCare() {
-      //   // 
-      //   // this.getView().getModel("specimenCreationModel").setProperty("/", models.initialSpecimen);
-      //   if (!this._pCreateDialog) {
-      //     this._pCreateDialog = sap.ui.core.Fragment.load({
-      //       id: this.getView().getId(),
-      //       name: "blackseeds.ratings.view.fragments.StatusDialog",
-      //       controller: this
-      //     }).then(function name(oFragment) {
-      //       this.getView().addDependent(oFragment);
 
-      //       // oFragment.addStyleClass(this.getOwnerComponent().getContentDensityClass());
-      //       return oFragment;
-      //     }.bind(this));
-      //   }
-      //   this._pCreateDialog.then(function (oFragment) {
-      //     oFragment.open();
-      //   });
-      // },
+      handleAppointmentSelect(oEvent) {
+        var oAppointment = oEvent.getParameter("appointment");
+        
+        if (!this._pProductDialog) {
+          this._pProductDialog = sap.ui.core.Fragment.load({
+            id: this.getView().getId(),
+            name: "blackseeds.ratings.view.fragments.ApplicationEditDialog",
+            controller: this
+          }).then(function name(oFragment) {
+            this.getView().addDependent(oFragment);
+            return oFragment;
+          }.bind(this));
+        }
+        this._pProductDialog.then(function (oFragment) {
+          oFragment.open();
+        });
+
+        // })
+      },
 
       onLinkPress(oEvent) {
 
@@ -185,15 +197,44 @@ sap.ui.define(
 
       },
 
-      _setParent(specimen) {
-        
+
+      onChildPress(oEvent) {
+
+        var oItem = oEvent.getSource().getText();
+        var result = oItem.substring(1);
+
+        var aChilds = this.getView().getModel('specimenModel').getProperty('/childs').find((a) => a.tagID === result);
+
+        this.getRouter().navTo("specimen", {
+          objectId: aChilds.ID
+        });
+
+      },
+
+
+
+      _setFamily(specimen) {
+        this.byId('childs').setVisible(false)
         if (specimen.parentID) {
           this._getSpecimen(specimen.parentID).then((parent) => {
-            // debugger;
-            // this.getView().getModel().setProperty("/parentTagID", parent.tagID)
-            this.getView().byId('link-parent').setText('#' + parent.tagID)
+            this.getView().getModel('specimenModel').setProperty("/parent", parent);
           })
         }
+
+        this._getChilds(specimen.ID).then((childs) => {
+          if (childs.results.length > 0) {
+            this.byId('childs').setVisible(true)
+            this.getView().getModel('specimenModel').setProperty("/childs", childs.results);
+          }
+        })
+
+      },
+
+      getGroupHeader: function (oGroup){
+        debugger;
+        return new GroupHeaderListItem({
+          title: oGroup.key
+        });
       },
 
       _setCalendar(specimen, careTypes, cares, lifeCycles) {
@@ -203,6 +244,8 @@ sap.ui.define(
         // var oLeg = this.byId("legend");
         // var oCal = this.byId("calendar");
         var oPla = this.byId("planing");
+
+        oPla.setStartDate(specimen.plantedDate)
         // var index = 0;
         // oCal.removeAllSpecialDates();
         // oLeg.removeAllItems();
@@ -299,7 +342,7 @@ sap.ui.define(
 
             this._setCalendar(specimen, careTypes, cares, lifeCycles);
 
-            this._setParent(specimen);
+            this._setFamily(specimen);
             // this._setPhotos(photos.results);
 
           })
@@ -358,6 +401,18 @@ sap.ui.define(
         }
         return new Promise((res, rej) => {
           this.getView().getModel().read(sPath, {
+            success: res,
+            error: rej
+          })
+        });
+
+      },
+
+      _getChilds(specimenID) {
+        var aFilter = [new Filter("parentID", FilterOperator.EQ, specimenID)];
+        return new Promise((res, rej) => {
+          this.getView().getModel().read('/Specimens', {
+            filters: aFilter,
             success: res,
             error: rej
           })

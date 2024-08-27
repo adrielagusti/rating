@@ -1,0 +1,148 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:unified="sap.ui.unified"
+>
+    <!-- <VBox class="sapUiSmallMargin"> -->
+    <Panel
+        width="100%"
+        expandable="true"
+        expanded="true"
+        headerText="Information"
+        class="sapUiTinyMarginTop"
+    >
+        <f:Form editable="false">
+            <f:layout>
+                <f:ResponsiveGridLayout
+                    labelSpanXL="3"
+                    labelSpanL="3"
+                    labelSpanM="3"
+                    labelSpanS="12"
+                    adjustLabelSpan="false"
+                    emptySpanXL="4"
+                    emptySpanL="4"
+                    emptySpanM="4"
+                    emptySpanS="0"
+                    columnsXL="1"
+                    columnsL="1"
+                    columnsM="1"
+                />
+            </f:layout>
+            <f:formContainers>
+                <f:FormContainer>
+                    <f:formElements>
+                        <!-- <f:FormElement label="Tag ID">
+                            <f:fields>
+                                <Text text="#{tagID}" />
+                            </f:fields>
+                        </f:FormElement> -->
+                        <f:FormElement label="Strain Name">
+                            <f:fields>
+                                <Text text="{strainName}" />
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement label="Planted On">
+                            <f:fields>
+                                <Text
+                                    text="{
+                                        'path': 'plantedDate',
+                                        'type': 'sap.ui.model.type.DateTime'}"
+                                />
+                            </f:fields>
+                        </f:FormElement>
+                        <!-- <f:FormElement label="State">
+                            <f:fields>
+                                <Text text="{stateDescription}" />
+                            </f:fields>
+                        </f:FormElement> -->
+                        <f:FormElement label="Generation">
+                            <f:fields>
+                                <Text text="{strainAlias} {seqNumber}" />
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement label="Last Care">
+                            <f:fields>
+                                <Text
+                                    visible="{= ${lastCare} !== null }"
+                                    text="{
+                                        'path': 'lastCare',
+                                        'type': 'sap.ui.model.type.DateTime'}"
+                                />
+                                <Text
+                                    visible="{= ${lastCare} === null }"
+                                    text="NO INFORMATION"
+                                />
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement label="Specimen name">
+                            <f:fields>
+                                <Text text="{name}" />
+                            </f:fields>
+                        </f:FormElement>
+                    </f:formElements>
+                </f:FormContainer>
+                <!-- <f:FormContainer title="Specimen Family">
+                    <f:formElements>
+                        <f:FormElement
+                            label="Parent"
+                            visible="{= ${parentID} !== null }"
+                        >
+                            <f:fields>
+                                <Link
+                                    press="onLinkPress"
+                                    text="#{specimenModel>/parent/tagID}"
+                                />
+                            </f:fields>
+                        </f:FormElement>
+                        <f:FormElement
+                            label="Childs"
+                            id="childs"
+                        >
+                            <f:fields>
+                                <List
+                                    items="{
+                                    path: 'specimenModel>/childs',
+                                    sorter: 
+                                        { path: 'tagID', descending: false }                                        
+                                    }"
+                                    width="50%"
+                                >
+                                    <InputListItem>
+                                        <HBox
+                                            alignContent="SpaceBetween"
+                                            justifyContent="SpaceBetween"
+                                        >
+                                            <Link
+                                                text="#{specimenModel>tagID}"
+                                                press="onChildPress"
+                                            />
+                                            <ObjectStatus
+                                                icon="{specimenModel>stateIcon}"
+                                                state="{specimenModel>stateColor}"
+                                            />
+                        
+                                        </HBox>
+                                    </InputListItem>
+                                </List>
+                            </f:fields>
+                        </f:FormElement>
+                    </f:formElements>
+                </f:FormContainer> -->
+            </f:formContainers>
+        </f:Form>
+    </Panel>
+    <Panel
+        width="100%"
+        expandable="true"
+        expanded="false"
+        headerText="Family"
+        class="sapUiTinyMarginTop"
+    >
+        <core:Fragment
+            fragmentName="blackseeds.ratings.view.fragments.SpecimenFamily"
+            type="XML"
+        />
+    </Panel>
+</core:FragmentDefinition>

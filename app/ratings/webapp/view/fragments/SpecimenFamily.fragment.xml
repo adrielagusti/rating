@@ -1,0 +1,95 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:unified="sap.ui.unified"
+>
+    <!-- <VBox class="sapUiSmallMargin"> -->
+    <f:Form
+        editable="false"
+    >
+        <f:layout>
+            <f:ResponsiveGridLayout
+                labelSpanXL="3"
+                labelSpanL="3"
+                labelSpanM="3"
+                labelSpanS="12"
+                adjustLabelSpan="false"
+                emptySpanXL="4"
+                emptySpanL="4"
+                emptySpanM="4"
+                emptySpanS="0"
+                columnsXL="1"
+                columnsL="1"
+                columnsM="1"
+            />
+        </f:layout>
+        <f:formContainers>
+            <f:FormContainer>
+                <f:formElements>
+                    <f:FormElement
+                        label="Parent of Specimen"
+                        visible="{= ${parentID} !== null }"
+                    >
+                        <f:fields>
+                            <HBox>
+                                <Link
+                                    press="onLinkPress"
+                                    text="#{specimenModel>/parent/tagID}"
+                                    class="sapUiMediumMarginBegin"
+                                />
+                                <ObjectStatus
+                                    icon="{specimenModel>/parent/stateIcon}"
+                                    state="{specimenModel>/parent/stateColor}"
+                                    class="sapUiLargeMarginBegin"
+                                />
+                            </HBox>
+                        </f:fields>
+                    </f:FormElement>
+                </f:formElements>
+            </f:FormContainer>
+            <f:FormContainer>
+                <f:formElements>
+                    <f:FormElement
+                        label="Direct Childs"
+                        id="childs"
+                    >
+                        <f:fields>
+                            <List
+                                items="{
+                                    path: 'specimenModel>/childs',
+                                    sorter: 
+                                        { path: 'tagID', descending: false }                                        
+                                    }"
+                                width="50%"
+                            >
+                                <InputListItem>
+                                    <HBox
+                                        alignContent="SpaceBetween"
+                                        justifyContent="SpaceBetween"
+                                    >
+                                        <Link
+                                            text="#{specimenModel>tagID}"
+                                            press="onChildPress"
+                                        />
+                                        <ObjectStatus
+                                            icon="{specimenModel>stateIcon}"
+                                            state="{specimenModel>stateColor}"
+                                        />
+                                        <!-- <Text
+                                    text="{
+                                        'path': 'plantedDate',
+                                        'type': 'sap.ui.model.type.DateTime'}"
+                                /> -->
+                                    </HBox>
+                                </InputListItem>
+                            </List>
+                        </f:fields>
+                    </f:FormElement>
+                </f:formElements>
+            </f:FormContainer>
+        </f:formContainers>
+    </f:Form>
+    <!-- </VBox> -->
+</core:FragmentDefinition>

@@ -31,7 +31,8 @@
     "build": "cds build --clean;cp gen/srv/srv/csn.json srv/gen/;cp -r gen/db/src/gen db/src npx cds-dbm deploy --load-via delta docker-compose up",
     "adri:1": "cds add data",
     "adri:2": "heroku pg:push rating postgresql-acute-84663 --app blackseeds-ratings",
-    "adri:3": "heroku pg:reset --app blackseeds-ratings"
+    "adri:3": "heroku pg:reset --app blackseeds-ratings",
+    "adri:4": "npx cds-dbm deploy --load-via delta --auto-undeploy"
   },
   "engines": {
     "node": "^18"
@@ -81,18 +82,6 @@
             },
             "chei": {
               "password": "Gesell20"
-            },
-            "guest1": {
-              "password": "loro1111"
-            },
-            "guest2": {
-              "password": "pato2222"
-            },
-            "guest3": {
-              "password": "rata3333"
-            },
-            "guest4": {
-              "password": "sapo4444"
             },
             "*" : false
           }

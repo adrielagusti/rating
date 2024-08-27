@@ -295,9 +295,11 @@ sap.ui.define(
 
       onStatusConfirmPress: function () {
         var aItems = this.getView().getModel('collectionModel').getProperty("/selectedSpecimens");
+        var that = this;
         this.getOwnerComponent().getModel("view").setProperty("/busyDialog", true)
         this.changeSpecimenStatus(aItems).then((result) => {
 
+          that.byId('company-status').getBinding("items").refresh(true);
           sap.m.MessageToast.show('Specimens updated');
           this.onStatusCancelPress();
         })
@@ -412,18 +414,19 @@ sap.ui.define(
 
             var specimen = specimenModel.getBindingContext().getObject()
 
-            aPromises.push(
-              this._createCare(specimen, careTypeName)
-            );
-            aPromises.push(
-              this._createWater(specimen)
-            );
+            this._createCare(specimen, careTypeName).then((care) => {
 
-            addedProducts.forEach((product) => {
               aPromises.push(
-                this._createApplication(specimen, product)
+                this._createWater(specimen, care)
               );
+
+              addedProducts.forEach((product) => {
+                aPromises.push(
+                  this._createApplication(specimen, product, care)
+                );
+              })
             })
+
           });
 
           Promise.all(aPromises)
@@ -438,11 +441,47 @@ sap.ui.define(
 
       },
 
+      processSpecimen: async function (specimens) {
+
+        var aPromises = [];
+
+        var addedProducts = this.getView().getModel("careModel").getProperty("/water").onlyWater === true ? [] :
+          this.getView().getModel("careModel").getProperty("/application").products.filter((a) => a.selected === true)
+
+        var careTypeName = addedProducts.length > 0 ? 'WP' : 'OW'; // Water product or Only Water
+
+
+        try {
+
+          for (const specimenModel of specimens) {
+            const specimen = specimenModel.getBindingContext().getObject();
+            const care = await this._createCare(specimen, careTypeName);
+
+            const aPromises = [
+              this._createWater(specimen, care)
+            ];
+
+            addedProducts.forEach(product => {
+              aPromises.push(this._createApplication(specimen, product, care));
+            });
+
+            // Wait for all the promises related to the current specimen
+            await Promise.all(aPromises);
+          }
+
+          // All specimens processed successfully
+          console.log('All specimens processed successfully');
+        } catch (error) {
+          console.error('ERROR', error);
+        }
+      },
+
       onApplicationConfirmPress() {
         var aItems = this.getView().getModel('collectionModel').getProperty("/selectedSpecimens");
         this.getOwnerComponent().getModel("view").setProperty("/busyDialog", true)
         var that = this;
-        this.applicateToSpecimens(aItems).then((result) => {
+        // this.applicateToSpecimens(aItems).then((result) => {
+        this.processSpecimen(aItems).then((result) => {
           sap.m.MessageToast.show('Specimens have ate');
           that.byId('list').getBinding("items").refresh(true);
           that.onApplicationCancelPress();
@@ -461,7 +500,7 @@ sap.ui.define(
           if (!this._pProductDialog) {
             this._pProductDialog = sap.ui.core.Fragment.load({
               id: this.getView().getId(),
-              name: "blackseeds.ratings.view.fragments.ProductWaterDialog",
+              name: "blackseeds.ratings.view.fragments.ApplicationCreateDialog",
               controller: this
             }).then(function name(oFragment) {
               this.getView().addDependent(oFragment);
@@ -703,9 +742,9 @@ sap.ui.define(
         });
       },
 
-      _createWater(specimen) {
+      _createWater(specimen, care) {
         var water = this.getView().getModel("careModel").getProperty("/water");
-        var oData = this._formatWatering(specimen, water);
+        var oData = this._formatWatering(specimen, water, care);
         return new Promise((resolve, reject) => {
           this.getView().getModel().create('/Waterings', oData, {
             success: resolve,
@@ -714,14 +753,19 @@ sap.ui.define(
         });
       },
 
-      _formatWatering(specimen, water) {
+      _formatWatering(specimen, water, care) {
         var selected = this.getView().getModel('collectionModel').getProperty('/selectedSpecimens').length;
         return {
           specimen: { ID: specimen.ID },
           // product: {ID: product.ID},
           date: this.getView().getModel("careModel").getProperty("/date"),
           liters: parseFloat((water.liters / selected), 2).toFixed(2),
-          method: water.method
+          // liters: water.liters,
+          ec: water.ec,
+          temp: water.temp,
+          ph: water.ph,
+          method: water.method,
+          care: { ID: care.ID },
           // ...water,
         }
       },
@@ -761,8 +805,8 @@ sap.ui.define(
         return data;
       },
 
-      _createApplication(specimen, product) {
-        var oData = this._formatApplication(specimen, product);
+      _createApplication(specimen, product, care) {
+        var oData = this._formatApplication(specimen, product, care);
         return new Promise((resolve, reject) => {
           this.getView().getModel().create('/Applications', oData, {
             success: resolve,
@@ -771,7 +815,7 @@ sap.ui.define(
         });
       },
 
-      _formatApplication(specimen, product) {
+      _formatApplication(specimen, product, care) {
         var selected = this.getView().getModel('collectionModel').getProperty('/selectedSpecimens').length;
 
         return {
@@ -779,7 +823,8 @@ sap.ui.define(
           product: { ID: product.ID },
           date: this.getView().getModel("careModel").getProperty("/date"),
           amount: parseFloat((product.amount / selected), 2).toFixed(2),
-          method: 'Water'
+          method: 'Water',
+          care: { ID: care.ID }
         }
       },
 
@@ -799,50 +844,6 @@ sap.ui.define(
           careType: { ID: this.getView().getModel("careModel").getProperty("/careTypes").find((a) => a.name === careTypeName).ID },
           description: this.getView().getModel("careModel").getProperty("/description")
         }
-      },
-
-      handleUploadComplete(oEvent) {
-        var sResponse = oEvent.getParameter("response"),
-          aRegexResult = /\d{4}/.exec(sResponse),
-          iHttpStatusCode = aRegexResult && parseInt(aRegexResult[0]),
-          sMessage;
-        if (sResponse) {
-          sMessage = iHttpStatusCode === 200 ? sResponse + " (Upload Success)" : sResponse + " (Upload Error)";
-          // debugger
-
-          sap.m.MessageToast.show(sMessage);
-          // debugger
-        }
-      },
-
-      // handleUploadPress: function () {
-      //   var oFileUploader = this.byId("fileUploader");
-      //   var that = this;
-      //   oFileUploader.checkFileReadable().then(function () {
-      //     // that._createPhoto().then((data) => { 
-      //     // debugger;
-      //     // oFileUploader.setProperty('name','TESTNAME');
-      //     // oFileUploader.setName('asd');
-      //     oFileUploader.upload();
-      //     // debugger  
-      //   // });
-      //   }, function (error) {
-      //     MessageToast.show("The file cannot be read. It may have changed.");
-      //   }).then(function () {
-      //     oFileUploader.clear();
-      //   });
-      // },
-
-      _deletePhoto(guid) {
-        // var oData = ({name: 'test' , content: 'AAAAAAAAA'});
-        var sPath = "/SpecimenPhotos(guid'" + guid + "')"
-
-        return new Promise((resolve, reject) => {
-          this.getView().getModel().remove(sPath, {
-            success: resolve,
-            error: reject
-          });
-        });
       },
 
       _getStrainsNumber() {

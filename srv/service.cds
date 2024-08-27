@@ -57,6 +57,7 @@ service BlackSeedsService {
                 strain.name       as strainName,
                 cares,
                 waterings,
+                applications,
                 photos,
                 MAX(
                     cares.date
@@ -103,7 +104,7 @@ service BlackSeedsService {
         }
 
     entity Cares                  as
-        projection on blackseeds.Care {
+        projection on blackseeds.Cares {
             key ID,
                 specimen,
                 careType.name        as careName,
@@ -112,7 +113,9 @@ service BlackSeedsService {
                 careType.icon        as icon,
                 careType,
                 date,
-                description
+                description,
+                waterings, 
+                applications
         }
 
 
@@ -126,7 +129,8 @@ service BlackSeedsService {
             temp,
             ec,
             ph,
-            method
+            method,
+            care
         }
 
     entity Applications           as
@@ -137,7 +141,8 @@ service BlackSeedsService {
                 product.name as productName,
                 date,
                 amount,
-                method
+                method, 
+                care
         }
 
     entity Photos                 as

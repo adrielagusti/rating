@@ -1,0 +1,242 @@
+<core:FragmentDefinition
+    xmlns:launchpad="sap.ushell.ui.launchpad"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+>
+    <Dialog
+        title="{= ${collectionModel>/selectedSpecimens}.length } {i18n>dialog.selectedspe}"
+        contentWidth="60%"
+        busy="{collectionModel>/createDialogBusy}"
+        stretch="true"
+    >
+        <content>
+            <f:Form editable="true">
+                <f:layout>
+                    <f:ResponsiveGridLayout
+                        labelSpanXL="4"
+                        labelSpanL="4"
+                        labelSpanM="4"
+                        labelSpanS="12"
+                        adjustLabelSpan="false"
+                        emptySpanXL="0"
+                        emptySpanL="0"
+                        emptySpanM="0"
+                        emptySpanS="0"
+                        columnsXL="2"
+                        columnsL="2"
+                        columnsM="2"
+                        singleContainerFullSize="false"
+                    />
+                </f:layout>
+                <f:formContainers>
+                    <f:FormContainer title="{i18n>form.water}">
+                        <!-- ID;parentID;breedType;seqNumber;strain_ID;clone;name;comments;tagID -->
+                        <f:formElements>
+                            <f:FormElement>
+                                <f:fields>
+                                    <HBox>
+                                        <StepInput
+                                            value="{careModel>/water/liters}"
+                                            displayValuePrecision="1"
+                                            min="1"
+                                            step="1"
+                                            width="90%"
+                                        />
+                                        <Label
+                                            text="{i18n>form.liters}"
+                                            class="sapUiTinyMarginTop"
+                                        />
+                                    </HBox>
+                                </f:fields>
+                            </f:FormElement>
+
+                            <f:FormElement>
+                                <f:fields>
+                                    <HBox>
+                                        <StepInput
+                                            value="{careModel>/water/temp}"
+                                            displayValuePrecision="1"
+                                            min="1"
+                                            step="1"
+                                            width="90%"
+                                        />
+                                        <Label
+                                            text="(°C) {i18n>form.temp}"
+                                            class="sapUiTinyMarginTop"
+                                        />
+                                    </HBox>
+                                </f:fields>
+                            </f:FormElement>
+
+                            <f:FormElement>
+                                <f:fields>
+                                    <HBox>
+                                        <StepInput
+                                            value="{careModel>/water/ph}"
+                                            displayValuePrecision="2"
+                                            min="1"
+                                            step="0.5"
+                                            width="90%"
+                                        />
+                                        <Label
+                                            text="pH"
+                                            class="sapUiTinyMarginTop"
+                                        />
+                                    </HBox>
+                                </f:fields>
+                            </f:FormElement>
+
+                            <f:FormElement>
+                                <f:fields>
+                                    <HBox>
+                                        <StepInput
+                                            value="{careModel>/water/ec}"
+                                            displayValuePrecision="2"
+                                            min="1"
+                                            step="50"
+                                            width="90%"
+                                        />
+                                        <Label
+                                            text="{i18n>form.electrocond}"
+                                            class="sapUiTinyMarginTop"
+                                        />
+                                    </HBox>
+                                </f:fields>
+                            </f:FormElement>
+
+                            <f:FormElement>
+                                <f:fields>
+                                    <!-- <VBox
+                                        justifyContent="End"
+                                        alignContent="End"
+                                        alignItems="End"
+                                    > -->
+                                    <!-- <HBox>
+                                       
+                                    </HBox> -->
+                                    <VBox
+                                        justifyContent="End"
+                                        alignContent="End"
+                                        alignItems="End"
+                                    >
+                                        <FlexBox>
+                                            <Text
+                                                text="Only water"
+                                                class="sapUiTinyMarginEnd"
+                                            />
+                                            <CheckBox
+                                                selected="{careModel>/water/onlyWater}"
+                                            />
+                                            <!-- <Switch
+                                            state="{careModel>/onlyWater}"
+                                            customTextOn=" "
+                                            customTextOff=" "
+                                        >
+                                            <layoutData>
+                                                <FlexItemData growFactor="1" />
+                                            </layoutData>
+                                        </Switch> -->
+                                        </FlexBox>
+                                    </VBox>
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                    <f:FormContainer
+                        visible="{= ${careModel>/water/onlyWater} === false }"
+                        title="{i18n>form.nutrients}"
+                    >
+                        <f:formElements>
+                            <f:FormElement>
+                                <f:fields>
+                                    <!-- <ComboBox
+                                        items="{/Specimens}"
+                                        selectedKey="{careModel>/parentID}"
+                                        selectionChange=".onChangeSanctionSubtype"
+                                        
+                                    >
+                                        <core:Item
+                                            key="{ID}"
+                                            text="{name}"
+                                        />
+                                    </ComboBox> -->
+
+                                    <List
+                                        backgroundDesign="Solid"
+                                        items="{careModel>/application/products}"
+                                    >
+                                        <CustomListItem>
+                                            <FlexBox>
+                                                <!-- <Text text="of"/> -->
+                                                <!-- <Select
+                                                    forceSelection="false"
+                                                    selectedKey="{careModel>/productID}"
+                                                    autoAdjustWidth="true"
+                                                    items="{
+                                                    path: '/Products',
+                                                    sorter: { path: 'name' }
+                                                    }"
+                                             
+                                                >
+                                                    <core:Item
+                                                        key="{ID}"
+                                                        text="{name} "
+                                                    />
+                                                </Select> -->
+
+                                                <StepInput
+                                                    value="{careModel>amount}"
+                                                    displayValuePrecision="2"
+                                                    min="0.5"
+                                                    step="0.5"
+                                                    width="90%"
+                                                    enabled="{= ${careModel>selected} === true }"
+                                                />
+                                                <!-- <Input
+                                                    value="{careModel>amount}"
+                                                    class="sapUiTinyMarginBegin"
+                                                    width="70%"
+                                                    type="Number"
+                                                /> -->
+
+                                                <Text
+                                                    text="{careModel>name}"
+                                                    width="170px"
+                                                />
+
+                                                <CheckBox selected="{careModel>selected}"
+                                            
+                           
+                                                />
+                                                <!-- <Label text="{careModel>unit}" class="sapUiTinyMarginTop"/> -->
+                                            </FlexBox>
+                                        </CustomListItem>
+                                    </List>
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                
+                </f:formContainers>
+            </f:Form>
+        </content>
+        <beginButton>
+            <Button
+                text="{i18n>confirm}"
+                icon="sap-icon://add"
+                type="Emphasized"
+                press=".onApplicationConfirmPress"
+            />
+        </beginButton>
+        <endButton>
+            <Button
+                text="{i18n>cancel}"
+                icon="sap-icon://sys-cancel"
+                type="Reject"
+                press=".onApplicationCancelPress"
+            />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>
