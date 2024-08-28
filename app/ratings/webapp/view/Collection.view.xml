@@ -73,6 +73,22 @@
                 class="sapUiTinyMarginTop"
                 visible="{= ${collectionModel>/mode} === 'grid' }"
             >
+                <HBox>
+                    <Label
+                        text="Alive only: "
+                        class="sapUiTinyMarginTop"
+                    />
+                    <Switch
+                        state="false"
+                        customTextOn="Yes"
+                        customTextOff="No"
+                        change="onSwitchChange"
+                    />
+                </HBox>
+                <!-- <layoutData>
+                        <FlexItemData growFactor="1" />
+                    </layoutData>
+                </Switch> -->
                 <List
                     id='list'
                     items="{
@@ -81,11 +97,12 @@
                               { path: 'seqNumber', descending: false },
                               { path: 'strainAlias', descending: true },
                               { path: 'tagID', descending: false }
-                        ]
+                        ] 
                     }"
                     mode="MultiSelect"
                     selectionChange="onSelectionChange"
                 >
+                    <!-- filters: [{ path: 'stateDescription', operator: 'NE', value1: 'Harvested' }] -->
                     <!-- group: true -->
                     <headerToolbar>
                         <OverflowToolbar>
@@ -104,7 +121,7 @@
                                     icon="sap-icon://multiselect-all"
                                     press="onSelectAction('all',$event)"
                                 />
-                               
+
                                 <Button
                                     text="Photo"
                                     icon="sap-icon://camera"
@@ -117,7 +134,7 @@
                                     visible="{= ${collectionModel>/selectedSpecimens}.length >= 1 }"
                                     press="onApplication"
                                 />
-                             <!-- <Button
+                                <!-- <Button
                                     text="Display"
                                     icon="sap-icon://display"
                                     visible="{= ${collectionModel>/selectedSpecimens}.length === 1 }"

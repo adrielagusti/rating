@@ -57,6 +57,9 @@ sap.ui.define([
                 method: 'Manual'
             },
 
+
+            multiplePhotos: [{}],
+
             initialWater: {
                 date: '',
                 liters: 2,

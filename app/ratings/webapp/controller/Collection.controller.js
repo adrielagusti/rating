@@ -21,6 +21,7 @@ sap.ui.define(
         this.getRouter().getRoute("collection").attachPatternMatched(this._onObjectMatched, this);
 
         this.getView().setModel(new JSONModel($.extend(true, {}, models.initialStatus)), 'statusModel');
+        this.getView().setModel(new JSONModel($.extend(true, {}, models.multiplePhotos)), 'multiplePhotoModel');
         this.getView().setModel(new JSONModel($.extend(true, {}, models.initialSpecimen)), 'specimenCreationModel');
         this.getView().setModel(new JSONModel($.extend(true, {}, models.initialCollection)), 'collectionModel');
         this.getView().setModel(new JSONModel($.extend(true, {}, {
@@ -84,6 +85,124 @@ sap.ui.define(
 
         this.getRouter().navTo("specimen", {
           objectId: oItem.ID
+        });
+
+      },
+
+      onSwitchChange(oEvent) {
+
+        var res = oEvent.getSource().getState();
+
+        var oList = this.getView().byId('list');
+
+        if (!oList) {
+          console.error('List control not found');
+          return;
+        }
+        // debugger;
+        // Get the binding of the items property
+        var oBinding = oList.getBinding('items');
+
+        if (!oBinding) {
+          console.error('Items binding not found');
+          return;
+        }
+
+        // Remove all filters
+        if (res === false) {
+          oBinding.filter([]);
+        } else {
+          oBinding.filter([new Filter("stateDescription", FilterOperator.EQ, 'Alive'),
+          new Filter("stateDescription", FilterOperator.EQ, 'Sick')]);
+        }
+        // debugger;
+
+      },
+
+      onMultiplePhotos() {
+
+        var aSelected = this.getView().byId('list').getSelectedItems();
+        var newArray = [];
+
+        aSelected.forEach(specimen => {
+          var oSpecimen = specimen.getBindingContext().getObject()
+
+          newArray.push({
+            photo: false,
+            ...oSpecimen
+          })
+
+        });
+
+        this.getView().getModel('multiplePhotoModel').setProperty('/photos', newArray);
+
+        if (!this._pPhotosDialog) {
+          this._pPhotosDialog = sap.ui.core.Fragment.load({
+            id: this.getView().getId(),
+            name: "blackseeds.ratings.view.fragments.PhotosDialog",
+            controller: this
+          }).then(function name(oFragment) {
+            this.getView().addDependent(oFragment);
+            return oFragment;
+          }.bind(this));
+        }
+        this._pPhotosDialog.then(function (oFragment) {
+          oFragment.open();
+        });
+
+      },
+
+      onMultiplePhotosCancelPress: function () {
+
+        this._pPhotosDialog.then(function (oFragment) {
+          oFragment.close();
+        });
+      },
+
+      onTakePhoto: async function (oEvent) {
+        oEvent.getSource().setVisible(false);
+        var that = this;
+        // var path = this.getView().getObjectBinding().getPath();
+
+        // const regex = /guid'([0-9a-fA-F-]{36})'/;
+        // const specimen = path.match(regex)[1];
+
+        // debugger;
+
+        var oSpecimen = oEvent.getSource().getParent().getBindingContext('multiplePhotoModel').getObject()
+
+        var selectedSpecimens = this.getView().getModel('multiplePhotoModel').getProperty('/photos');
+
+        var folder = oSpecimen.strainAlias + ' ' + oSpecimen.seqNumber + ' ' + oSpecimen.tagID;
+
+        cloudinary.setCloudName('hgyusg0s0');
+        cloudinary.setAPIKey('641639681197656');
+        cloudinary.openUploadWidget({
+          uploadPreset: "xondth9e",
+          showAdvancedOptions: true,
+          sources: ['camera'],
+          folder: folder,
+        }, (error, result) => {
+          oEvent.getSource().setVisible(true);
+          if (result.info.secure_url !== undefined) {
+            var p1 = that._createCare(oSpecimen.ID, 'PH')
+            var p2 = that._createPhoto(oSpecimen.ID, result.info.secure_url)
+
+            Promise.all([p1, p2])
+              .then(results => {
+                sap.m.MessageToast.show('Photo uploaded correctly   #' + oSpecimen.tagID)
+                
+                var aSelectedSpecimens = selectedSpecimens.filter(function (specimen) {
+                  return specimen.ID !== oSpecimen.ID;
+                });
+        
+                // debugger;
+                that.getView().getModel('multiplePhotoModel').setProperty('/photos', aSelectedSpecimens);
+
+              })
+
+          }
+
         });
 
       },
@@ -293,7 +412,8 @@ sap.ui.define(
         });
       },
 
-      onStatusConfirmPress: function () {
+      onStatusConfirmPress: function (oEvent) {
+        oEvent.getSource().setVisible(false);
         var aItems = this.getView().getModel('collectionModel').getProperty("/selectedSpecimens");
         var that = this;
         this.getOwnerComponent().getModel("view").setProperty("/busyDialog", true)
@@ -301,6 +421,7 @@ sap.ui.define(
 
           that.byId('company-status').getBinding("items").refresh(true);
           sap.m.MessageToast.show('Specimens updated');
+          oEvent.getSource().setVisible(true);
           this.onStatusCancelPress();
         })
       },
@@ -476,7 +597,8 @@ sap.ui.define(
         }
       },
 
-      onApplicationConfirmPress() {
+      onApplicationConfirmPress(oEvent) {
+        oEvent.getSource().setVisible(false);
         var aItems = this.getView().getModel('collectionModel').getProperty("/selectedSpecimens");
         this.getOwnerComponent().getModel("view").setProperty("/busyDialog", true)
         var that = this;
@@ -484,6 +606,7 @@ sap.ui.define(
         this.processSpecimen(aItems).then((result) => {
           sap.m.MessageToast.show('Specimens have ate');
           that.byId('list').getBinding("items").refresh(true);
+          oEvent.getSource().setVisible(true);
           that.onApplicationCancelPress();
         });
       },
@@ -555,8 +678,10 @@ sap.ui.define(
         });
       },
 
-      onCreateConfirmPress: function () {
+      onCreateConfirmPress: function (oEvent) {
+        oEvent.getSource().setVisible(false);
 
+        // return;
         this.getOwnerComponent().getModel("view").setProperty("/busyDialog", true)
 
         // debugger;
@@ -568,12 +693,14 @@ sap.ui.define(
 
         if (!aData.plantedDate) {
           sap.m.MessageToast.show('Specify a date');
+          oEvent.getSource().setVisible(true);
           return;
         }
 
         // Validations
         if (!aData.tagID || !/^\d{7,}$/.test(aData.tagID)) {
           sap.m.MessageToast.show('TAG ID must be a number with at least 7 digits');
+          oEvent.getSource().setVisible(true);
           return;
         }
 
@@ -581,6 +708,7 @@ sap.ui.define(
 
           if (!aData.strainName) {
             sap.m.MessageToast.show('Specify a name for the Strain');
+            oEvent.getSource().setVisible(true);
             return;
           }
 
@@ -593,6 +721,7 @@ sap.ui.define(
             this._saveSpecimens(aData).then((result) => {
               this._setUserResults();
               sap.m.MessageToast.show('Strain and specimens created');
+              oEvent.getSource().setVisible(true);
               that.onCreateCancelPress();
             })
           })
@@ -601,6 +730,7 @@ sap.ui.define(
           // Validations
           if (!aData.strainID) {
             sap.m.MessageToast.show('Select a Strain');
+            oEvent.getSource().setVisible(true);
             return;
           }
 
@@ -609,6 +739,7 @@ sap.ui.define(
           this._saveSpecimens(aData).then((result) => {
             this._setUserResults();
             sap.m.MessageToast.show('Specimens created');
+            oEvent.getSource().setVisible(true);
             that.onCreateCancelPress();
           })
         }
@@ -825,6 +956,26 @@ sap.ui.define(
           amount: parseFloat((product.amount / selected), 2).toFixed(2),
           method: 'Water',
           care: { ID: care.ID }
+        }
+      },
+
+      _createPhoto(specimen, publicId) {
+        var oData = this._formatPhoto(specimen, publicId);
+        return new Promise((resolve, reject) => {
+          this.getView().getModel().create('/Photos', oData, {
+            success: resolve,
+            error: reject
+          });
+        });
+      },
+
+      _formatPhoto(specimen, publicId) {
+
+        return {
+          specimen: { ID: specimen },
+          date: new Date(),
+          publicId: publicId,
+          // description: this.getView().getModel("careModel").getProperty("/description")
         }
       },
 

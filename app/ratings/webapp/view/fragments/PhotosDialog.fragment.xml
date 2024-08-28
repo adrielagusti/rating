@@ -1,0 +1,79 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+>
+    <Dialog
+        title="New Specimen"
+        contentWidth="60%"
+        busy="{collectionModel>/createDialogBusy}"
+        stretch="true"
+    >
+        <content>
+            <!-- <List
+                items="{
+                        path: 'multiplePhotoModel>/photos'
+                    }"
+            >
+                <InputListItem>
+                  
+                    <Button
+
+                        press="onTakePhoto"
+                        text="{i18n>button.take}"
+                        icon="sap-icon://camera"
+                    />
+                </InputListItem>
+            </List> -->
+
+            <Table
+                items="{ path: 'multiplePhotoModel>/photos' }"
+            >
+                <columns>
+                    <Column>
+                        <Text text="Tag ID" />
+                    </Column>
+                    <Column>
+                        <Text text="Camera" />
+                    </Column>
+                     <!-- <Column>
+                        <Text text="Photo" />
+                    </Column> -->
+                </columns>
+                <items>
+                    <ColumnListItem vAlign="Middle">
+                        <cells>
+                            <ObjectIdentifier
+                                title="#{multiplePhotoModel>tagID}"
+                                text="{multiplePhotoModel>strainName}"
+                            />
+                            <Button
+                                press="onTakePhoto"
+                                text="{i18n>button.take}"
+                                icon="sap-icon://camera"
+                            />
+                            <!-- <CheckBox select="{multiplePhotoModel>photo}"/> -->
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <!-- <beginButton>
+            <Button
+                text="{i18n>confirm}"
+                icon="sap-icon://add"
+                type="Emphasized"
+                press=".onCreateConfirmPress"
+            />
+        </beginButton> -->
+        <endButton>
+            <Button
+                text="{i18n>cancel}"
+                icon="sap-icon://sys-cancel"
+                type="Reject"
+                press=".onMultiplePhotosCancelPress"
+            />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

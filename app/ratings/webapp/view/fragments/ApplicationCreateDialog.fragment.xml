@@ -41,7 +41,7 @@
                                             value="{careModel>/water/liters}"
                                             displayValuePrecision="1"
                                             min="1"
-                                            step="1"
+                                            step="0.5"
                                             width="90%"
                                         />
                                         <Label

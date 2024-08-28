@@ -112,8 +112,8 @@ sap.ui.define(
         })
       },
 
-      onTakePhoto: async function () {
-
+      onTakePhoto: async function (oEvent) {
+        oEvent.getSource().setVisible(false);
         var that = this;
         // var path = this.getView().getObjectBinding().getPath();
 
@@ -121,28 +121,30 @@ sap.ui.define(
         // const specimen = path.match(regex)[1];
 
         var specimen = this.getView().getBindingContext().getObject()
+        // var folder = specimen.strainAlias + specimen.seqNumber + pecimen.tagID;
+        var folder = specimen.strainAlias + ' ' + specimen.seqNumber + ' #' + specimen.tagID;
 
         cloudinary.setCloudName('hgyusg0s0');
-        cloudinary.setAPIKey('641639681197656');
-
+        cloudinary.setAPIKey('641639681197656');        
         cloudinary.openUploadWidget({
           uploadPreset: "xondth9e",
           showAdvancedOptions: true,
           sources: ['camera'],
-          folder: specimen.tagID,
+          folder: folder,
         }, (error, result) => {
-
+          oEvent.getSource().setVisible(true);
           if (result.info.secure_url !== undefined) {
             var p1 = that._createCare(specimen.ID, 'PH')
             var p2 = that._createPhoto(specimen.ID, result.info.secure_url)
-
+            
             Promise.all([p1, p2])
               .then(results => {
+                oEvent.getSource().setVisible(true);
                 that._setSpecimenResults();
               })
 
           }
-          // console.log(result.info.secure_url)
+
         });
 
       },
