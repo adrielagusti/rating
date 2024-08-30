@@ -122,7 +122,7 @@ sap.ui.define(
 
         var specimen = this.getView().getBindingContext().getObject()
         // var folder = specimen.strainAlias + specimen.seqNumber + pecimen.tagID;
-        var folder = specimen.strainAlias + ' ' + specimen.seqNumber + ' #' + specimen.tagID;
+        var folder = specimen.strainAlias + ' ' + specimen.seqNumber + ' ' + specimen.tagID;
 
         cloudinary.setCloudName('hgyusg0s0');
         cloudinary.setAPIKey('641639681197656');        
