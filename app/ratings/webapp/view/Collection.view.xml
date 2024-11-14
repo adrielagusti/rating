@@ -30,12 +30,12 @@
                         width="8rem"
                     />
                     <VBox>
-                        <MessageStrip
+                        <!-- <MessageStrip
                             class=" sapUiTinyMarginBot"
                             text="Need revision or water"
                             type="Warning"
                             showIcon="true"
-                        />
+                        /> -->
                         <VBox
                             id='company-status'
                             items="{ 
@@ -67,13 +67,50 @@
                     <!-- showCloseButton="true" -->
                 </HBox>
             </Panel>
+            <Panel
+                expandable='true'
+                headerText="Filters"
+            >
+                <HBox>
+                    <Label
+                        text="State: "
+                        class="sapUiTinyMargin"
+                    />
+                    <MultiComboBox
+                        selectionChange="handleSelectionChange"
+                        showClearIcon="true"
+                        items="{
+                                path: '/SpecimenStates',
+                                sorter: { path: 'description' }
+                            }"
+                    >
+                        <core:Item
+                            key="{ID}"
+                            text="{description}"
+                        />
+                    </MultiComboBox>
+                </HBox>
+                <HBox>
+                    <Label
+                        text="Tag ID:"
+                        class="sapUiTinyMargin"
+                    />
+                    <SearchField
+                        width="80%"
+                        search=".onSearchTag"
+                    />
+                </HBox>
+            </Panel>
 
             <Panel
+                headerText="Specimens"
                 expanded="true"
                 class="sapUiTinyMarginTop"
                 visible="{= ${collectionModel>/mode} === 'grid' }"
             >
-                <HBox>
+                <!-- <HBox> -->
+
+                <!-- <HBox>
                     <Label
                         text="Alive only: "
                         class="sapUiTinyMarginTop"
@@ -85,6 +122,19 @@
                         change="onSwitchChange"
                     />
                 </HBox>
+                 <HBox>
+                    <Label
+                        text="Clones only: "
+                        class="sapUiTinyMarginTop"
+                    />
+                    <Switch
+                        state="false"
+                        customTextOn="Yes"
+                        customTextOff="No"
+                        change="onSwitchChangeClones"
+                    />
+                </HBox> -->
+                <!-- </HBox> -->
                 <!-- <layoutData>
                         <FlexItemData growFactor="1" />
                     </layoutData>
@@ -152,12 +202,23 @@
                                     visible="{= ${collectionModel>/selectedSpecimens}.length >= 1 }"
                                     press="onChangeStatus"
                                 />
-
                                 <Button
-                                    text="Remove some leafs"
+                                    text="Clone"
                                     icon="sap-icon://e-care"
                                     visible="{= ${collectionModel>/selectedSpecimens}.length >= 1 }"
-                                    press="onPrune"
+                                    press="onClone"
+                                />
+                                <Button
+                                    text="Favorite / Unfavorite"
+                                    icon="sap-icon://favorite"
+                                    visible="{= ${collectionModel>/selectedSpecimens}.length >= 1 }"
+                                    press="onFavChange"
+                                />
+                                <Button
+                                    text="Change Tag ID #"
+                                    icon="sap-icon://tags"
+                                    visible="{= ${collectionModel>/selectedSpecimens}.length === 1 }"
+                                    press="onChangeTag"
                                 />
                                 <Button
                                     text="{= ${collectionModel>/selectedSpecimens}.length >= 1 ? 'Add new specimens' : 'Add Specimen #' }"
@@ -180,11 +241,17 @@
                                     text="#{tagID}"
                                     press="onLinkPress"
                                 />
-                                <ObjectStatus
+                                 <ObjectStatus
+                                    icon="sap-icon://favorite"
+                                    class="sapUiTinyMarginBegin"
+                                    visible="{= ${favorite} === true }"
+                                    state="Warning"
+                                />
+                                <!-- <ObjectStatus
                                     class="sapUiTinyMarginBegin"
                                     icon="{ parts: [ 'lastCare','stateIcon'], formatter: '.formatter.showWarning' }"
                                     state="{ parts: [ 'lastCare','stateColor'], formatter: '.formatter.showWarningColor' }"
-                                />
+                                /> -->
                             </HBox>
                             <!-- <HBox>
                               
@@ -199,11 +266,13 @@
                                     }}"
                                     class="sapUiMediumMarginEnd"
                                 /> -->
+                               
                                 <Label
                                     text="{strainName} {seqNumber}"
                                     class="sapUiTinyMarginEnd"
                                 />
                                 <!-- text="{stateDescription}" -->
+
                                 <ObjectStatus
                                     icon="{stateIcon}"
                                     state="{stateColor}"

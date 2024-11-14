@@ -42,13 +42,6 @@ sap.ui.define(
 
       _onObjectMatched(oEvent) {
         this._setUserResults();
-        // this.onApplication();
-
-        // this._deletePhoto('bcbc4120-a7fc-4dbb-8bf4-7d058ca8e9d4').then((data) => { });
-        // this._deletePhoto('cd6af24e-a68b-4a4b-bfe1-ade9750fe81e').then((data) => { });
-
-        // this._getPhoto().then((data) => { debugger;});
-
       },
 
       onChangeSpecimenNumber(oEvent) {
@@ -89,35 +82,121 @@ sap.ui.define(
 
       },
 
-      onSwitchChange(oEvent) {
+      onSearchTag(oEvent) {
+        // debugger;
+        var oList = this.getView().byId('list');
+        var oBinding = oList.getBinding('items');
+        oBinding.filter([new Filter("tagID", FilterOperator.Contains, oEvent.getSource().getValue())]);
+      },
 
-        var res = oEvent.getSource().getState();
+      handleSelectionChange(oEvent) {
 
         var oList = this.getView().byId('list');
-
-        if (!oList) {
-          console.error('List control not found');
-          return;
-        }
-        // debugger;
-        // Get the binding of the items property
         var oBinding = oList.getBinding('items');
+        var aSelectedStates = oEvent.getSource().getSelectedKeys();
+        var aFilters = [];
 
-        if (!oBinding) {
-          console.error('Items binding not found');
-          return;
-        }
-
-        // Remove all filters
-        if (res === false) {
-          oBinding.filter([]);
-        } else {
-          oBinding.filter([new Filter("stateDescription", FilterOperator.EQ, 'Alive'),
-          new Filter("stateDescription", FilterOperator.EQ, 'Sick')]);
-        }
-        // debugger;
+        aSelectedStates.forEach(element => {
+          aFilters.push(new Filter("state_ID", FilterOperator.EQ, element))
+        });
+        oBinding.filter(aFilters);
 
       },
+
+      onChangeTag() {
+        var selected = this.getView().byId('list').getSelectedItems()[0].getBindingContext().getObject();
+
+        this.getView().getModel('collectionModel').setProperty('/selectedSpecimen', selected);
+
+        if (!this._editDialog) {
+          this._editDialog = sap.ui.core.Fragment.load({
+            id: this.getView().getId(),
+            name: "blackseeds.ratings.view.fragments.EditSpecimen",
+            controller: this
+          }).then(function name(oFragment) {
+            this.getView().addDependent(oFragment);
+            return oFragment;
+          }.bind(this));
+        }
+        this._editDialog.then(function (oFragment) {
+          oFragment.open();
+        });
+
+      },
+
+      onChangeTagConfirmPress: function (oEvent) {
+        oEvent.getSource().setVisible(false);
+        this.getOwnerComponent().getModel("view").setProperty("/busyDialog", true)
+        var newTag = this.getView().getModel('collectionModel').getProperty('/newTagID');
+
+        var aData = $.extend(true, {
+        }, this.getView().getModel("collectionModel").getProperty("/selectedSpecimen"));
+
+        var that = this;
+
+        // Validations
+        if (!aData.tagID || !/^\d{7,}$/.test(aData.tagID)) {
+          sap.m.MessageToast.show('TAG ID must be a number with at least 7 digits');
+          oEvent.getSource().setVisible(true);
+          return;
+        }
+
+        aData.tagID = newTag;
+        this._updateSpecimenTagFav(aData).then(data => {
+          sap.m.MessageToast.show('Specimens updated')
+          oEvent.getSource().setVisible(true);
+          that.byId('list').getBinding("items").refresh(true);
+          that.onChangeTagCancelPress()
+        })
+          .catch(error => {
+            const parsedResponse = JSON.parse(error.responseText);
+            const errorMessage = parsedResponse.error.message.value;
+            sap.m.MessageToast.show(errorMessage)
+            oEvent.getSource().setVisible(true);
+            that.byId('list').getBinding("items").refresh(true);
+            // resolve()
+          });;
+
+      },
+
+      onChangeTagCancelPress: function () {
+
+        this.getView().getModel("collectionModel").setProperty("/", models.initialCollection);
+        this.getOwnerComponent().getModel("view").setProperty("/busy", false)
+        this.getOwnerComponent().getModel("view").setProperty("/busyDialog", false)
+
+        this._editDialog.then(function (oFragment) {
+          oFragment.close();
+        });
+      },
+
+      onFavChange() {
+
+        var specimens = this.getView().byId('list').getSelectedItems();
+        var aPromises = [];
+        var statusModel = this.getView().getModel("statusModel").getProperty("/");
+
+        // return new Promise((resolve, reject) => {
+          specimens.forEach(specimen => {
+
+            var oSpecimen = specimen.getBindingContext().getObject();
+            oSpecimen.favorite = oSpecimen.favorite === false || oSpecimen.favorite ===  null ? true : false
+            aPromises.push(
+              this._updateSpecimenTagFav(oSpecimen)
+            );
+        //   })
+        })
+
+        // Promise.all(aPromises)
+        //   .then(results => {
+        //     // resolve();
+        //   })
+        //   .catch(error => {
+        //     // console.error("ERROR", error);
+        //   });
+
+      },
+
 
       onMultiplePhotos() {
 
@@ -191,11 +270,11 @@ sap.ui.define(
             Promise.all([p1, p2])
               .then(results => {
                 sap.m.MessageToast.show('Photo uploaded correctly   #' + oSpecimen.tagID)
-                
+
                 var aSelectedSpecimens = selectedSpecimens.filter(function (specimen) {
                   return specimen.ID !== oSpecimen.ID;
                 });
-        
+
                 // debugger;
                 that.getView().getModel('multiplePhotoModel').setProperty('/photos', aSelectedSpecimens);
 
@@ -737,15 +816,21 @@ sap.ui.define(
 
 
           this._saveSpecimens(aData).then((result) => {
-            this._setUserResults();
-            sap.m.MessageToast.show('Specimens created');
+            if (result) {
+              this._setUserResults();
+              sap.m.MessageToast.show('Specimens created');
+              that.onCreateCancelPress();
+            } else {
+              that.byId('list').getBinding("items").refresh(true);
+            }
             oEvent.getSource().setVisible(true);
-            that.onCreateCancelPress();
           })
         }
 
 
       },
+
+
 
       onSelectStrain: function (oEvent) {
         let strainID = oEvent.getSource().getSelectedKey();
@@ -803,12 +888,14 @@ sap.ui.define(
           Promise.all(aPromises)
             .then(results => {
 
-              // this._onSuccess(results)
-              resolve();
+              sap.m.MessageToast.show('Specimens created')
+              resolve(results);
             })
             .catch(error => {
-
-              console.error("ERROR", error);
+              const parsedResponse = JSON.parse(error.responseText);
+              const errorMessage = parsedResponse.error.message.value;
+              sap.m.MessageToast.show(errorMessage)
+              resolve()
             });
         })
 
@@ -873,6 +960,18 @@ sap.ui.define(
         });
       },
 
+      _updateSpecimenTagFav(data) {
+
+        var sPath = "/Specimens(guid'" + data.ID + "')"
+      
+        return new Promise((resolve, reject) => {
+          this.getView().getModel().update(sPath, data, {
+            success: resolve,
+            error: reject
+          });
+        });
+      },
+
       _createWater(specimen, care) {
         var water = this.getView().getModel("careModel").getProperty("/water");
         var oData = this._formatWatering(specimen, water, care);
@@ -923,14 +1022,16 @@ sap.ui.define(
 
         data.tagID = data.tagID.padStart(7, '0');
 
-        data.state = { ID: 'e8c8bfd3-95de-498e-b4b1-aa591480db28' } // Alive
+
 
         data.strain = { ID: data.strainID };
         if (!data.parentID) {
           data.seqNumber = 0;
+          data.state = { ID: 'e8c8bfd3-95de-498e-b4b1-aa591480db28' } // Alive
           delete data.parentID;
         } else {
           data.seqNumber = seqNumber + 1;
+          data.state = { ID: 'cc155edf-ac5b-41da-8c1b-1144f84568b1' } // Clone 
         }
         // debugger ;
         return data;

@@ -32,22 +32,24 @@ entity Attributes {
 
 //  Collection 
 entity Specimens : managed {
-  key ID          : UUID;
-      parentID    : UUID;
-      breedType   : String;
-      seqNumber   : Integer;
-      strain      : Association to Strains;
-      name        : String;
-      tagID       : String;
-      plantedDate : DateTime;
-      place       : Association to Places;
-      state       : Association to SpecimenStates;
-      sex         : String(1) default 'F';
+  key ID           : UUID;
+      parentID     : UUID;
+      breedType    : String;
+      seqNumber    : Integer;
+      strain       : Association to Strains;
+      name         : String;
+      tagID        : String;
+      plantedDate  : DateTime;
+      place        : Association to Places;
+      state        : Association to SpecimenStates;
+      sex          : String(1) default 'F';
       
-      cares       : Composition of many Cares on cares.specimen = $self;
-      waterings   : Composition of many Waterings on waterings.specimen = $self;
-      photos      : Composition of many Photos on photos.specimen = $self;
+      cares        : Composition of many Cares on cares.specimen = $self;
+      waterings    : Composition of many Waterings on waterings.specimen = $self;
+      photos       : Composition of many Photos on photos.specimen = $self;
       applications : Composition of many Applications on applications.specimen = $self;
+
+      favorite    : Boolean default false;
 }
 
 entity Cares : managed  {

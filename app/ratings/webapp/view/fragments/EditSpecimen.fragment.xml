@@ -1,0 +1,32 @@
+<c:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core"
+>
+    <Dialog
+        title="Editing #{collectionModel>/selectedSpecimen/tagID}"
+        contentWidth="60%"
+        busy="{collectionModel>/createDialogBusy}"
+    >
+        <content>
+            <Input value="{collectionModel>/newTagID}" width="90%" class="sapUiTinyMargin"
+               placeholder="Specimen # Tag ID (7 numbers)"
+                                        maxLength="7"/>
+        </content>
+        <beginButton>
+            <Button
+                text="{i18n>confirm}"
+                icon="sap-icon://accept"
+                type="Emphasized"
+                press=".onChangeTagConfirmPress"
+            />
+        </beginButton>
+        <endButton>
+            <Button
+                text="{i18n>cancel}"
+                icon="sap-icon://sys-cancel"
+                type="Reject"
+                press=".onChangeTagCancelPress"
+            />
+        </endButton>
+    </Dialog>
+</c:FragmentDefinition>

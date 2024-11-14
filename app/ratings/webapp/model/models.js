@@ -45,7 +45,8 @@ sap.ui.define([
                 mode: "grid",
                 createDialogBusy: false,
                 selected: 0,
-                selectedSpecimens: []
+                selectedSpecimens: [],
+                newTagID: ''
             },
 
             initialApplication: {

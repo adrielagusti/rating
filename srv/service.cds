@@ -62,6 +62,11 @@ service BlackSeedsService {
                 MAX(
                     cares.date
                 )                 as lastCare : DateTime,
+                // SUM(
+                //     photos.ID
+                // ) as photosNumber : Integer,
+                0 as photosNumber : Integer,
+                favorite
         }
         group by
             ID,

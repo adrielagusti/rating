@@ -184,7 +184,7 @@
                                     /> -->
 
                                     <Select
-                                        forceSelection="false"
+                                        forceSelection="true"
                                         selectedKey="{specimenCreationModel>/strainID}"
                                         autoAdjustWidth="true"
                                         items="{
