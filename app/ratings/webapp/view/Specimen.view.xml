@@ -96,7 +96,7 @@
                 </HBox>
             </Panel>
             <IconTabBar
-                class="sapUiResponsiveContentPadding"
+               
                 tabDensityMode="Compact"
                 expandable="false"
             >
@@ -368,6 +368,15 @@
                             </Table>
                         </Panel>
                     </IconTabFilter>
+                     <!-- <IconTabFilter
+                        key="watering"
+                        icon="sap-icon://favorite"
+                    >
+                     <core:Fragment
+                            fragmentName="blackseeds.ratings.view.fragments.Attributes"
+                            type="XML"
+                        />
+                    </IconTabFilter> -->
                 </items>
             </IconTabBar>
         </content>

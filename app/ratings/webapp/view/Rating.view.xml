@@ -13,7 +13,7 @@
         <subHeader>
             <Toolbar>
                 <ToolbarSpacer />
-                <Title text="Black Seeds Ratings Application" />
+                <Title text="Black Seeds Ratings" />
                 <ToolbarSpacer />
             </Toolbar>
         </subHeader>
@@ -28,100 +28,51 @@
                     <VBox>
                         <HBox justifyContent="End">
                             <ObjectStatus
-                                text="{name}"
+                                text="{strainName}"
                                 state="Success"
-                                class=" sapUiTinyMarginEnd"
+                                class=" sapUiTinyMarginEnd sapMObjectStatusLarge"
                             />
                             <ObjectStatus
                                 state="Success"
-                                class=""
+                                class="sapUiTinyMarginTop"
                                 icon="sap-icon://e-care"
                             />
                         </HBox>
-                        <HBox justifyContent="End">
+                        <!-- <HBox justifyContent="End" visible="{= ${tagID}.length >= 4 ? true : false }"> -->
+                    
+                        <HBox justifyContent="End"
+                        visible="{= ${strainID} !== undefined ? true : false }">
                             <ObjectStatus
-                                text="{tagID}"
+                                text="Planted on {
+                                        'path': 'plantedDate',
+                                        'type': 'sap.ui.model.type.Date'}"
                                 class=" sapUiTinyMarginEnd sapUiTinyMarginTop"
                             />
                             <ObjectStatus
                                 class="sapUiTinyMarginTop"
-                                icon="sap-icon://blank-tag"
+                                icon="sap-icon://history"
+                            />
+                        </HBox>
+                            <HBox
+                            justifyContent="End"
+                            visible="{= ${strainID} !== undefined ? true : false }"
+                        >
+                            <ObjectStatus
+                                text="# {tagID}"
+                                class=" sapUiTinyMarginEnd sapUiTinyMarginTop"
+                            />
+                            <ObjectStatus
+                                class="sapUiTinyMarginTop"
+                                icon="sap-icon://tag"
                             />
                         </HBox>
                     </VBox>
                 </HBox>
             </Panel>
-            <VBox
-                id="vbox-atts"
-                items="{dataModel>/ratings}"
-            >
-                <Panel
-                    width="100%"
-                    class="sapUiResponsiveMargin"
-                >
-                    <headerToolbar>
-                        <OverflowToolbar>
-                            <core:Icon
-                                src="sap-icon://accept"
-                                color="yellow"
-                                visible="{= ${dataModel>value} > 0 }"
-                            />
-                            <Title text=" {dataModel>description}" />
-                        </OverflowToolbar>
-                    </headerToolbar>
-                    <content>
-                        <VBox>
-                            <HBox visible="{= ${dataModel>type} === 'stars'}">
-                                <RatingIndicator
-                                    maxValue="15"
-                                    value="{dataModel>value}"
-                                    iconSize="16px"
-                                />
-                                <Label
-                                    text="{dataModel>value} / 15"
-                                    class="sapUiTinyMarginEnd sapUiTinyMarginTop sapUiSmallMarginBegin"
-                                />
-                            </HBox>
-                            <HBox visible="{= ${dataModel>type} === 'slider'}">
-                                <Slider
-                                    min="0"
-                                    max="15"
-                                    step="1"
-                                    width="21.7rem"
-                                    value="{dataModel>value}"
-                                 	showAdvancedTooltip="true"
-				                    showHandleTooltip="false"
-                                >
-                                    <ResponsiveScale
-                                        tickmarksBetweenLabels="5"
-                                    />
-                                </Slider>
-                            </HBox>
-                            <Input
-                                value="{dataModel>comments}"
-                                visible="{= ${dataModel>type} === 'string'}"
-                                placeholder="Add comments"
-                                width="100%"
-                            />
-                            <Input
-                                value="{dataModel>comments}"
-                                visible="{= ${dataModel>type} !== 'string' &amp;&amp; ${dataModel>comments} !== '' }"
-                                enabled="false"
-                                placeholder="Add comments"
-                                width="100%"
-                            />
-                            <HBox
-                                justifyContent="SpaceBetween"
-                                visible="{= ${dataModel>type} === 'slider'}"
-                            >
-                                <ObjectStatus text="Low" />
-                                <ObjectStatus text="Medium" />
-                                <ObjectStatus text="High" />
-                            </HBox>
-                        </VBox>
-                    </content>
-                </Panel>
-            </VBox>
+            <core:Fragment
+                fragmentName="blackseeds.ratings.view.fragments.Attributes"
+                type="XML"
+            />
         </content>
         <footer>
             <Toolbar>

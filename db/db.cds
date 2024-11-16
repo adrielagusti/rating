@@ -19,6 +19,7 @@ entity Ratings : managed {
       strain    : Association to Strains;
       attribute : Association to Attributes;
       comments  : String;
+      specimen  : Association to Specimens;
 }
 
 
@@ -48,6 +49,7 @@ entity Specimens : managed {
       waterings    : Composition of many Waterings on waterings.specimen = $self;
       photos       : Composition of many Photos on photos.specimen = $self;
       applications : Composition of many Applications on applications.specimen = $self;
+      ratings      : Composition of many Ratings on ratings.specimen = $self; 
 
       favorite    : Boolean default false;
 }

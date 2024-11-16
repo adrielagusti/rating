@@ -102,8 +102,13 @@
           "target": ["main"]
         },
         {
-          "pattern": "rating/{objectId}",
-          "name": "rating",
+          "pattern": "ratingSpecimen/{objectId}",
+          "name": "ratingSpecimen",
+          "target": ["rating"]
+        },
+        {
+          "pattern": "ratingStrain/{objectId}",
+          "name": "ratingStrain",
           "target": ["rating"]
         },
         {

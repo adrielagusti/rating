@@ -1,0 +1,74 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+>
+    <VBox
+        id="vbox-atts"
+        items="{dataModel>/ratings}"
+    >
+        <Panel
+            width="100%"
+            class="sapUiResponsiveMargin"
+        >
+            <headerToolbar>
+                <OverflowToolbar>
+                    <core:Icon
+                        src="sap-icon://accept"
+                        color="yellow"
+                        visible="{= ${dataModel>value} > 0 }"
+                    />
+                    <Title text=" {dataModel>description}" />
+                </OverflowToolbar>
+            </headerToolbar>
+            <content>
+                <VBox>
+                    <HBox visible="{= ${dataModel>type} === 'stars'}">
+                        <RatingIndicator
+                            maxValue="15"
+                            value="{dataModel>value}"
+                            iconSize="16px"
+                        />
+                        <Label
+                            text="{dataModel>value} / 15"
+                            class="sapUiTinyMarginEnd sapUiTinyMarginTop sapUiSmallMarginBegin"
+                        />
+                    </HBox>
+                    <HBox visible="{= ${dataModel>type} === 'slider'}">
+                        <Slider
+                            min="0"
+                            max="15"
+                            step="1"
+                            width="21.7rem"
+                            value="{dataModel>value}"
+                            showAdvancedTooltip="true"
+                            showHandleTooltip="false"
+                        >
+                            <ResponsiveScale tickmarksBetweenLabels="5" />
+                        </Slider>
+                    </HBox>
+                    <Input
+                        value="{dataModel>comments}"
+                        visible="{= ${dataModel>type} === 'string'}"
+                        placeholder="Add comments"
+                        width="100%"
+                    />
+                    <Input
+                        value="{dataModel>comments}"
+                        visible="{= ${dataModel>type} !== 'string' &amp;&amp; ${dataModel>comments} !== '' }"
+                        enabled="false"
+                        placeholder="Add comments"
+                        width="100%"
+                    />
+                    <HBox
+                        justifyContent="SpaceBetween"
+                        visible="{= ${dataModel>type} === 'slider'}"
+                    >
+                        <ObjectStatus text="Low" />
+                        <ObjectStatus text="Medium" />
+                        <ObjectStatus text="High" />
+                    </HBox>
+                </VBox>
+            </content>
+        </Panel>
+    </VBox>
+</core:FragmentDefinition>

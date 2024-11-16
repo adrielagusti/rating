@@ -17,7 +17,7 @@
         <subHeader>
             <Toolbar>
                 <ToolbarSpacer />
-                <Title text="Black Seeds Collection Application" />
+                <Title text="Black Seeds Collection" />
                 <ToolbarSpacer />
             </Toolbar>
         </subHeader>
@@ -68,8 +68,9 @@
                 </HBox>
             </Panel>
             <Panel
+                visible="{= ${collectionModel>/mode} === 'grid' }"
                 expandable='true'
-                headerText="Filters"
+                headerText="Filters Panel"
             >
                 <HBox>
                     <Label
@@ -291,6 +292,7 @@
                 expanded="true"
                 class="sapUiTinyMarginTop"
                 visible="{= ${collectionModel>/mode} === 'tree' }"
+                headerText="Hierarchy of Specimens"
             >
                 <IconTabBar
                     expanded="true"
@@ -319,9 +321,9 @@
         <footer>
             <Toolbar>
                 <Button
-                    icon="sap-icon://e-care"
+                    icon="sap-icon://media-rewind"
                     type="Transparent"
-                    press="onBroBack"
+                    press="toRatings"
                 />
                 <ToolbarSpacer />
                 <SegmentedButton
@@ -330,12 +332,12 @@
                 >
                     <items>
                         <SegmentedButtonItem
-                            text="Hierarchy"
-                            key="tree"
+                            text="Specimens"
+                            key="grid"
                         />
                         <SegmentedButtonItem
-                            text="List"
-                            key="grid"
+                            text="Hierarchy"
+                            key="tree"
                         />
                     </items>
                 </SegmentedButton>

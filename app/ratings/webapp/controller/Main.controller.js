@@ -17,27 +17,55 @@ sap.ui.define(
       formatter: formatter,
 
       onInit() {
+        this.getView().setModel(new JSONModel({ mode: "rate", list: "strains" }), 'appModel');
         this._setUserResults();
-        this.getView().setModel(new JSONModel({ mode: "rate" }), 'appModel');
+        this.getRouter().getRoute("main").attachPatternMatched(this._onObjectMatched, this);
       },
 
       _setUserResults() {
+
+        //What are we raiting?
+        var listMode = this.getView().getModel('appModel').getProperty('/list')
+        // debugger;
+        // Get the data
         let p1 = this._getRatings();
         let p2 = this._getStrains()
         let p3 = this._getAttributes()
+        let p4 = this._getSpecimens()
 
-        Promise.all([p1, p2, p3])
+        Promise.all([p1, p2, p3, p4])
           .then(results => {
 
-            const [aRatings, aStrains, aAttributes] = results;
-            const aStrainsProc = this.prepareSummarizedModel(aRatings.results, aStrains.results, aAttributes.results);
-            const aHistory = this._setHistory(aRatings.results);
+            const [aRatings, aStrains, aAttributes, aSpecimens] = results;
 
-            var iFull = aStrainsProc.filter((item) => item.state === 'Success').length;
-            var iPogress = aStrainsProc.filter((item) => item.state === 'Warning').length;
-            var iTotal = aStrainsProc.length - iFull - iPogress;
-            
-            this.getOwnerComponent().setModel(new JSONModel({ strains: aStrainsProc, full: iFull, progress: iPogress, total: iTotal, history: aHistory }), 'dataModel');
+            // var ratedEntity = ( listMode === 'strains' ? aStrains.results : aSpecimens.results )
+
+            const aProcessed = listMode === 'strains' ?
+              this.prepareSummarizedModelStrains(aRatings.results, aStrains.results, aAttributes.results) :
+              this.prepareSummarizedModelSpecimens(aRatings.results, aSpecimens.results, aAttributes.results)
+
+            const aHistory = listMode === 'strains' ?
+              this.prepareHistoryStrains(aRatings.results) :
+              this.prepareHistorySpecimens(aRatings.results)
+
+            const aTopTier = listMode === 'strains' ?
+              this.prepareTopTierStrains(aStrains.results) :
+              this.prepareTopTierSpecimens(aSpecimens.results)
+
+            // Calculation of totals 
+            var iFull = aProcessed.filter((item) => item.state === 'Success').length;
+            var iPogress = aProcessed.filter((item) => item.state === 'Warning').length;
+            var iTotal = aProcessed.length - iFull - iPogress;
+
+            this.getOwnerComponent().setModel(new JSONModel({
+              list: aProcessed,
+              full: iFull,
+              progress: iPogress,
+              total: iTotal,
+              history: aHistory,
+              topTier: aTopTier,
+              // filters: aFilters 
+            }), 'dataModel');
 
           })
 
@@ -46,6 +74,10 @@ sap.ui.define(
 
       getModel: function (sModelName) {
         return this.getView().getModel();
+      },
+
+      _onObjectMatched(oEvent) {
+        this._setUserResults();
       },
 
       onSelectRow(oEvent) {
@@ -71,16 +103,21 @@ sap.ui.define(
         });
       },
 
-      toCollection(oEvent){
-        this.getRouter().navTo("collection", {
-          // objectId: oEvent.getParameters().selectedItem.getKey()
-        });
+      onChangeListModel() {
+        this._setUserResults();
+      },
+
+      toCollection(oEvent) {
+        this.getRouter().navTo("collection");
       },
 
       _showObject(oItem) {
-        this.getRouter().navTo("rating", {
+        var path = this.getView().getModel('appModel').getProperty('/list') === 'strains' ? 'ratingStrain' : 'ratingSpecimen';
+
+        this.getRouter().navTo(path, {
           objectId: oItem.ID
         });
+
       },
 
       getRouter() {
@@ -118,11 +155,20 @@ sap.ui.define(
         });
       },
 
-      _setHistory(aRatings) {
+      _getSpecimens() {
+        return new Promise((res, rej) => {
+          this.getOwnerComponent().getModel().read("/Specimens", {
+            success: res,
+            error: rej
+          })
+        });
+      },
+
+      prepareHistoryStrains(aRatings) {
 
         const aHistory = [];
 
-        aRatings.forEach(rating => {
+        aRatings.filter((a) => a.specimenID === null).forEach(rating => {
           if (!aHistory.find(item => item.strainID === rating.strainID)) {
             aHistory.push(rating);
           }
@@ -132,14 +178,44 @@ sap.ui.define(
 
       },
 
-      prepareSummarizedModel(aRatings, aStrains, aAttributes) {
+      prepareHistorySpecimens(aRatings) {
+
+        const aHistory = [];
+
+        aRatings.filter((a) => a.specimenID !== null).forEach(rating => {
+          if (!aHistory.find(item => item.specimenID === rating.specimenID)) {
+            aHistory.push(rating);
+          }
+        });
+
+        return aHistory;
+
+      },
+
+      prepareTopTierSpecimens(Specimens) {
+
+        return Specimens.filter(a => a.totalPoints > 0).map(a => {
+          return {
+              ...a,       
+              name: a.strainName
+          }
+        })
+      },
+
+      prepareTopTierStrains(Strains) {
+
+        return Strains.filter(a => a.totalPoints > 0);
+
+      },
+
+      prepareSummarizedModelStrains(aRatings, aStrains, aAttributes) {
 
         var iAttributes = aAttributes.length;
         iAttributes = iAttributes - 1; // Comments is not a valuable attribute
 
         let aSummarized = aStrains.map(strain => {
           let sum = 0;
-      
+
           strain.state = 'None';
           strain.text = 'Not rated';
           strain.icon = 'sap-icon://e-care';
@@ -152,20 +228,62 @@ sap.ui.define(
             }
           });
 
-          strain.totalPoints =  parseInt(strain.totalPoints / iAttributes );
+          strain.totalPoints = parseInt(strain.totalPoints / iAttributes);
           if (sum === 0) {
-            return {...strain}
-          } else{
-            
+            return { ...strain }
+          } else {
+
             return {
               ...strain,
-              text: sum === iAttributes ?  'Full rated' : 'In process',
-              state: sum === iAttributes ?  'Success' : 'Warning',
-              icon: sum === iAttributes ?  'sap-icon://sys-enter-2' : 'sap-icon://warning2',
+              text: sum === iAttributes ? 'Full rated' : 'In process',
+              state: sum === iAttributes ? 'Success' : 'Warning',
+              icon: sum === iAttributes ? 'sap-icon://sys-enter-2' : 'sap-icon://warning2',
             };
           }
 
-         
+
+        });
+
+        return aSummarized;
+
+      },
+      prepareSummarizedModelSpecimens(aRatings, aSpecimens, aAttributes) {
+
+        var iAttributes = aAttributes.length;
+        iAttributes = iAttributes - 1; // Comments is not a valuable attribute
+
+        let aSummarized = aSpecimens.filter(a => a.stateDescription === 'Sick').map(specimen => {
+          let sum = 0;
+
+          specimen.state = 'None';
+          specimen.text = 'Not rated';
+          specimen.icon = 'sap-icon://tag';
+          specimen.totalPoints = 0;
+
+          aRatings.forEach(rating => {
+            if (rating.specimenID === specimen.ID && rating.value > 0) {
+              sum += 1;
+              specimen.totalPoints = rating.value + specimen.totalPoints;
+            }
+          });
+
+          specimen.totalPoints = parseInt(specimen.totalPoints / iAttributes);
+          if (sum === 0) {
+            return {
+              ...specimen,
+              name: specimen.strainName
+            }
+          } else {
+
+            return {
+              ...specimen,
+              name: specimen.strainName,
+              text: sum === iAttributes ? 'Full rated' : 'In process',
+              state: sum === iAttributes ? 'Success' : 'Warning',
+              icon: sum === iAttributes ? 'sap-icon://sys-enter-2' : 'sap-icon://warning2',
+            };
+          }
+
         });
 
         return aSummarized;

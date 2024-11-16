@@ -36,8 +36,8 @@ sap.ui.define(
         return UIComponent.getRouterFor(this);
       },
 
-      onBroBack: function () {
-        history.go(-1);
+      toRatings: function () {
+        this.getRouter().navTo('main')
       },
 
       _onObjectMatched(oEvent) {
@@ -105,7 +105,7 @@ sap.ui.define(
 
       onChangeTag() {
         var selected = this.getView().byId('list').getSelectedItems()[0].getBindingContext().getObject();
-
+        this.getView().getModel('collectionModel').setProperty('/newTagID', '');
         this.getView().getModel('collectionModel').setProperty('/selectedSpecimen', selected);
 
         if (!this._editDialog) {
@@ -142,19 +142,20 @@ sap.ui.define(
         }
 
         aData.tagID = newTag;
-        this._updateSpecimenTagFav(aData).then(data => {
-          sap.m.MessageToast.show('Specimens updated')
-          oEvent.getSource().setVisible(true);
-          that.byId('list').getBinding("items").refresh(true);
-          that.onChangeTagCancelPress()
-        })
+        this._updateSpecimenTag(aData)
+          .then(data => {
+            sap.m.MessageToast.show('Specimens updated')
+            oEvent.getSource().setVisible(true);  
+            // that.byId('list').removeSelections();     
+            // that.byId('list').getBinding("items").refresh(true);    
+            that.onChangeTagCancelPress() 
+            })
           .catch(error => {
             const parsedResponse = JSON.parse(error.responseText);
             const errorMessage = parsedResponse.error.message.value;
             sap.m.MessageToast.show(errorMessage)
             oEvent.getSource().setVisible(true);
             that.byId('list').getBinding("items").refresh(true);
-            // resolve()
           });;
 
       },
@@ -175,24 +176,27 @@ sap.ui.define(
         var specimens = this.getView().byId('list').getSelectedItems();
         var aPromises = [];
         var statusModel = this.getView().getModel("statusModel").getProperty("/");
+        var that = this;
 
         // return new Promise((resolve, reject) => {
-          specimens.forEach(specimen => {
+        specimens.forEach(specimen => {
 
-            var oSpecimen = specimen.getBindingContext().getObject();
-            oSpecimen.favorite = oSpecimen.favorite === false || oSpecimen.favorite ===  null ? true : false
-            aPromises.push(
-              this._updateSpecimenTagFav(oSpecimen)
-            );
-        //   })
+          var oSpecimen = specimen.getBindingContext().getObject();
+          oSpecimen.favorite = oSpecimen.favorite === false || oSpecimen.favorite === null ? true : false
+          aPromises.push(
+            this._updateSpecimenFav(oSpecimen)
+          );
+          //   })
         })
 
+
         // Promise.all(aPromises)
-        //   .then(results => {
-        //     // resolve();
+        //   .then(()=>{
+        //     debugger;
+        //     that.byId('list').getBinding("items").refresh(true);
         //   })
         //   .catch(error => {
-        //     // console.error("ERROR", error);
+        //    debugger;
         //   });
 
       },
@@ -358,7 +362,7 @@ sap.ui.define(
             }
 
 
-            const aSpecimens = specimens.results;
+            const aSpecimens = specimens.results.sort((a, b) => a.tagID - b.tagID);
             const mothers = aSpecimens.filter((mother) => (mother.seqNumber === 0));
 
             const strains = getStrainsOfSpecimens(mothers);
@@ -960,16 +964,30 @@ sap.ui.define(
         });
       },
 
-      _updateSpecimenTagFav(data) {
-
-        var sPath = "/Specimens(guid'" + data.ID + "')"
-      
+      _updateSpecimenFav(data) {
+        const functionUrl = '/changeFavorite'
         return new Promise((resolve, reject) => {
-          this.getView().getModel().update(sPath, data, {
+          this.getView().getModel().callFunction(functionUrl, {
+            method: "POST",
+            urlParameters: { ID: data.ID },
+            sucess: resolve,
+            error: reject
+          });
+        });
+
+      },
+
+      _updateSpecimenTag(data) {
+        const functionUrl = '/changeTag'
+        return new Promise((resolve, reject) => {
+          this.getView().getModel().callFunction(functionUrl, {
+            method: "POST",
+            urlParameters: { ID: data.ID, tagID: data.tagID },
             success: resolve,
             error: reject
           });
         });
+
       },
 
       _createWater(specimen, care) {

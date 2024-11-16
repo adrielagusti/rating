@@ -18,7 +18,7 @@
             <subHeader>
                 <Toolbar>
                     <ToolbarSpacer />
-                    <Title text="Black Seeds Ratings Application" />
+                    <Title text="Black Seeds Ratings" />
                     <ToolbarSpacer />
                 </Toolbar>
             </subHeader>
@@ -40,7 +40,7 @@
                                 <ObjectStatus
                                     state="None"
                                     class=""
-                                    icon="sap-icon://e-care"
+                                    icon="{= ${appModel>/list} === 'strains' ? 'sap-icon://e-care' : 'sap-icon://tag' }"
                                 />
                             </HBox>
 
@@ -68,8 +68,42 @@
                                     icon="sap-icon://sys-enter-2"
                                 />
                             </HBox>
+                            <MessageStrip
+                                class=" sapUiTinyMarginTop"
+                                text="Harvested specimens only"
+                                type="Warning"
+                                showIcon="true"
+                                visible="{= ${appModel>/list} === 'specimens' }"
+                            />
                         </VBox>
                     </HBox>
+                </Panel>
+                <Panel
+                    expanded="true"
+                    class="sapUiTinyMarginTop"
+                >
+                    <SegmentedButton
+                        selectedKey="{appModel>/mode}"
+                        width="100%"
+                    >
+                        <items>
+                            <SegmentedButtonItem
+                                text="List"
+                                icon="sap-icon://favorite"
+                                key="rate"
+                            />
+                            <SegmentedButtonItem
+                                text="Global"
+                                icon="sap-icon://competitor"
+                                key="top"
+                            />
+                            <SegmentedButtonItem
+                                text="History"
+                                icon="sap-icon://history"
+                                key="hist"
+                            />
+                        </items>
+                    </SegmentedButton>
                 </Panel>
 
                 <Panel
@@ -81,7 +115,7 @@
                         id="grid-toptier"
                         mode="SingleSelectMaster"
                         growing="true"
-                        items="{path: '/Strains', sorter: { path: 'totalPoints', descending: true } }"
+                        items="{path: 'dataModel>/topTier', sorter: { path: 'totalPoints', descending: true } }"
                         selectionChange="onSelectRowTop"
                     >
                         <f:customLayout>
@@ -92,11 +126,11 @@
                             <VBox>
                                 <HBox justifyContent="SpaceBetween">
                                     <Title
-                                        text="{name}"
+                                        text="{dataModel>name}"
                                         class="sapUiSmallMargin"
                                     />
                                     <Title
-                                        text="{tagID}"
+                                        text="# {dataModel>tagID}"
                                         class="sapUiSmallMargin"
                                     />
                                 </HBox>
@@ -107,7 +141,7 @@
                                         class="sapUiTinyMargin"
                                     />
                                     <Label
-                                        text="{path : 'totalPoints' , formatter: '.formatter.rating' } / 15"
+                                        text="{path : 'dataModel>totalPoints' , formatter: '.formatter.rating' } / 15"
                                         class="sapUiTinyMarginTop"
                                     />
                                 </HBox>
@@ -122,7 +156,7 @@
                 >
                     <f:GridList
                         mode="SingleSelectMaster"
-                        items="{path: 'dataModel>/strains', sorter: { path: 'dataModel>tagID' } }"
+                        items="{path: 'dataModel>/list', sorter: { path: 'dataModel>tagID' } }"
                         selectionChange="onSelectRow"
                     >
                         <f:customLayout>
@@ -143,7 +177,7 @@
                                             icon="{dataModel>icon}"
                                         />
                                         <Title
-                                            text="{dataModel>tagID}"
+                                            text="# {dataModel>tagID}"
                                             class="sapUiSmallMarginTopBottom sapUiSmallMarginEnd sapUiTinyMarginBegin"
                                         />
                                     </HBox>
@@ -198,9 +232,9 @@
                                     class="sapUiSmallMargin"
                                     text="{dataModel>strainName}"
                                 />
-                                <Title
+                                <Title             
                                     class="sapUiSmallMargin"
-                                    text="{dataModel>tagID}"
+                                    text="# {= ${strainID} !== undefined ? ${dataModel>specimenTag} : ${dataModel>tagID} }"
                                 />
                             </HBox>
                             <ObjectStatus
@@ -208,7 +242,6 @@
                                 state="Success"
                                 class="sapUiTinyMargin sapUiSmallMarginBegin"
                             />
-                        
                         </f:GridListItem>
                     </f:GridList>
                 </Panel>
@@ -216,34 +249,30 @@
             <footer>
                 <Toolbar>
                     <Button
-                        icon="sap-icon://e-care"
+                        icon="sap-icon://media-rewind"
                         type="Transparent"
                         press="toCollection"
                     />
                     <ToolbarSpacer />
-
                     <SegmentedButton
-                        selectedKey="{appModel>/mode}"
-                        width="70%"
+                        selectedKey="{appModel>/list}"
+                        width="100%"
+                        selectionChange="onChangeListModel"
                     >
                         <items>
                             <SegmentedButtonItem
-                                text="Rate"
-                                icon="sap-icon://favorite"
-                                key="rate"
+                                text="Rate by Strains"
+                                icon="sap-icon://e-care"
+                                key="strains"
                             />
                             <SegmentedButtonItem
-                                text="Global"
-                                icon="sap-icon://competitor"
-                                key="top"
-                            />
-                            <SegmentedButtonItem
-                                text="History"
-                                icon="sap-icon://history"
-                                key="hist"
+                                text="Rate by Specimens"
+                                icon="sap-icon://tag"
+                                key="specimens"
                             />
                         </items>
                     </SegmentedButton>
+
                     <ToolbarSpacer />
                     <Select
                         forceSelection="false"
@@ -252,7 +281,7 @@
                         icon="sap-icon://filter"
                         autoAdjustWidth="true"
                         items="{
-						path: '/Strains',
+						path: 'dataModel>/filters',
 						sorter: { path: 'tagID' }
 					}"
                         change="onSelectNav"
