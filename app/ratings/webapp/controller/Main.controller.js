@@ -252,7 +252,7 @@ sap.ui.define(
         var iAttributes = aAttributes.length;
         iAttributes = iAttributes - 1; // Comments is not a valuable attribute
 
-        let aSummarized = aSpecimens.filter(a => a.stateDescription === 'Sick').map(specimen => {
+        let aSummarized = aSpecimens.filter(a => a.stateDescription === 'Harvested').map(specimen => {
           let sum = 0;
 
           specimen.state = 'None';
