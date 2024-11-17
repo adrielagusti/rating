@@ -18,7 +18,7 @@
             <subHeader>
                 <Toolbar>
                     <ToolbarSpacer />
-                    <Title text="Black Seeds Ratings" />
+                    <Title text="Ratings Perspective" />
                     <ToolbarSpacer />
                 </Toolbar>
             </subHeader>
@@ -234,7 +234,7 @@
                                 />
                                 <Title             
                                     class="sapUiSmallMargin"
-                                    text="# {= ${strainID} !== undefined ? ${dataModel>specimenTag} : ${dataModel>tagID} }"
+                                    text="# {= ${strainID} !== null ? ${dataModel>specimenTag} : ${dataModel>tagID} }"
                                 />
                             </HBox>
                             <ObjectStatus
@@ -261,14 +261,14 @@
                     >
                         <items>
                             <SegmentedButtonItem
-                                text="Rate by Strains"
-                                icon="sap-icon://e-care"
-                                key="strains"
-                            />
-                            <SegmentedButtonItem
                                 text="Rate by Specimens"
                                 icon="sap-icon://tag"
                                 key="specimens"
+                            />
+                            <SegmentedButtonItem
+                                text="Rate by Strains"
+                                icon="sap-icon://e-care"
+                                key="strains"
                             />
                         </items>
                     </SegmentedButton>
@@ -276,7 +276,6 @@
                     <ToolbarSpacer />
                     <Select
                         forceSelection="false"
-                        selectedKey="{userSelectionModel>/Strains}"
                         type="IconOnly"
                         icon="sap-icon://filter"
                         autoAdjustWidth="true"
@@ -287,8 +286,8 @@
                         change="onSelectNav"
                     >
                         <core:Item
-                            key="{ID}"
-                            text="{tagID} - {name} "
+                            key="{dataModel>ID}"
+                            text="{dataModel>tagID} - {dataModel>name} "
                         />
                     </Select>
                 </Toolbar>

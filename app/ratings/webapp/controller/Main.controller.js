@@ -17,8 +17,8 @@ sap.ui.define(
       formatter: formatter,
 
       onInit() {
-        this.getView().setModel(new JSONModel({ mode: "rate", list: "strains" }), 'appModel');
-        this._setUserResults();
+        this.getView().setModel(new JSONModel({ mode: "rate", list: "specimens" }), 'appModel');
+        // this._setUserResults();
         this.getRouter().getRoute("main").attachPatternMatched(this._onObjectMatched, this);
       },
 
@@ -52,6 +52,10 @@ sap.ui.define(
               this.prepareTopTierStrains(aStrains.results) :
               this.prepareTopTierSpecimens(aSpecimens.results)
 
+            const aFilters = listMode === 'strains' ?
+              this.prepareFiltersStrains(aStrains.results) :
+              this.prepareFiltersSpecimens(aSpecimens.results)
+
             // Calculation of totals 
             var iFull = aProcessed.filter((item) => item.state === 'Success').length;
             var iPogress = aProcessed.filter((item) => item.state === 'Warning').length;
@@ -64,7 +68,7 @@ sap.ui.define(
               total: iTotal,
               history: aHistory,
               topTier: aTopTier,
-              // filters: aFilters 
+              filters: aFilters
             }), 'dataModel');
 
           })
@@ -86,22 +90,21 @@ sap.ui.define(
       },
 
       onSelectRowTop(oEvent) {
-        let oItem = oEvent.getSource().getSelectedItem().getBindingContext().getObject();
+        let oItem = oEvent.getSource().getSelectedItem().getBindingContext('dataModel').getObject();
         this._showObject(oItem);
       },
 
       onSelectHist(oEvent) {
         let oItem = oEvent.getSource().getSelectedItem().getBindingContext('dataModel').getObject();
-        this.getRouter().navTo("rating", {
-          objectId: oItem.strainID
-        });
+        var id = this.getView().getModel('appModel').getProperty('/list') === 'strains' ? oItem.strainID : oItem.specimenID
+        this._showObject({ ID: id });
       },
 
       onSelectNav(oEvent) {
-        this.getRouter().navTo("rating", {
-          objectId: oEvent.getParameters().selectedItem.getKey()
-        });
+        let oItem = oEvent.getSource().getSelectedItem().getBindingContext('dataModel').getObject();
+        this._showObject(oItem);
       },
+
 
       onChangeListModel() {
         this._setUserResults();
@@ -196,8 +199,8 @@ sap.ui.define(
 
         return Specimens.filter(a => a.totalPoints > 0).map(a => {
           return {
-              ...a,       
-              name: a.strainName
+            ...a,
+            name: a.strainName
           }
         })
       },
@@ -205,6 +208,36 @@ sap.ui.define(
       prepareTopTierStrains(Strains) {
 
         return Strains.filter(a => a.totalPoints > 0);
+
+      },
+
+      prepareFiltersStrains(strains) {
+      
+        var aFilters = [];
+
+        strains.forEach((strain) => {
+          aFilters.push({
+            name: strain.name,
+            ID: strain.ID,
+            tagID: '# ' + strain.tagID
+          })
+        })
+        
+        return aFilters;
+      },
+      prepareFiltersSpecimens(specimens) {
+
+        var aFilters = [];
+
+        specimens.filter((a) => a.stateDescription === 'Harvested').forEach((specimen) => {
+          aFilters.push({
+            name: specimen.strainName,
+            ID: specimen.ID,
+            tagID: '# ' + specimen.tagID
+          })
+        })
+        
+        return aFilters;
 
       },
 
@@ -222,7 +255,7 @@ sap.ui.define(
           strain.totalPoints = 0;
 
           aRatings.forEach(rating => {
-            if (rating.strainID === strain.ID && rating.value > 0) {
+            if (rating.strainID === strain.ID && rating.value > 0 && rating.specimenID === null) {
               sum += 1;
               strain.totalPoints = rating.value + strain.totalPoints;
             }
@@ -236,8 +269,8 @@ sap.ui.define(
             return {
               ...strain,
               text: sum === iAttributes ? 'Full rated' : 'In process',
-              state: sum === iAttributes ? 'Success' : 'Warning',
-              icon: sum === iAttributes ? 'sap-icon://sys-enter-2' : 'sap-icon://warning2',
+              state: sum === iAttributes ? 'Success' : 'Success',
+              icon: sum === iAttributes ? 'sap-icon://sys-enter-2' : 'sap-icon://sys-enter-2',
             };
           }
 

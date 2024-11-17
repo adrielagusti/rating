@@ -5,6 +5,7 @@
     xmlns:core="sap.ui.core"
     displayBlock="true"
     xmlns="sap.m"
+    xmlns:tnt="sap.tnt"
 >
     <Page
         showHeader="false"
@@ -13,7 +14,7 @@
         <subHeader>
             <Toolbar>
                 <ToolbarSpacer />
-                <Title text="Black Seeds Ratings" />
+                <Title text="Rating" />
                 <ToolbarSpacer />
             </Toolbar>
         </subHeader>
@@ -39,9 +40,23 @@
                             />
                         </HBox>
                         <!-- <HBox justifyContent="End" visible="{= ${tagID}.length >= 4 ? true : false }"> -->
-                    
-                        <HBox justifyContent="End"
-                        visible="{= ${strainID} !== undefined ? true : false }">
+
+                        <HBox
+                            justifyContent="End"
+                            visible="{= ${strainID} !== undefined ? true : false }"
+                        >
+                            <tnt:InfoLabel
+                                visible="{= ${favorite} }"
+                                text="Favorite"
+                                colorScheme="1"
+                                icon="sap-icon://favorite"
+                                class="sapUiTinyMarginTop sapUiTinyMarginEnd"
+                            />
+                        </HBox>
+                        <HBox
+                            justifyContent="End"
+                            visible="{= ${strainID} !== undefined ? true : false }"
+                        >
                             <ObjectStatus
                                 text="Planted on {
                                         'path': 'plantedDate',
@@ -53,7 +68,7 @@
                                 icon="sap-icon://history"
                             />
                         </HBox>
-                            <HBox
+                        <HBox
                             justifyContent="End"
                             visible="{= ${strainID} !== undefined ? true : false }"
                         >

@@ -8,6 +8,7 @@
     xmlns:core="sap.ui.core"
     xmlns="sap.m"
     xmlns:dc="blackseeds.ratings.controls"
+    xmlns:tnt="sap.tnt"
 >
     <Page
         showHeader="false"
@@ -43,12 +44,14 @@
                             />
                         </HBox> -->
                         <HBox justifyContent="End">
-                            <!-- <ObjectStatus
-                                text="{
-                                        'path': 'plantedDate',
-                                        'type': 'sap.ui.model.type.DateTime'}"
-                                class=" sapUiTinyMarginEnd sapUiTinyMarginTop"
+                        
+                              <!-- <ObjectStatus
+                                class="sapUiTinyMarginTop sapUiTinyMarginEnd"
+                                icon="sap-icon://favorite"
+                                state="Warning"
+                                visible="{= ${favorite} }"
                             /> -->
+                           <tnt:InfoLabel text="Favorite" visible="{= ${favorite} }" colorScheme="1" icon="sap-icon://favorite"  class="sapUiTinyMarginTop sapUiTinyMarginEnd"/>
                             <ObjectStatus
                                 class="sapMObjectStatusLarge sapUiTinyMarginEnd"
                                 text="#{tagID}"
@@ -91,6 +94,7 @@
                                 class="sapUiTinyMarginTop"
                                 icon="{= ${sex} === 'F' ? 'sap-icon://female' : 'sap-icon://male' }"
                             />
+                        
                         </HBox>
                     </VBox>
                 </HBox>
@@ -384,7 +388,7 @@
             <Toolbar>
                 <ToolbarSpacer />
                 <Button
-                    text="Back"
+                    text="Return"
                     press="onBroBack"
                 />
             </Toolbar>

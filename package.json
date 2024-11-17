@@ -35,7 +35,7 @@
     "adri:4": "npx cds-dbm deploy --load-via delta --auto-undeploy",
     "adri:5": "heroku pg:backups:capture --app blackseeds-ratings",
     "adri:6": "heroku pg:backups --app blackseeds-ratings",
-    "adriL7": "heroku pg:backups:download --app blackseeds-ratings",
+    "adri:7": "heroku pg:backups:download --app blackseeds-ratings",
     "adri:8": "pg_restore --verbose --clean --no-acl --no-owner -h localhost -U postgres -d rating latest.dump"
   },
   "engines": {

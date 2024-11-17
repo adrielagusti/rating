@@ -6,6 +6,11 @@
     xmlns:unified="sap.ui.unified"
 >
     <!-- <VBox class="sapUiSmallMargin"> -->
+        <Button
+        text="Show in Hierarchy" enabled="false"
+    >
+        
+    </Button>
     <f:Form
         editable="false"
     >

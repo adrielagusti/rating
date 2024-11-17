@@ -17,7 +17,7 @@
         <subHeader>
             <Toolbar>
                 <ToolbarSpacer />
-                <Title text="Black Seeds Collection" />
+                <Title text="Collection Perspective" />
                 <ToolbarSpacer />
             </Toolbar>
         </subHeader>
@@ -80,6 +80,28 @@
                     <MultiComboBox
                         selectionChange="handleSelectionChange"
                         showClearIcon="true"
+                        width="300px"
+                        items="{
+                                path: '/SpecimenStates',
+                                sorter: { path: 'description' }
+                            }"
+                    >
+                        <core:Item
+                            key="{ID}"
+                            text="{description}"
+                        />
+                    </MultiComboBox>
+                </HBox>
+                <HBox>
+                    <Label
+                        text="Strain: "
+                        class="sapUiTinyMargin"
+                    />
+                    <MultiComboBox
+                        selectionChange="handleSelectionChange"
+                        showClearIcon="true"
+                        enabled="false"
+                        width="295px"
                         items="{
                                 path: '/SpecimenStates',
                                 sorter: { path: 'description' }
@@ -97,9 +119,36 @@
                         class="sapUiTinyMargin"
                     />
                     <SearchField
-                        width="80%"
+                        maxLength="7"
+                        width="292px"
                         search=".onSearchTag"
                     />
+                </HBox>
+
+                <HBox>
+                    <Label
+                        text="Generation: "
+                        class="sapUiTinyMargin"
+                    />
+                    <MultiComboBox
+                        selectionChange="handleSelectionChange"
+                        showClearIcon="true"
+                        enabled="false"
+                        width="262px"
+                        items="{
+                                path: '/SpecimenStates',
+                                sorter: { path: 'description' }
+                            }"
+                    >
+                        <core:Item
+                            key="{ID}"
+                            text="{description}"
+                        />
+                    </MultiComboBox>
+                </HBox>
+                <HBox>
+
+                    <CheckBox text="Favorites" selected="false" enabled="false" />
                 </HBox>
             </Panel>
 
@@ -192,6 +241,12 @@
                                     press="onDisplay"
                                 /> -->
                                 <Button
+                                    text="Favorite / Unfavorite"
+                                    icon="sap-icon://favorite"
+                                    visible="{= ${collectionModel>/selectedSpecimens}.length >= 1 }"
+                                    press="onFavChange"
+                                />
+                                <Button
                                     text="Change status"
                                     icon="sap-icon://electronic-medical-record"
                                     visible="{= ${collectionModel>/selectedSpecimens}.length >= 1 }"
@@ -208,17 +263,13 @@
                                     icon="sap-icon://e-care"
                                     visible="{= ${collectionModel>/selectedSpecimens}.length >= 1 }"
                                     press="onClone"
-                                />
-                                <Button
-                                    text="Favorite / Unfavorite"
-                                    icon="sap-icon://favorite"
-                                    visible="{= ${collectionModel>/selectedSpecimens}.length >= 1 }"
-                                    press="onFavChange"
+                                    enabled="false"
                                 />
                                 <Button
                                     text="Change Tag ID #"
                                     icon="sap-icon://tags"
                                     visible="{= ${collectionModel>/selectedSpecimens}.length === 1 }"
+            
                                     press="onChangeTag"
                                 />
                                 <Button
@@ -242,7 +293,7 @@
                                     text="#{tagID}"
                                     press="onLinkPress"
                                 />
-                                 <ObjectStatus
+                                <ObjectStatus
                                     icon="sap-icon://favorite"
                                     class="sapUiTinyMarginBegin"
                                     visible="{= ${favorite} === true }"
@@ -267,7 +318,7 @@
                                     }}"
                                     class="sapUiMediumMarginEnd"
                                 /> -->
-                               
+
                                 <Label
                                     text="{strainName} {seqNumber}"
                                     class="sapUiTinyMarginEnd"

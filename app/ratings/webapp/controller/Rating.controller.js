@@ -122,7 +122,7 @@ sap.ui.define(
         var strain = this.getView().getBindingContext().getObject();
 
         aAttributes.forEach(atribute => {
-          let existingRating = aRatings.find(rating => rating.attributeID === atribute.ID);
+          let existingRating = aRatings.find(rating => rating.attributeID === atribute.ID && rating.specimenID === null);
 
           if (existingRating) {
             result.push({
