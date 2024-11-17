@@ -24,6 +24,7 @@ sap.ui.define(
         this.getView().setModel(new JSONModel($.extend(true, {}, models.multiplePhotos)), 'multiplePhotoModel');
         this.getView().setModel(new JSONModel($.extend(true, {}, models.initialSpecimen)), 'specimenCreationModel');
         this.getView().setModel(new JSONModel($.extend(true, {}, models.initialCollection)), 'collectionModel');
+        this.getView().setModel(new JSONModel($.extend(true, {}, { filters: [] })), 'filtersModel');
         this.getView().setModel(new JSONModel($.extend(true, {}, {
           careTypes: [],
           water: models.initialWater,
@@ -86,21 +87,52 @@ sap.ui.define(
         // debugger;
         var oList = this.getView().byId('list');
         var oBinding = oList.getBinding('items');
-        oBinding.filter([new Filter("tagID", FilterOperator.Contains, oEvent.getSource().getValue())]);
+
+        var aFilters = this.getView().getModel('filtersModel').getProperty('/filters').filter(function(filter) {
+          return filter.sPath !== 'tagID';  
+       });
+
+       aFilters.push(new Filter("tagID", FilterOperator.Contains, oEvent.getSource().getValue()));
+
+       this.getView().getModel('filtersModel').setProperty('/filters',aFilters)
+       oBinding.filter(aFilters);
+       
       },
 
       handleSelectionChange(oEvent) {
 
-        var oList = this.getView().byId('list');
+        var oList = this.getView().byId('list')
         var oBinding = oList.getBinding('items');
         var aSelectedStates = oEvent.getSource().getSelectedKeys();
-        var aFilters = [];
+
+        var aFilters = this.getView().getModel('filtersModel').getProperty('/filters').filter(function(filter) {
+          return filter.sPath !== 'state_ID';  
+       });
 
         aSelectedStates.forEach(element => {
           aFilters.push(new Filter("state_ID", FilterOperator.EQ, element))
         });
+
+        this.getView().getModel('filtersModel').setProperty('/filters',aFilters)
         oBinding.filter(aFilters);
 
+      },
+
+      onRadioBuSelect(oEvent){
+        var oList = this.getView().byId('list');
+        var oBinding = oList.getBinding('items');
+        var filterValue =  oEvent.getSource().getSelectedButton().getId().slice(-3) === 'all' ? null : true 
+
+        var aFilters = this.getView().getModel('filtersModel').getProperty('/filters').filter(function(filter) {
+          return filter.sPath !== 'favorite';  
+        });
+
+        if (filterValue === true) {
+          aFilters.push(new Filter("favorite", FilterOperator.EQ, filterValue));
+        }
+
+        this.getView().getModel('filtersModel').setProperty('/filters',aFilters)
+        oBinding.filter(aFilters);
       },
 
       onChangeTag() {

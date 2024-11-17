@@ -70,7 +70,8 @@
             <Panel
                 visible="{= ${collectionModel>/mode} === 'grid' }"
                 expandable='true'
-                headerText="Filters Panel"
+                expanded="true"
+                headerText="Filters"
             >
                 <HBox>
                     <Label
@@ -125,7 +126,7 @@
                     />
                 </HBox>
 
-                <HBox>
+                <!-- <HBox>
                     <Label
                         text="Generation: "
                         class="sapUiTinyMargin"
@@ -145,10 +146,27 @@
                             text="{description}"
                         />
                     </MultiComboBox>
-                </HBox>
-                <HBox>
+                </HBox> -->
+                <HBox justifyContent="End">
 
-                    <CheckBox text="Favorites" selected="false" enabled="false" />
+                    <HBox class="sapUiTinyMargin" >
+                        <!-- <Label
+                            text="Show:"
+                        /> -->
+                        <RadioButtonGroup
+                            valueState="Success"
+                            columns="2"
+                            select="onRadioBuSelect"
+                        >
+                            <RadioButton
+                                text="All"
+                                selected="true"
+                                id="all"
+                            />
+                            <RadioButton text="Favorites" id="fav" />
+                        </RadioButtonGroup>
+                    </HBox>
+        
                 </HBox>
             </Panel>
 
@@ -269,7 +287,6 @@
                                     text="Change Tag ID #"
                                     icon="sap-icon://tags"
                                     visible="{= ${collectionModel>/selectedSpecimens}.length === 1 }"
-            
                                     press="onChangeTag"
                                 />
                                 <Button

@@ -47,6 +47,7 @@ sap.ui.define([
                 selected: 0,
                 selectedSpecimens: [],
                 newTagID: ''
+                // onlyFavorites: false
             },
 
             initialApplication: {

@@ -51,7 +51,7 @@
                                 state="Warning"
                                 visible="{= ${favorite} }"
                             /> -->
-                           <tnt:InfoLabel text="Favorite" visible="{= ${favorite} }" colorScheme="1" icon="sap-icon://favorite"  class="sapUiTinyMarginTop sapUiTinyMarginEnd"/>
+                           <tnt:InfoLabel text="" visible="{= ${favorite} }" colorScheme="1" icon="sap-icon://favorite"  class=" sapUiMediumMarginEnd"/>
                             <ObjectStatus
                                 class="sapMObjectStatusLarge sapUiTinyMarginEnd"
                                 text="#{tagID}"

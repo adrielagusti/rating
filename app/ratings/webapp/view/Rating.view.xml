@@ -40,16 +40,29 @@
                             />
                         </HBox>
                         <!-- <HBox justifyContent="End" visible="{= ${tagID}.length >= 4 ? true : false }"> -->
-
+                <HBox
+                            justifyContent="End"
+                            visible="{= ${strainID} !== undefined ? false : true }"
+                        >
+                             <tnt:InfoLabel
+                                text="Strain"
+                                colorScheme="1"
+                                class="sapUiTinyMarginTop sapUiTinyMarginEnd"
+                            />
+                        </HBox>
                         <HBox
                             justifyContent="End"
                             visible="{= ${strainID} !== undefined ? true : false }"
                         >
                             <tnt:InfoLabel
                                 visible="{= ${favorite} }"
-                                text="Favorite"
                                 colorScheme="1"
                                 icon="sap-icon://favorite"
+                                class="sapUiTinyMarginTop"
+                            />
+                             <tnt:InfoLabel
+                                text="Specimen"
+                                colorScheme="1"
                                 class="sapUiTinyMarginTop sapUiTinyMarginEnd"
                             />
                         </HBox>
@@ -72,6 +85,7 @@
                             justifyContent="End"
                             visible="{= ${strainID} !== undefined ? true : false }"
                         >
+
                             <ObjectStatus
                                 text="# {tagID}"
                                 class=" sapUiTinyMarginEnd sapUiTinyMarginTop"
