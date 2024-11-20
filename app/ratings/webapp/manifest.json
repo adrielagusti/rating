@@ -59,9 +59,7 @@
         "sap.ui.unified": {},
         "sap.suite.ui.commons": {},
         "sap.tnt": {},
-        "sap.ui.layout": {},
-        "sap.ui.layout.form": {}
-
+        "sap.ui.layout": {}
       }
     },
     "contentDensities": {
