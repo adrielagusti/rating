@@ -42,6 +42,7 @@ sap.ui.define(
       },
 
       _onObjectMatched(oEvent) {
+        this.getView().setBusy(false);
         this._setUserResults();
       },
 
