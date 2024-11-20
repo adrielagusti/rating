@@ -55,7 +55,6 @@
         "sap.ui.generic.app": {},
         "sap.ui.table": {},
         "sap.ushell": {},
-        "sap.ui.core.mvc": {},
         "sap.ui.unified": {},
         "sap.suite.ui.commons": {},
         "sap.tnt": {},
