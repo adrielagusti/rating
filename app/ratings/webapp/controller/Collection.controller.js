@@ -72,10 +72,11 @@ sap.ui.define(
       },
 
       onLinkPress(oEvent) {
-
+        this.getView().setBusy(true);
         // var oList = oEvent.getSource().getParent().getParent().getParent().getParent();
         // oList.removeSelections();
         var oItem = oEvent.getSource().getParent().getParent().getParent().getBindingContext().getObject();
+        
 
         this.getRouter().navTo("specimen", {
           objectId: oItem.ID
