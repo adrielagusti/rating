@@ -54,7 +54,14 @@
         "sap.ui.comp": {},
         "sap.ui.generic.app": {},
         "sap.ui.table": {},
-        "sap.ushell": {}
+        "sap.ushell": {},
+        "sap.ui.core.mvc": {},
+        "sap.ui.unified": {},
+        "sap.suite.ui.commons": {},
+        "sap.tnt": {},
+        "sap.ui.layout": {},
+        "sap.ui.layout.form": {}
+
       }
     },
     "contentDensities": {
